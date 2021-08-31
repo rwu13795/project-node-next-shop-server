@@ -22,7 +22,7 @@ app.use((req: Request, res: Response, next: NextFunction): void => {
   }
 });
 
-app.use(cors({ origin: ["https://project-next-js-blog.vercel.app/"] }));
+app.use(cors({ origin: ["https://project-next-js-blog.vercel.app"] }));
 
 app.use(helmet());
 app.use(compression());
