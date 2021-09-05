@@ -13,6 +13,7 @@ const compression_1 = __importDefault(require("compression"));
 // import { createStripeCheckoutSession } from "./middlewares/checkout";
 // import { createPaymentIntent } from "./middlewares/payment-intent";
 // import { handleStripeWebhook } from "./middlewares/webhooks";
+const routes_1 = require("./routes");
 const app = (0, express_1.default)();
 exports.app = app;
 // app.use(express.json());
@@ -26,10 +27,15 @@ app.use((req, res, next) => {
         express_1.default.json()(req, res, next);
     }
 });
-app.use((0, cors_1.default)({ origin: ["https://project-next-js-blog.vercel.app"] }));
+app.use((0, cors_1.default)({
+    origin: [
+        "https://project-next-js-blog.vercel.app",
+        "http://localhost:3000",
+    ],
+}));
 app.use((0, helmet_1.default)());
 app.use((0, compression_1.default)());
-app.get("/api/todos", (req, res, next) => {
-    res.status(200).send({ message: "Testing deployment api" });
-});
+// connect all routers to the app
+app.use("/api", routes_1.itemsRouter);
+app.use("/api/admin", routes_1.adminRouter);
 //# sourceMappingURL=app.js.map

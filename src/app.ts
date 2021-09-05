@@ -9,6 +9,8 @@ import compression from "compression";
 // import { createPaymentIntent } from "./middlewares/payment-intent";
 // import { handleStripeWebhook } from "./middlewares/webhooks";
 
+import { adminRouter, itemsRouter } from "./routes";
+
 const app = express();
 
 // app.use(express.json());
@@ -22,16 +24,20 @@ app.use((req: Request, res: Response, next: NextFunction): void => {
   }
 });
 
-app.use(cors({ origin: ["https://project-next-js-blog.vercel.app"] }));
+app.use(
+  cors({
+    origin: [
+      "https://project-next-js-blog.vercel.app",
+      "http://localhost:3000",
+    ],
+  })
+);
 
 app.use(helmet());
 app.use(compression());
 
-app.get(
-  "/api/todos",
-  (req: Request, res: Response, next: NextFunction): void => {
-    res.status(200).send({ message: "Testing deployment api" });
-  }
-);
+// connect all routers to the app
+app.use("/api", itemsRouter);
+app.use("/api/admin", adminRouter);
 
 export { app };

@@ -4,11 +4,11 @@
     "noImplicitReturns": true,
     "noUnusedLocals": true,
     "noImplicitAny": false,
-    "outDir": "lib",
+    "outDir": "built",
     "sourceMap": true,
     "strict": true,
     "target": "es2017",
-    "lib": ["ESNext"],
+    "lib": ["ESNext", "dom"],
     "strictNullChecks": false,
     "esModuleInterop": true
   },
