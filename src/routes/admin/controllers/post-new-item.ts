@@ -1,46 +1,60 @@
-import { Request, Response } from "express";
+import { NextFunction, Request, Response } from "express";
 import { PutObjectCommand } from "@aws-sdk/client-s3";
 
-// import { Items } from "../../../models/items";
+import { Items } from "../../../models/items";
 import asyncWrapper from "../../../middlewares/async-wrapper";
 import { s3Client } from "../../../util/aws-s3-client";
 
-export const postNewItem = asyncWrapper(async (req: Request, res: Response) => {
-  const body = req.body;
-  console.log(body);
+export const postNewItem = asyncWrapper(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const image = req.file;
+    console.log(req.file);
 
-  // const item = Items.build({ ...body });
-  // await item.save();
+    if (!image) {
+      return next(res.status(422).send({ message: "Missing image file!" }));
+    }
 
-  // console.log(item);
+    // let imageUrl = image.path.toString();
+    // console.log(imageUrl);
+    // const item = Items.build({ ...body });
+    // await item.save();
 
-  // res.status(201).send(item);
+    // console.log(item);
 
-  // Set the parameters
-  const params = {
-    Bucket: "testing-images-on-s3", // The name of the bucket. For example, 'sample_bucket_101'.
-    Key: "sample_upload2.txt", // The name of the object. For example, 'sample_upload.txt'.
-    Body: "Hello world 2!", // The content of the object. For example, 'Hello world!".
-  };
+    // res.status(201).send(item);
 
-  // const data = await s3Client.send(
-  //   new CreateBucketCommand({ Bucket: params.Bucket })
-  // );
+    // Set the parameters
+    const params = {
+      Bucket: "testing-images-on-s3", // The name of the bucket. For example, 'sample_bucket_101'.
+      // The name of the object. For example, 'sample_upload.txt'. And the folder name will any
+      // path in front of the file name, (testing_folder/xxxxx.txt)
+      Key: "images/cat-mask.jpg",
+      // The content of the object. For example, a string 'Hello world!" for txt file.
+      // for image, put in the file-buffer created by the "multer"
+      Body: req.file.buffer,
+    };
 
-  // console.log(data);
-  // console.log("Successfully created a bucket called ", data.Location);
+    // const data = await s3Client.send(
+    //   new CreateBucketCommand({ Bucket: params.Bucket })
+    // );
 
-  const results = await s3Client.send(new PutObjectCommand(params));
-  console.log(
-    "Successfully created " +
-      params.Key +
-      " and uploaded it to " +
-      params.Bucket +
-      "/" +
-      params.Key
-  );
+    // console.log(data);
+    // console.log("Successfully created a bucket called ", data.Location);
 
-  console.log(results);
+    const results = await s3Client.send(new PutObjectCommand(params));
+    console.log(
+      "Successfully created " +
+        params.Key +
+        " and uploaded it to " +
+        params.Bucket +
+        "/" +
+        params.Key
 
-  res.status(201).send({ message: "OK" });
-});
+      // the complete URL = "https//" + "params.Bucket" + ".s3.us-east-2.amazonaws.com/" + "params.Key"
+    );
+
+    // console.log(results);
+
+    res.status(201).send({ message: "OK" });
+  }
+);

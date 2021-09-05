@@ -2,12 +2,7 @@ import express, { Request, Response, NextFunction } from "express";
 import cors from "cors";
 import helmet from "helmet";
 import compression from "compression";
-
-// import { Payment } from "./models/payments";
-// import { runAsync } from "./middlewares/async-wrapper";
-// import { createStripeCheckoutSession } from "./middlewares/checkout";
-// import { createPaymentIntent } from "./middlewares/payment-intent";
-// import { handleStripeWebhook } from "./middlewares/webhooks";
+import multer from "multer";
 
 import { adminRouter, itemsRouter } from "./routes";
 
@@ -35,6 +30,19 @@ app.use(
 
 app.use(helmet());
 app.use(compression());
+
+const fileFilter = (req: Request, file, callback) => {
+  if (
+    file.mimetype === "image/png" ||
+    file.mimetype === "image/jpg" ||
+    file.mimetype === "image/jpeg"
+  ) {
+    callback(null, true);
+  } else {
+    callback(null, false);
+  }
+};
+app.use(multer({ fileFilter: fileFilter }).single("image"));
 
 // connect all routers to the app
 app.use("/api", itemsRouter);

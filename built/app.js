@@ -8,11 +8,7 @@ const express_1 = __importDefault(require("express"));
 const cors_1 = __importDefault(require("cors"));
 const helmet_1 = __importDefault(require("helmet"));
 const compression_1 = __importDefault(require("compression"));
-// import { Payment } from "./models/payments";
-// import { runAsync } from "./middlewares/async-wrapper";
-// import { createStripeCheckoutSession } from "./middlewares/checkout";
-// import { createPaymentIntent } from "./middlewares/payment-intent";
-// import { handleStripeWebhook } from "./middlewares/webhooks";
+const multer_1 = __importDefault(require("multer"));
 const routes_1 = require("./routes");
 const app = (0, express_1.default)();
 exports.app = app;
@@ -35,6 +31,17 @@ app.use((0, cors_1.default)({
 }));
 app.use((0, helmet_1.default)());
 app.use((0, compression_1.default)());
+const fileFilter = (req, file, callback) => {
+    if (file.mimetype === "image/png" ||
+        file.mimetype === "image/jpg" ||
+        file.mimetype === "image/jpeg") {
+        callback(null, true);
+    }
+    else {
+        callback(null, false);
+    }
+};
+app.use((0, multer_1.default)({ fileFilter: fileFilter }).single("image"));
 // connect all routers to the app
 app.use("/api", routes_1.itemsRouter);
 app.use("/api/admin", routes_1.adminRouter);
