@@ -8,5 +8,6 @@ const express_1 = __importDefault(require("express"));
 const controllers_1 = require("./controllers");
 const router = express_1.default.Router();
 exports.adminRouter = router;
-router.post("/post-new-item", controllers_1.postNewItem);
+router.post("/post-new-product", controllers_1.postNewItem);
+router.post("/get-one-product", controllers_1.getOneProduct);
 //# sourceMappingURL=router.js.map

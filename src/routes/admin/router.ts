@@ -1,9 +1,11 @@
 import express from "express";
 
-import { postNewItem } from "./controllers";
+import { getOneProduct, postNewItem } from "./controllers";
 
 const router = express.Router();
 
-router.post("/post-new-item", postNewItem);
+router.post("/post-new-product", postNewItem);
+
+router.post("/get-one-product", getOneProduct);
 
 export { router as adminRouter };

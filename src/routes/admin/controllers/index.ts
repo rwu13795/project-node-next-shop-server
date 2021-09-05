@@ -1,1 +1,2 @@
-export * from "./post-new-item";
+export * from "./post-new-product";
+export * from "./get-one-product";

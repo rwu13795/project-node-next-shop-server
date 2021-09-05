@@ -9,7 +9,8 @@ const cors_1 = __importDefault(require("cors"));
 const helmet_1 = __importDefault(require("helmet"));
 const compression_1 = __importDefault(require("compression"));
 const multer_1 = __importDefault(require("multer"));
-const routes_1 = require("./routes");
+const router_1 = require("./routes/admin/router");
+const router_2 = require("./routes/items/router");
 const app = (0, express_1.default)();
 exports.app = app;
 // app.use(express.json());
@@ -43,6 +44,6 @@ const fileFilter = (req, file, callback) => {
 };
 app.use((0, multer_1.default)({ fileFilter: fileFilter }).single("image"));
 // connect all routers to the app
-app.use("/api", routes_1.itemsRouter);
-app.use("/api/admin", routes_1.adminRouter);
+app.use("/api", router_2.itemsRouter);
+app.use("/api/admin", router_1.adminRouter);
 //# sourceMappingURL=app.js.map

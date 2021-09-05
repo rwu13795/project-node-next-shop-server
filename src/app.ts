@@ -4,7 +4,8 @@ import helmet from "helmet";
 import compression from "compression";
 import multer from "multer";
 
-import { adminRouter, itemsRouter } from "./routes";
+import { adminRouter } from "./routes/admin/router";
+import { itemsRouter } from "./routes/items/router";
 
 const app = express();
 

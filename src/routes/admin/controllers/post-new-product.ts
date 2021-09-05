@@ -1,20 +1,37 @@
-"use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.postNewItem = void 0;
-const product_1 = require("../../../models/product");
-const async_wrapper_1 = __importDefault(require("../../../middlewares/async-wrapper"));
-exports.postNewItem = (0, async_wrapper_1.default)(async (req, res, next) => {
+import { NextFunction, Request, Response } from "express";
+import { PutObjectCommand } from "@aws-sdk/client-s3";
+
+import { Product } from "../../../models/product";
+import { Stock } from "../../../models/stock";
+import asyncWrapper from "../../../middlewares/async-wrapper";
+import { s3Client } from "../../../util/aws-s3-client";
+
+export const postNewItem = asyncWrapper(
+  async (req: Request, res: Response, next: NextFunction) => {
     // const image = req.file;
     // console.log(req.file);
-    const { title, price, color } = req.body;
-    const product = product_1.Product.build({ title, price, color: [color] });
+
+    const { title, price, color, size, quantity } = req.body;
+
+    const product = Product.build({
+      title,
+      price,
+      colors: [color],
+      sizes: [size],
+      stock: {
+        color: { [color]: { [size]: quantity } },
+        size: { [size]: { [color]: quantity } },
+      },
+    });
+
     console.log(product._id);
+
     await product.save();
-    res.status(201).send({ message: "OK", result: product });
-});
+
+    res.status(201).send({ message: "OK", product });
+  }
+);
+
 /*if (!image) {
       return next(res.status(422).send({ message: "Missing image file!" }));
     }
@@ -50,7 +67,7 @@ exports.postNewItem = (0, async_wrapper_1.default)(async (req, res, next) => {
     console.log(
       "Successfully created " +
         params.Key +
-        " and uploaded it to " +
+        " and uploaded it to " + 
         params.Bucket +
         "/" +
         params.Key
@@ -60,4 +77,3 @@ exports.postNewItem = (0, async_wrapper_1.default)(async (req, res, next) => {
 
     // console.log(results);
  */
-//# sourceMappingURL=post-new-item.js.map
