@@ -5,11 +5,13 @@ import { Product } from "../../../models/product";
 
 export const getOneProduct = asyncWrapper(
   async (req: Request, res: Response, next: NextFunction) => {
-    const { p_id } = req.body;
+    const { color, size } = req.body;
 
-    const product = await Product.findById({ _id: p_id });
-
-    await product.populate("stock_ref");
+    // use the "$in : [value]" to find one with such value in an array
+    const product = await Product.find({
+      colors: { $in: [color] },
+      sizes: { $in: [size] },
+    });
 
     res.status(200).send({ message: "OK", result: product });
   }
