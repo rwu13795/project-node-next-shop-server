@@ -1,34 +1,78 @@
 import { NextFunction, Request, Response } from "express";
-import { PutObjectCommand } from "@aws-sdk/client-s3";
+// import { PutObjectCommand } from "@aws-sdk/client-s3";
 
 import { Product } from "../../../models/product";
-import { Stock } from "../../../models/stock";
+// import { Stock } from "../../../models/stock";
 import asyncWrapper from "../../../middlewares/async-wrapper";
-import { s3Client } from "../../../util/aws-s3-client";
+// import { s3Client } from "../../../util/aws-s3-client";
+
+import { StockProps } from "../../../models/product";
 
 export const postNewItem = asyncWrapper(
   async (req: Request, res: Response, next: NextFunction) => {
-    // const image = req.file;
+    // const imageFiles = req.files;
     // console.log(req.file);
 
-    const { title, price, color, size, quantity } = req.body;
+    const { title, main_cat, sub_cat, price, colorProps, description } =
+      req.body;
 
-    const product = Product.build({
-      title,
-      price,
-      colors: [color],
-      sizes: [size],
-      stock: {
-        color: { [color]: { [size]: quantity } },
-        size: { [size]: { [color]: quantity } },
-      },
-    });
+    const sizeArray = ["small", "medium", "large"];
 
-    console.log(product._id);
+    /**
+     *   colorProps: {
+     *      "red": {
+     *          sizes: { small: num, medium: num, large: num },
+     *          imagesCount: number   // used to extract image-files from the imageFiles for each color
+     *      },
+     *      "blue": { ... }
+     *   }
+     */
 
-    await product.save();
+    let colorArray = Object.keys(colorProps);
 
-    res.status(201).send({ message: "OK", product });
+    // map the stock by colors and sizes
+    let stock: StockProps = { byColor: {}, bySize: {} };
+    for (let color of colorArray) {
+      stock.byColor[color] = { ...colorProps[color].sizes };
+      for (let size of sizeArray) {
+        // have to initialize the "stock.bySize[size]" before we could access the [color]
+        stock.bySize[size] = {};
+        stock.bySize[size][color] = colorProps[color].sizes[size];
+      }
+    }
+    /* example stock:   
+             {
+               byColor: {
+                 red: { small: 3, medium: 55, large: 2 },
+                 blue: { small: 44, medium: 1, large: 11 }
+               },
+               bySize: { small: { blue: 44 }, medium: { blue: 1 }, large: { blue: 11 } }
+             }
+     */
+
+    // const product = Product.build({
+    //   title,
+    //   main_cat,
+    //   sub_cat,
+    //   price,
+    //   colors: colorArray,
+    //   sizes: sizeArray,
+    //   stock,
+    //   imageUrl: {
+    //     ["red"]: {
+    //       main: "https://testing-images-on-s3.s3.us-east-2.amazonaws.com/images/t-1.jpg",
+    //       sub: [
+    //         "https://testing-images-on-s3.s3.us-east-2.amazonaws.com/images/t-1.jpg",
+    //       ],
+    //     },
+    //   },
+    //   description,
+    // });
+
+    // await product.save();
+
+    console.log("> > > Admin - added new product < < <");
+    res.status(201).send({ message: "OK" });
   }
 );
 

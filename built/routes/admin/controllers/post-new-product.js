@@ -4,25 +4,56 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.postNewItem = void 0;
-const product_1 = require("../../../models/product");
+// import { Stock } from "../../../models/stock";
 const async_wrapper_1 = __importDefault(require("../../../middlewares/async-wrapper"));
 exports.postNewItem = (0, async_wrapper_1.default)(async (req, res, next) => {
-    // const image = req.file;
+    // const imageFiles = req.files;
     // console.log(req.file);
-    const { title, price, color, size, quantity } = req.body;
-    const product = product_1.Product.build({
-        title,
-        price,
-        colors: [color],
-        sizes: [size],
-        stock: {
-            color: { [color]: { [size]: quantity } },
-            size: { [size]: { [color]: quantity } },
-        },
-    });
-    console.log(product._id);
-    await product.save();
-    res.status(201).send({ message: "OK", product });
+    const { title, main_cat, sub_cat, price, colorProps, description } = req.body;
+    const sizeArray = ["small", "medium", "large"];
+    /**
+     *   colorProps: {
+     *      "red": {
+     *          sizes: { small: num, medium: num, large: num },
+     *          imagesCount: number   // used to extract image-files from the imageFiles for each color
+     *      },
+     *      "blue": { ... }
+     *   }
+     */
+    let colorArray = Object.keys(colorProps);
+    console.log(colorArray);
+    console.log(colorProps["red"].sizes);
+    let stock = { byColor: {}, bySize: {} };
+    for (let color of colorArray) {
+        stock.byColor[color] = Object.assign({}, colorProps[color].sizes);
+        for (let size of sizeArray) {
+            // have to initialize the "stock.bySize[size]" before we could access the [color]
+            stock.bySize[size] = {};
+            stock.bySize[size][color] = colorProps[color].sizes[size];
+        }
+    }
+    console.log(stock);
+    // const product = Product.build({
+    //   title,
+    //   main_cat,
+    //   sub_cat,
+    //   price,
+    //   colors: colorArray,
+    //   sizes: sizeArray,
+    //   stock,
+    //   imageUrl: {
+    //     ["red"]: {
+    //       main: "https://testing-images-on-s3.s3.us-east-2.amazonaws.com/images/t-1.jpg",
+    //       sub: [
+    //         "https://testing-images-on-s3.s3.us-east-2.amazonaws.com/images/t-1.jpg",
+    //       ],
+    //     },
+    //   },
+    //   description,
+    // });
+    // await product.save();
+    console.log("> > > Admin - added new product < < <");
+    res.status(201).send({ message: "OK" });
 });
 /*if (!image) {
       return next(res.status(422).send({ message: "Missing image file!" }));

@@ -1,27 +1,44 @@
 import mongoose from "mongoose";
 
-interface ColorProps {
-  [color: string]: { [sizeTag: string]: number };
+export interface StockProps {
+  byColor: {
+    [color: string]: { [sizeTag: string]: number | undefined } | undefined;
+  };
+
+  bySize: {
+    [size: string]: { [color: string]: number | undefined } | undefined;
+  };
 }
 
-interface SizeProps {
-  [size: string]: { [color: string]: number };
+interface imageUrlProps {
+  [color: string]: {
+    main: string | undefined;
+    sub: string[] | undefined;
+  };
 }
 
 interface ProductAttrs {
   title: string;
+  main_cat: string;
+  sub_cat: string;
   price: number;
   colors: string[];
   sizes: string[];
-  stock: { color: ColorProps; size: SizeProps };
+  stock: StockProps;
+  imageUrl: imageUrlProps;
+  description: string;
 }
 
 interface ProductDoc extends mongoose.Document {
   title: string;
+  main_cat: string;
+  sub_cat: string;
   price: number;
   colors: string[];
   sizes: string[];
-  stock: { color: ColorProps; size: SizeProps };
+  stock: StockProps;
+  imageUrl: imageUrlProps;
+  description: string;
   version: number;
 }
 
@@ -31,26 +48,18 @@ interface ProductModel extends mongoose.Model<ProductDoc> {
 
 const productSchema = new mongoose.Schema(
   {
-    title: {
-      type: String,
-      required: true,
-    },
-    price: {
-      type: Number,
-      required: true,
-    },
-    colors: {
-      type: Array,
-      required: true,
-    },
-    sizes: {
-      type: Array,
-      required: true,
-    },
+    title: { type: String, required: true },
+    main_cat: { type: String, required: true },
+    sub_cat: { type: String, required: true },
+    price: { type: Number, required: true },
+    colors: { type: Array, required: true },
+    sizes: { type: Array, required: true },
     stock: {
-      color: { type: Object, required: true },
-      size: { type: Object, required: true },
+      byColor: { type: Object, required: true },
+      bySize: { type: Object, required: true },
     },
+    imageUrl: { type: Object, required: true },
+    description: { type: String, required: true },
   },
   {
     toJSON: {

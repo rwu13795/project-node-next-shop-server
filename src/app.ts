@@ -2,10 +2,9 @@ import express, { Request, Response, NextFunction } from "express";
 import cors from "cors";
 import helmet from "helmet";
 import compression from "compression";
-import multer from "multer";
 
 import { adminRouter } from "./routes/admin/router";
-import { itemsRouter } from "./routes/items/router";
+import { productRouter } from "./routes/product/router";
 
 const app = express();
 
@@ -32,21 +31,8 @@ app.use(
 app.use(helmet());
 app.use(compression());
 
-const fileFilter = (req: Request, file, callback) => {
-  if (
-    file.mimetype === "image/png" ||
-    file.mimetype === "image/jpg" ||
-    file.mimetype === "image/jpeg"
-  ) {
-    callback(null, true);
-  } else {
-    callback(null, false);
-  }
-};
-app.use(multer({ fileFilter: fileFilter }).single("image"));
-
 // connect all routers to the app
-app.use("/api", itemsRouter);
+app.use("/api/products", productRouter);
 app.use("/api/admin", adminRouter);
 
 export { app };

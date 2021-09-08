@@ -8,9 +8,8 @@ const express_1 = __importDefault(require("express"));
 const cors_1 = __importDefault(require("cors"));
 const helmet_1 = __importDefault(require("helmet"));
 const compression_1 = __importDefault(require("compression"));
-const multer_1 = __importDefault(require("multer"));
 const router_1 = require("./routes/admin/router");
-const router_2 = require("./routes/items/router");
+const router_2 = require("./routes/product/router");
 const app = (0, express_1.default)();
 exports.app = app;
 // app.use(express.json());
@@ -32,18 +31,7 @@ app.use((0, cors_1.default)({
 }));
 app.use((0, helmet_1.default)());
 app.use((0, compression_1.default)());
-const fileFilter = (req, file, callback) => {
-    if (file.mimetype === "image/png" ||
-        file.mimetype === "image/jpg" ||
-        file.mimetype === "image/jpeg") {
-        callback(null, true);
-    }
-    else {
-        callback(null, false);
-    }
-};
-app.use((0, multer_1.default)({ fileFilter: fileFilter }).single("image"));
 // connect all routers to the app
-app.use("/api", router_2.itemsRouter);
+app.use("/api/products", router_2.productRouter);
 app.use("/api/admin", router_1.adminRouter);
 //# sourceMappingURL=app.js.map

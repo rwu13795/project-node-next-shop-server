@@ -6,26 +6,18 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.Product = void 0;
 const mongoose_1 = __importDefault(require("mongoose"));
 const productSchema = new mongoose_1.default.Schema({
-    title: {
-        type: String,
-        required: true,
-    },
-    price: {
-        type: Number,
-        required: true,
-    },
-    colors: {
-        type: Array,
-        required: true,
-    },
-    sizes: {
-        type: Array,
-        required: true,
-    },
+    title: { type: String, required: true },
+    main_cat: { type: String, required: true },
+    sub_cat: { type: String, required: true },
+    price: { type: Number, required: true },
+    colors: { type: Array, required: true },
+    sizes: { type: Array, required: true },
     stock: {
-        color: { type: Object, required: true },
-        size: { type: Object, required: true },
+        byColor: { type: Object, required: true },
+        bySize: { type: Object, required: true },
     },
+    imageUrl: { type: Object, required: true },
+    description: { type: String, required: true },
 }, {
     toJSON: {
         transform(doc, ret) {
