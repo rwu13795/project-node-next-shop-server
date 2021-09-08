@@ -1,11 +1,11 @@
 import express from "express";
 import { uploadImages } from "../../middlewares/upload-images";
 
-import { getOneProduct, postNewItem, editProduct } from "./controllers";
+import { getOneProduct, postNewProcut, editProduct } from "./controllers";
 
 const router = express.Router();
 
-router.post("/post-new-product", postNewItem);
+router.post("/post-new-product", uploadImages, postNewProcut);
 
 router.post("/get-one-product", getOneProduct);
 

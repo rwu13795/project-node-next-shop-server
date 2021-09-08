@@ -2,7 +2,7 @@ import mongoose from "mongoose";
 
 export interface StockProps {
   byColor: {
-    [color: string]: { [sizeTag: string]: number | undefined } | undefined;
+    [color: string]: { [size: string]: number | undefined } | undefined;
   };
 
   bySize: {

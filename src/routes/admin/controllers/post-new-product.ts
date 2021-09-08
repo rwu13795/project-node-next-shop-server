@@ -8,38 +8,43 @@ import asyncWrapper from "../../../middlewares/async-wrapper";
 
 import { StockProps } from "../../../models/product";
 
-export const postNewItem = asyncWrapper(
+export const postNewProcut = asyncWrapper(
   async (req: Request, res: Response, next: NextFunction) => {
-    // const imageFiles = req.files;
-    // console.log(req.file);
-
+    const imageFiles = req.files;
+    const document = JSON.parse(req.body.document);
     const { title, main_cat, sub_cat, price, colorProps, description } =
-      req.body;
+      document;
+
+    console.log(title, main_cat, sub_cat, price, colorProps, description);
+    console.log(imageFiles);
 
     const sizeArray = ["small", "medium", "large"];
 
     /**
-     *   colorProps: {
-     *      "red": {
-     *          sizes: { small: num, medium: num, large: num },
-     *          imagesCount: number   // used to extract image-files from the imageFiles for each color
-     *      },
-     *      "blue": { ... }
-     *   }
+     *   colorProps: [
+     *        {
+     *          colorAndSize: {color: 'white', small: '11', medium: '22', large: '31'},
+     *          imagesCount: 2
+     *        },
+     *        {
+     *          colorAndSize: {color: 'red', small: '5', medium: '99', large: '23'},
+     *          imagesCount: 4
+     *        }
+     *      ]
      */
 
-    let colorArray = Object.keys(colorProps);
+    // let colorArray = Object.keys(colorProps);
 
-    // map the stock by colors and sizes
-    let stock: StockProps = { byColor: {}, bySize: {} };
-    for (let color of colorArray) {
-      stock.byColor[color] = { ...colorProps[color].sizes };
-      for (let size of sizeArray) {
-        // have to initialize the "stock.bySize[size]" before we could access the [color]
-        stock.bySize[size] = {};
-        stock.bySize[size][color] = colorProps[color].sizes[size];
-      }
-    }
+    // // map the stock by colors and sizes
+    // let stock: StockProps = { byColor: {}, bySize: {} };
+    // for (let color of colorArray) {
+    //   stock.byColor[color] = { ...colorProps[color].sizes };
+    //   for (let size of sizeArray) {
+    //     // have to initialize the "stock.bySize[size]" before we could access the [color]
+    //     stock.bySize[size] = {};
+    //     stock.bySize[size][color] = colorProps[color].sizes[size];
+    //   }
+    // }
     /* example stock:   
              {
                byColor: {
