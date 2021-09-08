@@ -21,8 +21,7 @@ exports.postNewItem = (0, async_wrapper_1.default)(async (req, res, next) => {
      *   }
      */
     let colorArray = Object.keys(colorProps);
-    console.log(colorArray);
-    console.log(colorProps["red"].sizes);
+    // map the stock by colors and sizes
     let stock = { byColor: {}, bySize: {} };
     for (let color of colorArray) {
         stock.byColor[color] = Object.assign({}, colorProps[color].sizes);
@@ -32,7 +31,15 @@ exports.postNewItem = (0, async_wrapper_1.default)(async (req, res, next) => {
             stock.bySize[size][color] = colorProps[color].sizes[size];
         }
     }
-    console.log(stock);
+    /* example stock:
+             {
+               byColor: {
+                 red: { small: 3, medium: 55, large: 2 },
+                 blue: { small: 44, medium: 1, large: 11 }
+               },
+               bySize: { small: { blue: 44 }, medium: { blue: 1 }, large: { blue: 11 } }
+             }
+     */
     // const product = Product.build({
     //   title,
     //   main_cat,
