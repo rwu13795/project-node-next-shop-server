@@ -10,6 +10,7 @@ const helmet_1 = __importDefault(require("helmet"));
 const compression_1 = __importDefault(require("compression"));
 const router_1 = require("./routes/admin/router");
 const router_2 = require("./routes/product/router");
+const error_handler_1 = require("./middlewares/error-handler/error-handler");
 const app = (0, express_1.default)();
 exports.app = app;
 // app.use(express.json());
@@ -34,4 +35,6 @@ app.use((0, compression_1.default)());
 // connect all routers to the app
 app.use("/api/products", router_2.productRouter);
 app.use("/api/admin", router_1.adminRouter);
+// YOU HAVE TO APPLY THE errorHandler AT LAST //
+app.use(error_handler_1.errorHandler);
 //# sourceMappingURL=app.js.map

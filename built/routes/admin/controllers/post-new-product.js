@@ -16,12 +16,10 @@ exports.postNewProcut = (0, async_wrapper_1.default)(async (req, res, next) => {
     /**
      *   colorProps: [
      *        {
-     *          colorAndSize: {color: 'white', small: '11', medium: '22', large: '31'},
-     *          imagesCount: 2
+     *          color: 'white', small: '11', medium: '22', large: '31', imagesCount: 2
      *        },
      *        {
-     *          colorAndSize: {color: 'red', small: '5', medium: '99', large: '23'},
-     *          imagesCount: 4
+     *          color: 'red', small: '5', medium: '99', large: '23', imagesCount: 4
      *        }
      *      ]
      */
@@ -64,7 +62,6 @@ exports.postNewProcut = (0, async_wrapper_1.default)(async (req, res, next) => {
     //   description,
     // });
     // await product.save();
-    console.log("> > > Admin - added new product < < <");
     res.status(201).send({ message: "OK" });
 });
 /*if (!image) {

@@ -5,6 +5,7 @@ import compression from "compression";
 
 import { adminRouter } from "./routes/admin/router";
 import { productRouter } from "./routes/product/router";
+import { errorHandler } from "./middlewares/error-handler/error-handler";
 
 const app = express();
 
@@ -34,5 +35,8 @@ app.use(compression());
 // connect all routers to the app
 app.use("/api/products", productRouter);
 app.use("/api/admin", adminRouter);
+
+// YOU HAVE TO APPLY THE errorHandler AT LAST //
+app.use(errorHandler);
 
 export { app };
