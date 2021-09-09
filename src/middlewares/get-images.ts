@@ -15,7 +15,7 @@ const fileFilter = (req: Request, file, callback) => {
   }
 };
 
-export const uploadImages = multer({ fileFilter: fileFilter }).array(
+export const getImagesFromClient = multer({ fileFilter: fileFilter }).array(
   "uploaded_images"
 );
 

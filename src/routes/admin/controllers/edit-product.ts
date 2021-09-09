@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 import multer from "multer";
 
-import { uploadImages } from "../../../middlewares/upload-images";
+import { getImagesFromClient } from "../../../middlewares/get-images";
 
 export const editProduct = async (
   req: Request,
@@ -9,7 +9,7 @@ export const editProduct = async (
   next: NextFunction
 ) => {
   // error handling of multer
-  uploadImages(req, res, function (err) {
+  getImagesFromClient(req, res, function (err) {
     if (err instanceof multer.MulterError) {
       // A Multer error occurred when uploading.
     } else if (err) {

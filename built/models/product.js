@@ -16,7 +16,8 @@ const productSchema = new mongoose_1.default.Schema({
         byColor: { type: Object, required: true },
         bySize: { type: Object, required: true },
     },
-    imageUrl: { type: Object, required: true },
+    searchTags: { type: Array, required: true },
+    imagesUrl: { type: Object, required: true },
     description: { type: String, required: true },
 }, {
     toJSON: {

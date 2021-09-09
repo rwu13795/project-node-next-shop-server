@@ -10,7 +10,7 @@ export interface StockProps {
   };
 }
 
-interface imageUrlProps {
+export interface ImagesUrlProps {
   [color: string]: {
     main: string | undefined;
     sub: string[] | undefined;
@@ -25,7 +25,8 @@ interface ProductAttrs {
   colors: string[];
   sizes: string[];
   stock: StockProps;
-  imageUrl: imageUrlProps;
+  searchTags: string[];
+  imagesUrl: ImagesUrlProps;
   description: string;
 }
 
@@ -37,7 +38,8 @@ interface ProductDoc extends mongoose.Document {
   colors: string[];
   sizes: string[];
   stock: StockProps;
-  imageUrl: imageUrlProps;
+  searchTags: string[];
+  imagesUrl: ImagesUrlProps;
   description: string;
   version: number;
 }
@@ -58,7 +60,8 @@ const productSchema = new mongoose.Schema(
       byColor: { type: Object, required: true },
       bySize: { type: Object, required: true },
     },
-    imageUrl: { type: Object, required: true },
+    searchTags: { type: Array, required: true },
+    imagesUrl: { type: Object, required: true },
     description: { type: String, required: true },
   },
   {
