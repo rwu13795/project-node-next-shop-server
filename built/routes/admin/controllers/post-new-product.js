@@ -2,19 +2,22 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.postNewProcut = void 0;
 const client_s3_1 = require("@aws-sdk/client-s3");
+// import { Stock } from "../../../models/stock";
 const aws_s3_client_1 = require("../../../util/aws-s3-client");
 const postNewProcut = async (req, res, next) => {
     const imageFiles = req.files;
     const document = JSON.parse(req.body.document);
     const { title, main_cat, sub_cat, price, colorProps, description, } = document;
     const sizesArray = ["small", "medium", "large"];
-    let colorsArray = [];
+    let colorPairArray = [];
     for (let e of colorProps) {
-        colorsArray.push({ [e.colorName]: e.colorCode });
+        colorPairArray.push({ [e.colorName]: e.colorCode });
     }
     const stock = mapStock(sizesArray, colorProps);
     const imagesUrl = await uploadImageTo_S3(imageFiles, colorProps, main_cat, sub_cat, title);
     console.log(title, main_cat, sub_cat, price, colorProps, description);
+    console.log(stock);
+    console.log(colorPairArray);
     console.log(imagesUrl);
     // const product = Product.build({
     //   title,

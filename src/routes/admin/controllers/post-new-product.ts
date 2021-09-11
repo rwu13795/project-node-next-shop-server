@@ -1,22 +1,17 @@
 import { NextFunction, Request, Response } from "express";
-import { PutObjectCommand, CreateBucketCommand } from "@aws-sdk/client-s3";
+import { PutObjectCommand } from "@aws-sdk/client-s3";
 
 import { Product } from "../../../models/product";
 // import { Stock } from "../../../models/stock";
-import asyncWrapper from "../../../middlewares/async-wrapper";
 import { s3Client } from "../../../util/aws-s3-client";
 
-import { StockProps, ImagesUrlProps } from "../../../models/product";
+import { StockProps, ImagesUrlProps, ColorPair } from "../../../models/product";
 
 interface ColorProps {
   colorName: string;
   colorCode: string;
   sizes: { [name: string]: number };
   imagesCount: number;
-}
-
-interface ColorPair {
-  [color: string]: string;
 }
 
 export const postNewProcut = async (
@@ -44,9 +39,10 @@ export const postNewProcut = async (
   } = document;
 
   const sizesArray = ["small", "medium", "large"];
-  let colorsArray: ColorPair[] = [];
+
+  let colorPairArray: ColorPair[] = [];
   for (let e of colorProps) {
-    colorsArray.push({ [e.colorName]: e.colorCode });
+    colorPairArray.push({ [e.colorName]: e.colorCode });
   }
 
   const stock = mapStock(sizesArray, colorProps);
@@ -60,6 +56,8 @@ export const postNewProcut = async (
   );
 
   console.log(title, main_cat, sub_cat, price, colorProps, description);
+  console.log(stock);
+  console.log(colorPairArray);
   console.log(imagesUrl);
 
   // const product = Product.build({
