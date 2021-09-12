@@ -39,10 +39,12 @@ export const postNewProcut = async (
   } = document;
 
   const sizesArray = ["small", "medium", "large"];
+  let searchTags: string[] = [...title.split(" ")];
 
   let colorPairArray: ColorPair[] = [];
   for (let e of colorProps) {
     colorPairArray.push({ [e.colorName]: e.colorCode });
+    searchTags.push(e.colorName);
   }
 
   const stock = mapStock(sizesArray, colorProps);
@@ -55,32 +57,22 @@ export const postNewProcut = async (
     title
   );
 
-  console.log(title, main_cat, sub_cat, price, colorProps, description);
-  console.log(stock);
-  console.log(colorPairArray);
-  console.log(imagesUrl);
+  const product = Product.build({
+    title,
+    main_cat,
+    sub_cat,
+    price,
+    colors: colorPairArray,
+    sizes: sizesArray,
+    stock,
+    searchTags,
+    imagesUrl,
+    description,
+  });
 
-  // const product = Product.build({
-  //   title,
-  //   main_cat,
-  //   sub_cat,
-  //   price,
-  //   colors: colorArray,
-  //   sizes: sizeArray,
-  //   stock,
-  //   imageUrl: {
-  //     ["red"]: {
-  //       main: "https://testing-images-on-s3.s3.us-east-2.amazonaws.com/images/t-1.jpg",
-  //       sub: [
-  //         "https://testing-images-on-s3.s3.us-east-2.amazonaws.com/images/t-1.jpg",
-  //       ],
-  //     },
-  //   },
-  //   description,
-  // });
+  await product.save();
 
-  // await product.save();
-
+  console.log("> > > new product added < < <");
   res.status(201).send({ message: "OK" });
 };
 
@@ -88,13 +80,15 @@ function mapStock(sizesArray: string[], colorProps: ColorProps[]): StockProps {
   let stock: StockProps = { byColor: {}, bySize: {} };
   for (let elem of colorProps) {
     let color = elem.colorName;
-    stock.byColor[color] = { ...elem.sizes };
+    let totalByColor = Object.values(elem.sizes).reduce((x, y) => x + y, 0);
+    stock.byColor[color] = { ...elem.sizes, total: totalByColor };
     for (let size of sizesArray) {
       if (!stock.bySize[size]) {
         // NOTE have to initialize "bySize[size][color]" before we could assign a number to it
-        stock.bySize[size] = { [color]: 0 };
+        stock.bySize[size] = { [color]: 0, total: 0 };
       }
       stock.bySize[size][color] = elem.sizes[size];
+      stock.bySize[size].total = stock.bySize[size].total + elem.sizes[size];
     }
   }
   return stock;
@@ -176,43 +170,3 @@ async function uploadImageTo_S3(
   }
   return imagesUrl;
 }
-
-/**
-   * 
-    
-   */
-
-/*if (!image) {
-      return next(res.status(422).send({ message: "Missing image file!" }));
-    }
-
-    // let imageUrl = image.path.toString();
-    // console.log(imageUrl);
-    // const item = Items.build({ ...body });
-    // await item.save();
-
-    // console.log(item);
-
-    // res.status(201).send(item);
-
-    
-
- 
-
-    // console.log(data);
-    // console.log("Successfully created a bucket called ", data.Location);
-
-    const results = await s3Client.send(new PutObjectCommand(params));
-    console.log(
-      "Successfully created " +
-        params.Key +
-        " and uploaded it to " + 
-        params.Bucket +
-        "/" +
-        params.Key
-
-      // the complete URL = "https//" + "params.Bucket" + ".s3.us-east-2.amazonaws.com/" + "params.Key"
-    );
-
-    // console.log(results);
- */

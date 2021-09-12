@@ -2,12 +2,16 @@ import mongoose from "mongoose";
 
 export interface StockProps {
   byColor: {
-    [color: string]: { [size: string]: number | undefined } | undefined;
+    [color: string]: { [size: string]: number; total: number };
   };
 
   bySize: {
-    [size: string]: { [color: string]: number | undefined } | undefined;
+    [size: string]: { [color: string]: number; total: number };
   };
+}
+
+export interface ColorPair {
+  [colorName: string]: string; // { ["colorName"] : "colorCode" }
 }
 
 export interface ImagesUrlProps {
@@ -22,7 +26,7 @@ interface ProductAttrs {
   main_cat: string;
   sub_cat: string;
   price: number;
-  colors: string[];
+  colors: ColorPair[];
   sizes: string[];
   stock: StockProps;
   searchTags: string[];

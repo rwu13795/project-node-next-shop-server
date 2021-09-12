@@ -2,6 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.postNewProcut = void 0;
 const client_s3_1 = require("@aws-sdk/client-s3");
+const product_1 = require("../../../models/product");
 // import { Stock } from "../../../models/stock";
 const aws_s3_client_1 = require("../../../util/aws-s3-client");
 const postNewProcut = async (req, res, next) => {
@@ -9,35 +10,28 @@ const postNewProcut = async (req, res, next) => {
     const document = JSON.parse(req.body.document);
     const { title, main_cat, sub_cat, price, colorProps, description, } = document;
     const sizesArray = ["small", "medium", "large"];
+    let searchTags = [...title.split(" ")];
     let colorPairArray = [];
     for (let e of colorProps) {
         colorPairArray.push({ [e.colorName]: e.colorCode });
+        searchTags.push(e.colorName);
     }
     const stock = mapStock(sizesArray, colorProps);
     const imagesUrl = await uploadImageTo_S3(imageFiles, colorProps, main_cat, sub_cat, title);
-    console.log(title, main_cat, sub_cat, price, colorProps, description);
-    console.log(stock);
-    console.log(colorPairArray);
-    console.log(imagesUrl);
-    // const product = Product.build({
-    //   title,
-    //   main_cat,
-    //   sub_cat,
-    //   price,
-    //   colors: colorArray,
-    //   sizes: sizeArray,
-    //   stock,
-    //   imageUrl: {
-    //     ["red"]: {
-    //       main: "https://testing-images-on-s3.s3.us-east-2.amazonaws.com/images/t-1.jpg",
-    //       sub: [
-    //         "https://testing-images-on-s3.s3.us-east-2.amazonaws.com/images/t-1.jpg",
-    //       ],
-    //     },
-    //   },
-    //   description,
-    // });
-    // await product.save();
+    const product = product_1.Product.build({
+        title,
+        main_cat,
+        sub_cat,
+        price,
+        colors: colorPairArray,
+        sizes: sizesArray,
+        stock,
+        searchTags,
+        imagesUrl,
+        description,
+    });
+    await product.save();
+    console.log("> > > new product added < < <");
     res.status(201).send({ message: "OK" });
 };
 exports.postNewProcut = postNewProcut;
@@ -45,13 +39,15 @@ function mapStock(sizesArray, colorProps) {
     let stock = { byColor: {}, bySize: {} };
     for (let elem of colorProps) {
         let color = elem.colorName;
-        stock.byColor[color] = Object.assign({}, elem.sizes);
+        let totalByColor = Object.values(elem.sizes).reduce((x, y) => x + y, 0);
+        stock.byColor[color] = Object.assign(Object.assign({}, elem.sizes), { total: totalByColor });
         for (let size of sizesArray) {
             if (!stock.bySize[size]) {
                 // NOTE have to initialize "bySize[size][color]" before we could assign a number to it
-                stock.bySize[size] = { [color]: 0 };
+                stock.bySize[size] = { [color]: 0, total: 0 };
             }
             stock.bySize[size][color] = elem.sizes[size];
+            stock.bySize[size].total = stock.bySize[size].total + elem.sizes[size];
         }
     }
     return stock;
@@ -121,42 +117,4 @@ async function uploadImageTo_S3(imageFiles, colorProps, main_cat, sub_cat, title
     }
     return imagesUrl;
 }
-/**
-   *
-    
-   */
-/*if (!image) {
-      return next(res.status(422).send({ message: "Missing image file!" }));
-    }
-
-    // let imageUrl = image.path.toString();
-    // console.log(imageUrl);
-    // const item = Items.build({ ...body });
-    // await item.save();
-
-    // console.log(item);
-
-    // res.status(201).send(item);
-
-    
-
- 
-
-    // console.log(data);
-    // console.log("Successfully created a bucket called ", data.Location);
-
-    const results = await s3Client.send(new PutObjectCommand(params));
-    console.log(
-      "Successfully created " +
-        params.Key +
-        " and uploaded it to " +
-        params.Bucket +
-        "/" +
-        params.Key
-
-      // the complete URL = "https//" + "params.Bucket" + ".s3.us-east-2.amazonaws.com/" + "params.Key"
-    );
-
-    // console.log(results);
- */
 //# sourceMappingURL=post-new-product.js.map
