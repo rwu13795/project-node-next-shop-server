@@ -5,10 +5,10 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.editProduct = void 0;
 const multer_1 = __importDefault(require("multer"));
-const get_images_1 = require("../../../middlewares/get-images");
+const get_image_files_1 = __importDefault(require("../../../middlewares/upload-multi-files/get-image-files"));
 const editProduct = async (req, res, next) => {
     // error handling of multer
-    (0, get_images_1.getImagesFromClient)(req, res, function (err) {
+    (0, get_image_files_1.default)(req, res, function (err) {
         if (err instanceof multer_1.default.MulterError) {
             // A Multer error occurred when uploading.
         }

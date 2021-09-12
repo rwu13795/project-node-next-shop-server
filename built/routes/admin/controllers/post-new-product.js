@@ -2,35 +2,54 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.postNewProcut = void 0;
 const client_s3_1 = require("@aws-sdk/client-s3");
-const product_1 = require("../../../models/product");
 // import { Stock } from "../../../models/stock";
 const aws_s3_client_1 = require("../../../util/aws-s3-client");
 const postNewProcut = async (req, res, next) => {
     const imageFiles = req.files;
-    const document = JSON.parse(req.body.document);
-    const { title, main_cat, sub_cat, price, colorProps, description, } = document;
-    const sizesArray = ["small", "medium", "large"];
-    let searchTags = [...title.split(" ")];
-    let colorPairArray = [];
-    for (let e of colorProps) {
-        colorPairArray.push({ [e.colorName]: e.colorCode });
-        searchTags.push(e.colorName);
-    }
-    const stock = mapStock(sizesArray, colorProps);
-    const imagesUrl = await uploadImageTo_S3(imageFiles, colorProps, main_cat, sub_cat, title);
-    const product = product_1.Product.build({
-        title,
-        main_cat,
-        sub_cat,
-        price,
-        colors: colorPairArray,
-        sizes: sizesArray,
-        stock,
-        searchTags,
-        imagesUrl,
-        description,
-    });
-    await product.save();
+    console.log(req.body.title);
+    // const {
+    //   title,
+    //   main_cat,
+    //   sub_cat,
+    //   price,
+    //   colorProps,
+    //   description,
+    // }: {
+    //   title: string;
+    //   main_cat: string;
+    //   sub_cat: string;
+    //   price: number;
+    //   colorProps: ColorProps[];
+    //   description: string;
+    // } = document;
+    // const sizesArray = ["small", "medium", "large"];
+    // let searchTags: string[] = [...title.split(" ")];
+    // let colorPairArray: ColorPair[] = [];
+    // for (let e of colorProps) {
+    //   colorPairArray.push({ [e.colorName]: e.colorCode });
+    //   searchTags.push(e.colorName);
+    // }
+    // const stock = mapStock(sizesArray, colorProps);
+    // const imagesUrl = await uploadImageTo_S3(
+    //   imageFiles,
+    //   colorProps,
+    //   main_cat,
+    //   sub_cat,
+    //   title
+    // );
+    // const product = Product.build({
+    //   title,
+    //   main_cat,
+    //   sub_cat,
+    //   price,
+    //   colors: colorPairArray,
+    //   sizes: sizesArray,
+    //   stock,
+    //   searchTags,
+    //   imagesUrl,
+    //   description,
+    // });
+    // await product.save();
     console.log("> > > new product added < < <");
     res.status(201).send({ message: "OK" });
 };

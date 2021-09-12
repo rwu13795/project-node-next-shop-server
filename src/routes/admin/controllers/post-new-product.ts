@@ -20,57 +20,58 @@ export const postNewProcut = async (
   next: NextFunction
 ) => {
   const imageFiles = req.files;
-  const document = JSON.parse(req.body.document);
 
-  const {
-    title,
-    main_cat,
-    sub_cat,
-    price,
-    colorProps,
-    description,
-  }: {
-    title: string;
-    main_cat: string;
-    sub_cat: string;
-    price: number;
-    colorProps: ColorProps[];
-    description: string;
-  } = document;
+  console.log(req.body.title);
 
-  const sizesArray = ["small", "medium", "large"];
-  let searchTags: string[] = [...title.split(" ")];
+  // const {
+  //   title,
+  //   main_cat,
+  //   sub_cat,
+  //   price,
+  //   colorProps,
+  //   description,
+  // }: {
+  //   title: string;
+  //   main_cat: string;
+  //   sub_cat: string;
+  //   price: number;
+  //   colorProps: ColorProps[];
+  //   description: string;
+  // } = document;
 
-  let colorPairArray: ColorPair[] = [];
-  for (let e of colorProps) {
-    colorPairArray.push({ [e.colorName]: e.colorCode });
-    searchTags.push(e.colorName);
-  }
+  // const sizesArray = ["small", "medium", "large"];
+  // let searchTags: string[] = [...title.split(" ")];
 
-  const stock = mapStock(sizesArray, colorProps);
+  // let colorPairArray: ColorPair[] = [];
+  // for (let e of colorProps) {
+  //   colorPairArray.push({ [e.colorName]: e.colorCode });
+  //   searchTags.push(e.colorName);
+  // }
 
-  const imagesUrl = await uploadImageTo_S3(
-    imageFiles,
-    colorProps,
-    main_cat,
-    sub_cat,
-    title
-  );
+  // const stock = mapStock(sizesArray, colorProps);
 
-  const product = Product.build({
-    title,
-    main_cat,
-    sub_cat,
-    price,
-    colors: colorPairArray,
-    sizes: sizesArray,
-    stock,
-    searchTags,
-    imagesUrl,
-    description,
-  });
+  // const imagesUrl = await uploadImageTo_S3(
+  //   imageFiles,
+  //   colorProps,
+  //   main_cat,
+  //   sub_cat,
+  //   title
+  // );
 
-  await product.save();
+  // const product = Product.build({
+  //   title,
+  //   main_cat,
+  //   sub_cat,
+  //   price,
+  //   colors: colorPairArray,
+  //   sizes: sizesArray,
+  //   stock,
+  //   searchTags,
+  //   imagesUrl,
+  //   description,
+  // });
+
+  // await product.save();
 
   console.log("> > > new product added < < <");
   res.status(201).send({ message: "OK" });

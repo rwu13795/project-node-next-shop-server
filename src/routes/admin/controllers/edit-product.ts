@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 import multer from "multer";
 
-import { getImagesFromClient } from "../../../middlewares/get-images";
+import getImagesFromClient from "../../../middlewares/upload-multi-files/get-image-files";
 
 export const editProduct = async (
   req: Request,

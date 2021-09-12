@@ -1,0 +1,1 @@
+{"version":3,"file":"body_addProduct.js","sourceRoot":"","sources":["../../../src/middlewares/body-validator/body_addProduct.ts"],"names":[],"mappings":";;AAAA,yDAAyC;AAEzC,MAAM,eAAe,GAAG;IACtB,IAAA,wBAAI,EAAC,OAAO,CAAC,CAAC,QAAQ,EAAE,CAAC,WAAW,CAAC,wBAAwB,CAAC;CAC/D,CAAC;AAEF,kBAAe,eAAe,CAAC"}
