@@ -1,1 +1,0 @@
-{"version":3,"file":"custom-error.js","sourceRoot":"","sources":["../../../src/middlewares/error-handler/custom-error.ts"],"names":[],"mappings":";;;AAAA,MAAsB,WAAY,SAAQ,KAAK;IAG7C,YAAY,OAAe;QACzB,KAAK,CAAC,OAAO,CAAC,CAAC;QAEf,+DAA+D;QAC/D,sEAAsE;QACtE,qDAAqD;QACrD,MAAM,CAAC,cAAc,CAAC,IAAI,EAAE,WAAW,CAAC,SAAS,CAAC,CAAC;IACrD,CAAC;CAKF;AAfD,kCAeC;AAED;;;;;;;;;IASI"}

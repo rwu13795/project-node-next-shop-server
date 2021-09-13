@@ -4,7 +4,7 @@
     "noImplicitReturns": true,
     "noUnusedLocals": true,
     "noImplicitAny": false,
-    "outDir": "built",
+    "outDir": "build",
     "sourceMap": true,
     "strict": true,
     "target": "es2017",

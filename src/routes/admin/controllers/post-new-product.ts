@@ -1,11 +1,23 @@
 import { NextFunction, Request, Response } from "express";
 import { PutObjectCommand } from "@aws-sdk/client-s3";
 
-import { Product } from "../../../models/product";
+import { MenProduct } from "../../../models/men-product";
+import { WomenProduct } from "../../../models/women-product";
+import { KidsProduct } from "../../../models/kids-product";
+
 // import { Stock } from "../../../models/stock";
 import { s3Client } from "../../../util/aws-s3-client";
 
-import { StockProps, ImagesUrlProps, ColorPair } from "../../../models/product";
+import {
+  StockProps,
+  ImagesUrlProps,
+  ColorPair,
+  ProductAttrs,
+} from "../../../models/product-interfaces";
+import {
+  MainCategory,
+  sizesArray,
+} from "../../../models/product-category-enums";
 
 interface ColorProps {
   colorName: string;
@@ -20,58 +32,71 @@ export const postNewProcut = async (
   next: NextFunction
 ) => {
   const imageFiles = req.files;
+  const {
+    title,
+    main_cat,
+    sub_cat,
+    price,
+    colorProps,
+    description,
+  }: {
+    title: string;
+    main_cat: string;
+    sub_cat: string;
+    price: number;
+    colorProps: ColorProps[];
+    description: string;
+  } = req.body;
 
-  console.log(">>>>>> in post", req.body.description);
+  // put keywords in search tags
+  const tagsRegex = /[\s-]+/g; // match all "space" and "dash-line"
+  let searchTags: string[] = [...title.split(tagsRegex)];
 
-  // const {
-  //   title,
-  //   main_cat,
-  //   sub_cat,
-  //   price,
-  //   colorProps,
-  //   description,
-  // }: {
-  //   title: string;
-  //   main_cat: string;
-  //   sub_cat: string;
-  //   price: number;
-  //   colorProps: ColorProps[];
-  //   description: string;
-  // } = document;
+  let colorPairArray: ColorPair[] = [];
+  for (let e of colorProps) {
+    colorPairArray.push({ [e.colorName]: e.colorCode });
+    searchTags.push(e.colorName);
+  }
 
-  // const sizesArray = ["small", "medium", "large"];
-  // let searchTags: string[] = [...title.split(" ")];
+  const stock = mapStock(sizesArray, colorProps);
 
-  // let colorPairArray: ColorPair[] = [];
-  // for (let e of colorProps) {
-  //   colorPairArray.push({ [e.colorName]: e.colorCode });
-  //   searchTags.push(e.colorName);
-  // }
+  const imagesUrl = await uploadImageTo_S3(
+    imageFiles,
+    colorProps,
+    main_cat,
+    sub_cat,
+    title
+  );
 
-  // const stock = mapStock(sizesArray, colorProps);
+  const productAttrs: ProductAttrs = {
+    title,
+    main_cat,
+    sub_cat,
+    price,
+    colors: colorPairArray,
+    sizes: sizesArray,
+    stock,
+    searchTags,
+    imagesUrl,
+    description,
+  };
 
-  // const imagesUrl = await uploadImageTo_S3(
-  //   imageFiles,
-  //   colorProps,
-  //   main_cat,
-  //   sub_cat,
-  //   title
-  // );
+  let product;
+  switch (main_cat) {
+    case MainCategory.men:
+      product = MenProduct.build(productAttrs);
+      break;
+    case MainCategory.women:
+      product = WomenProduct.build(productAttrs);
+      break;
+    case MainCategory.kids:
+      product = KidsProduct.build(productAttrs);
+      break;
+    default:
+      break;
+  }
 
-  // const product = Product.build({
-  //   title,
-  //   main_cat,
-  //   sub_cat,
-  //   price,
-  //   colors: colorPairArray,
-  //   sizes: sizesArray,
-  //   stock,
-  //   searchTags,
-  //   imagesUrl,
-  //   description,
-  // });
-
-  // await product.save();
+  await product.save();
 
   console.log("> > > new product added < < <");
   res.status(201).send({ message: "OK" });

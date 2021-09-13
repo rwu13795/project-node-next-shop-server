@@ -2,7 +2,7 @@ import { NextFunction, Request, Response } from "express";
 
 import asyncWrapper from "../../../middlewares/async-wrapper";
 import { NotFoundError } from "../../../middlewares/error-handler/not-found-error";
-import { Product } from "../../../models/product";
+import { MenProduct } from "../../../models/men-product";
 
 export const getOneProduct = asyncWrapper(
   async (req: Request, res: Response, next: NextFunction) => {
@@ -12,7 +12,7 @@ export const getOneProduct = asyncWrapper(
     // specify the nested object property in a string `stock.byColor.${color}.total`
     const objectPath = `stock.byColor.${color}.total`;
     console.log(objectPath);
-    const product = await Product.find({ [objectPath]: { $gt: 0 } }).lean();
+    const product = await MenProduct.find({ [objectPath]: { $gt: 0 } }).lean();
 
     if (product.length < 1) {
       return next(new NotFoundError());
