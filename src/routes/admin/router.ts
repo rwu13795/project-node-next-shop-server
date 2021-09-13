@@ -1,6 +1,6 @@
 import express from "express";
-import body_addProduct from "../../middlewares/body-validator/body_addProduct";
-import bodyValidator from "../../middlewares/body-validator/validator";
+import body_addProduct from "../../middlewares/request-validator/body-addProduct";
+import requestValidator from "../../middlewares/request-validator/validator";
 import getImagesFromClient from "../../middlewares/upload-multi-files/get-image-files";
 import multiFiles_bodyParser from "../../middlewares/upload-multi-files/multi-files-bodyParser";
 
@@ -13,7 +13,7 @@ router.post(
   getImagesFromClient,
   multiFiles_bodyParser,
   body_addProduct,
-  bodyValidator,
+  requestValidator,
   postNewProcut
 );
 

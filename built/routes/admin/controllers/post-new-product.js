@@ -6,7 +6,7 @@ const client_s3_1 = require("@aws-sdk/client-s3");
 const aws_s3_client_1 = require("../../../util/aws-s3-client");
 const postNewProcut = async (req, res, next) => {
     const imageFiles = req.files;
-    console.log(req.body.title);
+    console.log(">>>>>> in post", req.body.description);
     // const {
     //   title,
     //   main_cat,

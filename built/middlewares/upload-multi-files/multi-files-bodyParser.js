@@ -5,6 +5,7 @@ const multiFiles_bodyParser = (req, res, next) => {
     // we have to parse the "req.body.document" and put this "document" back inside
     // "req.body", so that the "bodyValidator" can access the correct "body"
     const document = JSON.parse(req.body.document);
+    console.log("> > > request body in bodyParser", document);
     req.body = document;
     next();
 };

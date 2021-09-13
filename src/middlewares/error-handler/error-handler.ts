@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from "express";
-// import { CustomError } from "../errors/custom-error";
+import { CustomError } from "./custom-error";
 
 // if there are 4 arguments in a function, express will treat this
 // function as an error handling function automatically
@@ -16,13 +16,14 @@ export const errorHandler = (
 
   // the instanceof applies to all the CustomError's subclass, so we don't need
   // to check each custom error handler manually
-  //   if (err instanceof CustomError) {
-  //     return res.status(err.statusCode).send({ errors: err.serializeErrors() });
-  //   }
+  if (err instanceof CustomError) {
+    // console.log(err);
+    return res.status(err.statusCode).send({ errors: err.serializeErrors() });
+  }
 
   // the error which no handler can handle
   console.log(">>>>>>>>>>>>>>>>>>", err); // log the error details
-  res.status(400).send({
+  return res.status(400).send({
     message: "The error that no handler can handle !",
     field: "main",
   });

@@ -7,6 +7,7 @@ const asyncWrapper = (callback: Function) => {
       await callback(req, res, next);
     } catch (error) {
       // there is a custom error handler component
+      console.log("> > > asyncWrapper catched error: ", error);
       next(error);
     }
   };

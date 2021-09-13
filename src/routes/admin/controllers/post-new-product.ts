@@ -21,7 +21,7 @@ export const postNewProcut = async (
 ) => {
   const imageFiles = req.files;
 
-  console.log(req.body.title);
+  console.log(">>>>>> in post", req.body.description);
 
   // const {
   //   title,

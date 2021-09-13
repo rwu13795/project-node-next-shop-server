@@ -8,6 +8,7 @@ const asyncWrapper = (callback) => {
         }
         catch (error) {
             // there is a custom error handler component
+            console.log("> > > asyncWrapper catched error: ", error);
             next(error);
         }
     };
