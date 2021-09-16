@@ -70,8 +70,8 @@ export const postNewProcut = async (
 
   const productAttrs: ProductAttrs = {
     title,
-    main_cat,
-    sub_cat,
+    main_cat: main_cat.toLocaleLowerCase(),
+    sub_cat: sub_cat.toLocaleLowerCase(),
     price,
     colors: colorPairArray,
     sizes: sizesArray,
@@ -82,7 +82,7 @@ export const postNewProcut = async (
   };
 
   let product;
-  switch (main_cat) {
+  switch (main_cat.toLocaleLowerCase()) {
     case MainCategory.men:
       product = MenProduct.build(productAttrs);
       break;
@@ -162,9 +162,9 @@ async function uploadImageTo_S3(
 
   let fileIndex = 0;
   for (let elem of colorProps) {
-    // initialize the props
+    // initialize the [elem.colorName] prop
     if (!imagesUrl[elem.colorName]) {
-      imagesUrl[elem.colorName] = { main: "", sub: [] };
+      imagesUrl[elem.colorName] = [];
     }
     let count = 1;
     while (count <= elem.imagesCount) {
@@ -178,11 +178,8 @@ async function uploadImageTo_S3(
       params.Body = imageFiles[fileIndex].buffer;
 
       // put the url to imagesUrl
-      if (count === 1) {
-        imagesUrl[elem.colorName].main = awsUrl + `/${originalnameToUrl}`;
-      } else {
-        imagesUrl[elem.colorName].sub.push(awsUrl + `/${originalnameToUrl}`);
-      }
+      imagesUrl[elem.colorName].push(awsUrl + `/${originalnameToUrl}`);
+
       // upload to S3
       try {
         await s3Client.send(new PutObjectCommand(params));

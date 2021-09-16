@@ -5,10 +5,10 @@ import { Request, Response } from "express";
         (3) an array contains all colors
 */
 
-export const getProducts = async (req: Request, res: Response) => {
+export const getMainCat = async (req: Request, res: Response) => {
   const param = req.params;
 
   console.log(param);
 
-  res.status(200).send({ message: "OK" });
+  res.status(200).send({ message: "in main cat" });
 };

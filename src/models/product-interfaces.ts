@@ -15,10 +15,7 @@ export interface ColorPair {
 }
 
 export interface ImagesUrlProps {
-  [color: string]: {
-    main: string | undefined;
-    sub: string[] | undefined;
-  };
+  [color: string]: string[];
 }
 
 export interface ProductAttrs {

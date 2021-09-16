@@ -6,6 +6,6 @@ import { Request, Response } from "express";
         (4) price, stock, description
 */
 
-export const getProductDetail = async (req: Request, res: Response) => {
+export const getDetail = async (req: Request, res: Response) => {
   res.status(200).send({ message: "OK" });
 };
