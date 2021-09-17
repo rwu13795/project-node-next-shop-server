@@ -1,30 +1,21 @@
 import { NextFunction, Request, Response } from "express";
 import { PutObjectCommand } from "@aws-sdk/client-s3";
 
-import { MenProduct } from "../../../models/men-product";
-import { WomenProduct } from "../../../models/women-product";
-import { KidsProduct } from "../../../models/kids-product";
+import {
+  KidsProduct,
+  WomenProduct,
+  MenProduct,
+} from "../../../models/product-schema";
 
 // import { Stock } from "../../../models/stock";
 import { s3Client } from "../../../util/aws-s3-client";
 
 import {
   StockProps,
-  ImagesUrlProps,
-  ColorPair,
+  ColorProps,
   ProductAttrs,
 } from "../../../models/product-interfaces";
-import {
-  MainCategory,
-  sizesArray,
-} from "../../../models/product-category-enums";
-
-interface ColorProps {
-  colorName: string;
-  colorCode: string;
-  sizes: { [name: string]: number };
-  imagesCount: number;
-}
+import { MainCategory, sizesArray } from "../../../models/product-enums";
 
 export const postNewProcut = async (
   req: Request,
@@ -37,32 +28,29 @@ export const postNewProcut = async (
     main_cat,
     sub_cat,
     price,
-    colorProps,
+    colorPropsList,
     description,
   }: {
     title: string;
     main_cat: string;
     sub_cat: string;
     price: number;
-    colorProps: ColorProps[];
+    colorPropsList: ColorProps[];
     description: string;
   } = req.body;
 
   // put keywords in search tags
   const tagsRegex = /[\s-]+/g; // match all "space" and "dash-line"
   let searchTags: string[] = [...title.split(tagsRegex)];
-
-  let colorPairArray: ColorPair[] = [];
-  for (let e of colorProps) {
-    colorPairArray.push({ [e.colorName]: e.colorCode });
+  for (let e of colorPropsList) {
     searchTags.push(e.colorName);
   }
 
-  const stock = mapStock(sizesArray, colorProps);
+  const stock = mapStock(sizesArray, colorPropsList);
 
-  const imagesUrl = await uploadImageTo_S3(
+  const colorPropsList_withImageUrl = await uploadImageTo_S3(
     imageFiles,
-    colorProps,
+    colorPropsList,
     main_cat,
     sub_cat,
     title
@@ -73,12 +61,10 @@ export const postNewProcut = async (
     main_cat: main_cat.toLocaleLowerCase(),
     sub_cat: sub_cat.toLocaleLowerCase(),
     price,
-    colors: colorPairArray,
-    sizes: sizesArray,
     stock,
     searchTags,
-    imagesUrl,
     description,
+    colorPropsList: colorPropsList_withImageUrl,
   };
 
   let product;
@@ -102,9 +88,12 @@ export const postNewProcut = async (
   res.status(201).send({ message: "OK" });
 };
 
-function mapStock(sizesArray: string[], colorProps: ColorProps[]): StockProps {
+function mapStock(
+  sizesArray: string[],
+  colorPropsList: ColorProps[]
+): StockProps {
   let stock: StockProps = { byColor: {}, bySize: {} };
-  for (let elem of colorProps) {
+  for (let elem of colorPropsList) {
     let color = elem.colorName;
     let totalByColor = Object.values(elem.sizes).reduce((x, y) => x + y, 0);
     stock.byColor[color] = { ...elem.sizes, total: totalByColor };
@@ -136,15 +125,14 @@ function mapStock(sizesArray: string[], colorProps: ColorProps[]): StockProps {
 
 async function uploadImageTo_S3(
   imageFiles,
-  colorProps: ColorProps[],
+  colorPropsList: ColorProps[],
   main_cat: string,
   sub_cat: string,
   title: string
-) {
+): Promise<ColorProps[]> {
   // node does not support replaceAll(), need to use regex
   const allSpacesRegex = /\s/g;
   let urlTitle = title.replace(allSpacesRegex, "-");
-  let imagesUrl: ImagesUrlProps = {};
 
   const categoryUrl = `${main_cat}/${sub_cat}/${urlTitle}`;
   const awsUrl = `https://testing-images-on-s3.s3.us-east-2.amazonaws.com/${categoryUrl}`;
@@ -161,12 +149,11 @@ async function uploadImageTo_S3(
   };
 
   let fileIndex = 0;
-  for (let elem of colorProps) {
-    // initialize the [elem.colorName] prop
-    if (!imagesUrl[elem.colorName]) {
-      imagesUrl[elem.colorName] = [];
-    }
+  for (let elem of colorPropsList) {
     let count = 1;
+    if (!elem.imagesUrl) {
+      elem.imagesUrl = [];
+    }
     while (count <= elem.imagesCount) {
       let originalnameToUrl = imageFiles[fileIndex].originalname.replace(
         allSpacesRegex,
@@ -177,8 +164,8 @@ async function uploadImageTo_S3(
       params.Key = `${categoryUrl}/${originalnameToUrl}`;
       params.Body = imageFiles[fileIndex].buffer;
 
-      // put the url to imagesUrl
-      imagesUrl[elem.colorName].push(awsUrl + `/${originalnameToUrl}`);
+      // put the url to colorProps imagesUrl
+      elem.imagesUrl.push(awsUrl + `/${originalnameToUrl}`);
 
       // upload to S3
       try {
@@ -191,5 +178,5 @@ async function uploadImageTo_S3(
       fileIndex++;
     }
   }
-  return imagesUrl;
+  return colorPropsList;
 }

@@ -2,7 +2,7 @@ import { NextFunction, Request, Response } from "express";
 
 import asyncWrapper from "../../../middlewares/async-wrapper";
 import { NotFoundError } from "../../../middlewares/error-handler/not-found-error";
-import { MenProduct } from "../../../models/men-product";
+import { MenProduct } from "../../../models/product-schema";
 
 export const getOneProduct = asyncWrapper(
   async (req: Request, res: Response, next: NextFunction) => {

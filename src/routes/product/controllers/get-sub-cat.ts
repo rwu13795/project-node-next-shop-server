@@ -1,8 +1,10 @@
 import { Request, Response } from "express";
 
-import { MenProduct } from "../../../models/men-product";
-import { WomenProduct } from "../../../models/women-product";
-import { KidsProduct } from "../../../models/kids-product";
+import {
+  KidsProduct,
+  WomenProduct,
+  MenProduct,
+} from "../../../models/product-schema";
 import asyncWrapper from "../../../middlewares/async-wrapper";
 import {
   MainCategory,

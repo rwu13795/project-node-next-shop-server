@@ -7,9 +7,9 @@ const body_addProduct = [
   body("main_cat").notEmpty().withMessage("Main category cannot be empty"),
   body("sub_cat").notEmpty().withMessage("Sub category cannot be empty"),
   // (1) //
-  body("colorProps")
+  body("colorPropsList")
     .custom((value, { req }) => {
-      for (let elem of req.body.colorProps) {
+      for (let elem of req.body.colorPropsList) {
         if (elem.colorName === "" || elem.colorName === undefined) {
           return false; // returning "false" means "not validated"
         }
@@ -19,9 +19,9 @@ const body_addProduct = [
     .withMessage("colorName"),
   // have to use the message to indicate specific error field, since the "param" will
   // be "colorProps" for all element inside this colorProps array
-  body("colorProps")
+  body("colorPropsList")
     .custom((value, { req }) => {
-      for (let elem of req.body.colorProps) {
+      for (let elem of req.body.colorPropsList) {
         if (elem.colorCode === "" || elem.colorCode === undefined) {
           return false; // returning "false" means "not validated"
         }
@@ -29,9 +29,9 @@ const body_addProduct = [
       return true;
     })
     .withMessage("colorCode"),
-  body("colorProps")
+  body("colorPropsList")
     .custom((value, { req }) => {
-      for (let elem of req.body.colorProps) {
+      for (let elem of req.body.colorPropsList) {
         if (elem.imagesCount < 1) {
           return false; // returning "false" means "not validated"
         }
