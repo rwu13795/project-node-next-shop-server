@@ -32,16 +32,15 @@ export enum SizesCategory {
 }
 export const sizesArray = Object.values(SizesCategory);
 
-export enum DB_AttrKeys {
+export enum p_keys {
+  productInfo = "productInfo",
+  colorPropsList = "colorPropsList",
+  stock = "stock",
+  searchTags = "searchTags",
+  version = "version",
   title = "title",
   main_cat = "main_cat",
   sub_cat = "sub_cat",
   price = "price",
-  colors = "colors",
-  sizes = "sizes",
-  stock = "stock",
-  searchTags = "searchTags",
-  imagesUrl = "imagesUrl",
   description = "description",
-  version = "version",
 }

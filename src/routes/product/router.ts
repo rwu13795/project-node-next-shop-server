@@ -10,6 +10,6 @@ router.get("/:main_cat", getMainCat);
 
 router.get("/:main_cat/:sub_cat", getSubCat);
 
-router.get("/detail/:productId", getDetail);
+router.get("/detail/:category/:productId", getDetail);
 
 export { router as productRouter };

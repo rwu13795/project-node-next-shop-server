@@ -11,7 +11,7 @@ import {
   WomenCategory,
   MenCategory,
   KidsCategory,
-  DB_AttrKeys,
+  p_keys,
 } from "../../../models/product-enums";
 
 /* send (1) product id 
@@ -34,7 +34,7 @@ export const getSubCat = asyncWrapper(async (req: Request, res: Response) => {
       products = await MenProduct.find({ main_cat, sub_cat })
         .skip((page - 1) * ITEMS_PER_PAGE)
         .limit(ITEMS_PER_PAGE)
-        .select([DB_AttrKeys.imagesUrl, DB_AttrKeys.title])
+        .select([p_keys.colorPropsList, p_keys.title])
         .lean();
       break;
     case MainCategory.women:

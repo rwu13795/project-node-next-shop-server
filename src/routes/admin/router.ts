@@ -4,7 +4,7 @@ import requestValidator from "../../middlewares/request-validator/validator";
 import getImagesFromClient from "../../middlewares/upload-multi-files/get-image-files";
 import multiFiles_bodyParser from "../../middlewares/upload-multi-files/multi-files-bodyParser";
 
-import { getOneProduct, postNewProcut, editProduct } from "./controllers";
+import { getOneProduct, addNewProcut, editProduct } from "./controllers";
 
 const router = express.Router();
 
@@ -14,11 +14,18 @@ router.post(
   multiFiles_bodyParser,
   body_addProduct,
   requestValidator,
-  postNewProcut
+  addNewProcut
 );
 
 router.post("/get-one-product", getOneProduct);
 
-router.post("/edit-product", getImagesFromClient, editProduct);
+router.post(
+  "/edit-product",
+  getImagesFromClient,
+  multiFiles_bodyParser,
+  body_addProduct,
+  requestValidator,
+  editProduct
+);
 
 export { router as adminRouter };

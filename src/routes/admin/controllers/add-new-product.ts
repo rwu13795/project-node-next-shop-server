@@ -1,7 +1,5 @@
 import { NextFunction, Request, Response } from "express";
 
-import { ObjectId } from "mongodb";
-
 import {
   KidsProduct,
   WomenProduct,
@@ -10,12 +8,20 @@ import {
 
 import { ColorProps, ProductAttrs } from "../../../models/product-interfaces";
 import { MainCategory, sizesArray } from "../../../models/product-enums";
-import { ColorPropsFromClient } from ".";
 import mapStock from "../helpers/map-product-stock";
 import uploadImageTo_S3 from "../helpers/upload-to-S3";
-import deleteImages from "../helpers/delete-image-on-S3";
 
-export const editProduct = async (
+export interface ColorPropsFromClient {
+  colorName: string;
+  colorCode: string;
+  sizes: { [name: string]: number };
+  imageCount: number;
+  imageFiles: string[];
+  modifiedImages?: (string | File)[];
+  modifiedIndex?: number[];
+}
+
+export const addNewProcut = async (
   req: Request,
   res: Response,
   next: NextFunction
@@ -28,8 +34,6 @@ export const editProduct = async (
     price,
     colorPropsListFromClient,
     description,
-    productId,
-    deletedImgaes,
   }: {
     title: string;
     main_cat: string;
@@ -37,8 +41,6 @@ export const editProduct = async (
     price: number;
     colorPropsListFromClient: ColorPropsFromClient[];
     description: string;
-    productId: string;
-    deletedImgaes: string[];
   } = req.body;
 
   // put keywords in search tags
@@ -50,25 +52,20 @@ export const editProduct = async (
 
   const stock = mapStock(sizesArray, colorPropsListFromClient);
 
-  const [colorPropsList_toBeSaved]: [ColorProps[], void] = await Promise.all([
-    uploadImageTo_S3(
-      true,
-      imageFiles,
-      colorPropsListFromClient,
-      main_cat.toLowerCase(),
-      sub_cat.toLowerCase(),
-      title
-    ),
-    deleteImages(deletedImgaes),
-  ]);
+  const colorPropsList_toBeSaved: ColorProps[] = await uploadImageTo_S3(
+    false,
+    imageFiles,
+    colorPropsListFromClient,
+    main_cat.toLocaleLowerCase(),
+    sub_cat.toLocaleLowerCase(),
+    title
+  );
 
-  console.log(colorPropsList_toBeSaved);
-
-  const productUpdate: ProductAttrs = {
+  const productAttrs: ProductAttrs = {
     productInfo: {
       title,
-      main_cat: main_cat.toLowerCase(),
-      sub_cat: sub_cat.toLowerCase(),
+      main_cat: main_cat.toLocaleLowerCase(),
+      sub_cat: sub_cat.toLocaleLowerCase(),
       price,
       description,
     },
@@ -78,29 +75,17 @@ export const editProduct = async (
   };
 
   let product;
-  switch (main_cat.toLowerCase()) {
+  switch (main_cat.toLocaleLowerCase()) {
     case MainCategory.men: {
-      product = await MenProduct.findOneAndUpdate(
-        { _id: new ObjectId(productId) },
-        productUpdate,
-        { new: true }
-      );
+      product = MenProduct.build(productAttrs);
       break;
     }
     case MainCategory.women: {
-      product = await WomenProduct.findOneAndUpdate(
-        { _id: new ObjectId(productId) },
-        productUpdate,
-        { new: true }
-      );
+      product = WomenProduct.build(productAttrs);
       break;
     }
     case MainCategory.kids: {
-      product = await KidsProduct.findOneAndUpdate(
-        { _id: new ObjectId(productId) },
-        productUpdate,
-        { new: true }
-      );
+      product = KidsProduct.build(productAttrs);
       break;
     }
     default: {
@@ -108,6 +93,8 @@ export const editProduct = async (
     }
   }
 
-  console.log("> > > product edited < < <");
+  await product.save();
+
+  console.log("> > > new product added < < <");
   res.status(201).send({ message: "OK" });
 };
