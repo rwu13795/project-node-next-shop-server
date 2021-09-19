@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 
-const multiFiles_bodyParser = (
+export const multiFiles_bodyParser = (
   req: Request,
   res: Response,
   next: NextFunction
@@ -15,5 +15,3 @@ const multiFiles_bodyParser = (
 
   next();
 };
-
-export default multiFiles_bodyParser;

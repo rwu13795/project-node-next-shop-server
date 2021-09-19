@@ -4,10 +4,16 @@ import {
   KidsProduct,
   WomenProduct,
   MenProduct,
-} from "../../../models/product-schema";
+} from "../../../models/product/product-schema";
 
-import { ColorProps, ProductAttrs } from "../../../models/product-interfaces";
-import { MainCategory, sizesArray } from "../../../models/product-enums";
+import {
+  ColorProps,
+  ProductAttrs,
+} from "../../../models/product/product-interfaces";
+import {
+  MainCategory,
+  sizesArray,
+} from "../../../models/product/product-enums";
 import mapStock from "../helpers/map-product-stock";
 import uploadImageTo_S3 from "../helpers/upload-to-S3";
 
@@ -20,8 +26,16 @@ export interface ColorPropsFromClient {
   modifiedImages?: (string | File)[];
   modifiedIndex?: number[];
 }
+interface AddProductBody {
+  title: string;
+  main_cat: string;
+  sub_cat: string;
+  price: number;
+  colorPropsListFromClient: ColorPropsFromClient[];
+  description: string;
+}
 
-export const addNewProcut = async (
+export const addProduct = async (
   req: Request,
   res: Response,
   next: NextFunction
@@ -34,14 +48,7 @@ export const addNewProcut = async (
     price,
     colorPropsListFromClient,
     description,
-  }: {
-    title: string;
-    main_cat: string;
-    sub_cat: string;
-    price: number;
-    colorPropsListFromClient: ColorPropsFromClient[];
-    description: string;
-  } = req.body;
+  }: AddProductBody = req.body;
 
   // put keywords in search tags
   const tagsRegex = /[\s-]+/g; // match all "space" and "dash-line"

@@ -4,15 +4,15 @@ import {
   KidsProduct,
   WomenProduct,
   MenProduct,
-} from "../../../models/product-schema";
-import asyncWrapper from "../../../middlewares/async-wrapper";
+} from "../../../models/product/product-schema";
+import { asyncWrapper } from "../../../middlewares";
 import {
   MainCategory,
   WomenCategory,
   MenCategory,
   KidsCategory,
   p_keys,
-} from "../../../models/product-enums";
+} from "../../../models/product/product-enums";
 
 /* send (1) product id 
         (2) preview image Url for each color

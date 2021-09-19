@@ -1,8 +1,8 @@
 import { PutObjectCommand } from "@aws-sdk/client-s3";
 
 import { s3Client } from "../../../utils/aws-s3-client";
-import { ColorPropsFromClient } from "../controllers";
-import { ColorProps } from "../../../models/product-interfaces";
+import { ColorPropsFromClient } from "..";
+import { ColorProps } from "../../../models/product/product-interfaces";
 
 export default async function uploadImageTo_S3(
   editMode: boolean,

@@ -1,9 +1,9 @@
-console.log("hello world");
 import { config } from "dotenv";
 // import Stripe from "stripe";
 import mongoose from "mongoose";
 
 import { app } from "./app";
+import { Database_Connection_Error } from "./middlewares/error-handler/db-connection-error";
 
 if (process.env.NODE_ENV !== "production") {
   config();
@@ -25,7 +25,7 @@ const start = async () => {
     });
     console.log("> > > > >  Connected to MongoDB  < < < < <");
   } catch (err) {
-    console.log(err);
+    throw new Database_Connection_Error();
   }
 };
 

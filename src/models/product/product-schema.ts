@@ -18,7 +18,7 @@ kidsProductSchema.set("versionKey", "version");
 kidsProductSchema.statics.build = (attrs: ProductAttrs) => {
   return new KidsProduct(attrs);
 };
-const KidsProduct = mongoose.model<ProductDoc, ProductModel>(
+export const KidsProduct = mongoose.model<ProductDoc, ProductModel>(
   "kids_product",
   kidsProductSchema
 );
@@ -32,7 +32,7 @@ menProductSchema.set("versionKey", "version");
 menProductSchema.statics.build = (attrs: ProductAttrs) => {
   return new MenProduct(attrs);
 };
-const MenProduct = mongoose.model<ProductDoc, ProductModel>(
+export const MenProduct = mongoose.model<ProductDoc, ProductModel>(
   "men_product",
   menProductSchema
 );
@@ -46,9 +46,9 @@ womenProductSchema.set("versionKey", "version");
 womenProductSchema.statics.build = (attrs: ProductAttrs) => {
   return new WomenProduct(attrs);
 };
-const WomenProduct = mongoose.model<ProductDoc, ProductModel>(
+export const WomenProduct = mongoose.model<ProductDoc, ProductModel>(
   "women_product",
   womenProductSchema
 );
 
-export { KidsProduct, MenProduct, WomenProduct };
+//  { KidsProduct, MenProduct, WomenProduct };

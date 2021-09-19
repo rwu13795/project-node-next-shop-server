@@ -1,11 +1,28 @@
 import express, { Request, Response, NextFunction } from "express";
+import { config } from "dotenv";
 import cors from "cors";
 import helmet from "helmet";
 import compression from "compression";
+import session from "express-session";
+// const MongoDBStore = require("connect-mongodb-session")(session);
+import MongoStore from "connect-mongo";
 
 import { adminRouter } from "./routes/admin/router";
 import { productRouter } from "./routes/product/router";
 import { errorHandler } from "./middlewares/error-handler/error-handler";
+import { authRouter } from "./routes/auth/router";
+import { CurrentUser } from "./routes/auth/controllers/auth-status";
+
+declare module "express-session" {
+  interface SessionData {
+    currentUser: CurrentUser;
+    isLoggedIn: boolean;
+  }
+}
+
+if (process.env.NODE_ENV !== "production") {
+  config();
+}
 
 const app = express();
 
@@ -22,10 +39,37 @@ app.use((req: Request, res: Response, next: NextFunction): void => {
 
 app.use(
   cors({
+    credentials: true,
     origin: [
       "https://project-next-js-blog.vercel.app",
       "http://localhost:3000",
     ],
+  })
+);
+
+// const sessionStore = new MongoDBStore(
+//   {
+//     uri: process.env.MONGO_URI,
+//     collection: "sessions",
+//   },
+//   function (error) {
+//     console.log(error);
+//     // Should have gotten an error
+//   }
+// );
+
+app.use(
+  session({
+    secret: "my-secret",
+    resave: true,
+    saveUninitialized: true,
+    // the MongoDBStore will set the expiration time the same as we set for the session
+    // by using the expiration function offered by MongoDB
+    cookie: { maxAge: 1000 * 60 * 60 }, // 1 hour
+    // store: sessionStore, // additional config for using the MongoDBstore
+    store: MongoStore.create({
+      mongoUrl: process.env.MONGO_URI,
+    }),
   })
 );
 
@@ -35,6 +79,7 @@ app.use(compression());
 // connect all routers to the app
 app.use("/api/products", productRouter);
 app.use("/api/admin", adminRouter);
+app.use("/api/auth", authRouter);
 
 // YOU HAVE TO APPLY THE errorHandler AT LAST //
 app.use(errorHandler);

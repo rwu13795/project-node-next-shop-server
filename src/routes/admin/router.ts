@@ -1,10 +1,14 @@
 import express from "express";
-import body_addProduct from "../../middlewares/request-validator/body-addProduct";
-import requestValidator from "../../middlewares/request-validator/validator";
-import getImagesFromClient from "../../middlewares/upload-multi-files/get-image-files";
-import multiFiles_bodyParser from "../../middlewares/upload-multi-files/multi-files-bodyParser";
+import {
+  body_addProduct,
+  requestValidator,
+  getImagesFromClient,
+  multiFiles_bodyParser,
+} from "../../middlewares";
 
-import { getOneProduct, addNewProcut, editProduct } from "./controllers";
+import { addProduct } from "./controllers/add-product";
+import { editProduct } from "./controllers/edit-product";
+import { getOneProduct } from "./controllers/get-one-product";
 
 const router = express.Router();
 
@@ -14,7 +18,7 @@ router.post(
   multiFiles_bodyParser,
   body_addProduct,
   requestValidator,
-  addNewProcut
+  addProduct
 );
 
 router.post("/get-one-product", getOneProduct);

@@ -6,14 +6,31 @@ import {
   KidsProduct,
   WomenProduct,
   MenProduct,
-} from "../../../models/product-schema";
+} from "../../../models/product/product-schema";
 
-import { ColorProps, ProductAttrs } from "../../../models/product-interfaces";
-import { MainCategory, sizesArray } from "../../../models/product-enums";
-import { ColorPropsFromClient } from ".";
+import {
+  ColorProps,
+  ProductAttrs,
+} from "../../../models/product/product-interfaces";
+import {
+  MainCategory,
+  sizesArray,
+} from "../../../models/product/product-enums";
+import { ColorPropsFromClient } from "..";
 import mapStock from "../helpers/map-product-stock";
 import uploadImageTo_S3 from "../helpers/upload-to-S3";
 import deleteImages from "../helpers/delete-image-on-S3";
+
+interface EditProductBody {
+  title: string;
+  main_cat: string;
+  sub_cat: string;
+  price: number;
+  colorPropsListFromClient: ColorPropsFromClient[];
+  description: string;
+  productId: string;
+  deletedImgaes: string[];
+}
 
 export const editProduct = async (
   req: Request,
@@ -30,16 +47,7 @@ export const editProduct = async (
     description,
     productId,
     deletedImgaes,
-  }: {
-    title: string;
-    main_cat: string;
-    sub_cat: string;
-    price: number;
-    colorPropsListFromClient: ColorPropsFromClient[];
-    description: string;
-    productId: string;
-    deletedImgaes: string[];
-  } = req.body;
+  }: EditProductBody = req.body;
 
   // put keywords in search tags
   const tagsRegex = /[\s-]+/g; // match all "space" and "dash-line"
@@ -106,6 +114,9 @@ export const editProduct = async (
     default: {
       break;
     }
+  }
+
+  if (!product) {
   }
 
   console.log("> > > product edited < < <");

@@ -4,9 +4,9 @@ import {
   MenProduct,
   WomenProduct,
   KidsProduct,
-} from "../../../models/product-schema";
-import asyncWrapper from "../../../middlewares/async-wrapper";
-import { MainCategory, p_keys } from "../../../models/product-enums";
+} from "../../../models/product/product-schema";
+import { asyncWrapper } from "../../../middlewares";
+import { MainCategory, p_keys } from "../../../models/product/product-enums";
 
 export const getDetail = asyncWrapper(async (req: Request, res: Response) => {
   const { productId, category } = req.params;

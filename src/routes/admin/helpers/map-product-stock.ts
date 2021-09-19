@@ -1,5 +1,5 @@
-import { StockProps } from "../../../models/product-interfaces";
-import { ColorPropsFromClient } from "../controllers";
+import { StockProps } from "../../../models/product/product-interfaces";
+import { ColorPropsFromClient } from "..";
 
 export default function mapStock(
   sizesArray: string[],

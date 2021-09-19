@@ -2,7 +2,7 @@ import { body } from "express-validator";
 
 // the client-site check should be able to prevent user sending invalid data
 // this body validator is action as the second check
-const body_addProduct = [
+export const body_addProduct = [
   body("title").notEmpty().withMessage("Title cannot be empty"),
   body("main_cat").notEmpty().withMessage("Main category cannot be empty"),
   body("sub_cat").notEmpty().withMessage("Sub category cannot be empty"),
@@ -41,8 +41,6 @@ const body_addProduct = [
     .withMessage("imageCount"),
   body("description").notEmpty().withMessage("Description cannot be empty"),
 ];
-
-export default body_addProduct;
 
 /**
  *  (1) use the custom validation to check the values of each element in the colorProps array

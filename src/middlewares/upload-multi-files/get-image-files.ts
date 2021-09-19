@@ -15,11 +15,9 @@ const fileFilter = (req: Request, file, callback) => {
   }
 };
 
-const getImagesFromClient = multer({ fileFilter: fileFilter }).array(
+export const getImagesFromClient = multer({ fileFilter: fileFilter }).array(
   "uploaded_images"
 );
-
-export default getImagesFromClient;
 
 // all the uploaded_images objects are inside one single array,
 // we need to use the ["color"].url.imagesCount to extract the image-files for each color in the array

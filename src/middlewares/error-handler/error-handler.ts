@@ -22,9 +22,7 @@ export const errorHandler = (
   }
 
   // the error which no handler can handle
-  console.log(">>>>>>>>>>>>>>>>>>", err); // log the error details
   return res.status(400).send({
-    message: "The error that no handler can handle !",
-    field: "main",
+    message: "Something went worng badly",
   });
 };

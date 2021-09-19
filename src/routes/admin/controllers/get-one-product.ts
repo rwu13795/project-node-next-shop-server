@@ -1,8 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 
-import asyncWrapper from "../../../middlewares/async-wrapper";
-import { NotFoundError } from "../../../middlewares/error-handler/not-found-error";
-import { MenProduct } from "../../../models/product-schema";
+import { Bad_Request_Error, asyncWrapper } from "../../../middlewares";
+import { MenProduct } from "../../../models/product/product-schema";
 
 export const getOneProduct = asyncWrapper(
   async (req: Request, res: Response, next: NextFunction) => {
@@ -15,11 +14,11 @@ export const getOneProduct = asyncWrapper(
     const product = await MenProduct.find({ [objectPath]: { $gt: 0 } }).lean();
 
     if (product.length < 1) {
-      return next(new NotFoundError());
+      return next(new Bad_Request_Error("Product not found", "field"));
     }
 
     if (id.length !== 24) {
-      return next(new NotFoundError());
+      return next(new Bad_Request_Error("Product not found", "field"));
     }
 
     // const product = await Product.findById(id);
