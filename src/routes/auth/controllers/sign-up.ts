@@ -12,15 +12,15 @@ import { User } from "../../../models/user/user-schema";
 // );
 
 interface SignUpBody {
-  firstName: string;
-  lastName: string;
+  first_name: string;
+  last_name: string;
   email: string;
   password: string;
 }
 
 export const signUp = asyncWrapper(
   async (req: Request, res: Response, next: NextFunction) => {
-    const { firstName, lastName, email, password }: SignUpBody = req.body;
+    const { first_name, last_name, email, password }: SignUpBody = req.body;
 
     const existingUser = await User.findOne({ email });
 
@@ -36,8 +36,8 @@ export const signUp = asyncWrapper(
     // no need to hash password here, we created a pre-save hook inside the User schema
     // to hash password whenever the it is modified
     const newUser = User.build({
-      firstName,
-      lastName,
+      firstName: first_name,
+      lastName: last_name,
       email,
       password,
     });

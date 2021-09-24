@@ -1,9 +1,7 @@
 import express from "express";
 
 import { body_signIn, body_signUp, requestValidator } from "../../middlewares";
-import { getAuthStatus } from "./controllers/auth-status";
-import { signIn } from "./controllers/sign-in";
-import { signUp } from "./controllers/sign-up";
+import { getAuthStatus, signIn, signOut, signUp } from "./controllers";
 
 const router = express.Router();
 
@@ -11,7 +9,7 @@ router.get("/auth-status", getAuthStatus);
 
 router.post("/sign-in", body_signIn, requestValidator, signIn);
 
-router.post("/sign-out");
+router.post("/sign-out", signOut);
 
 router.post("/sign-up", body_signUp, requestValidator, signUp);
 
