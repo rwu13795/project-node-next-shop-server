@@ -1,54 +1,57 @@
 import mongoose from "mongoose";
 
-import {
-  ProductAttrs,
-  ProductDoc,
-  ProductModel,
-  productSchemaOption,
-  productSchemaRequirement,
-} from "./product-interfaces";
+import { ProductAttrs, ProductDoc, ProductModel } from "./product-interfaces";
 
+const productSchemaRequirement = {
+  productInfo: {
+    title: { type: String, required: true },
+    main_cat: { type: String, required: true },
+    sub_cat: { type: String, required: true },
+    price: { type: Number, required: true },
+    description: { type: String, required: true },
+  },
+  colorPropsList: { type: Array, required: true },
+  stock: {
+    byColor: { type: Object, required: true },
+    bySize: { type: Object, required: true },
+  },
+  searchTags: { type: Array, required: true },
+};
+
+//////////
 // Kids //
-const kidsProductSchema = new mongoose.Schema(
-  productSchemaRequirement,
-  productSchemaOption
-);
-// change the default "__v" version property to "version"
-kidsProductSchema.set("versionKey", "version");
+//////////
+const kidsProductSchema = new mongoose.Schema(productSchemaRequirement);
 kidsProductSchema.statics.build = (attrs: ProductAttrs) => {
   return new KidsProduct(attrs);
 };
-export const KidsProduct = mongoose.model<ProductDoc, ProductModel>(
+const KidsProduct = mongoose.model<ProductDoc, ProductModel>(
   "kids_product",
   kidsProductSchema
 );
 
+/////////
 // Men //
-const menProductSchema = new mongoose.Schema(
-  productSchemaRequirement,
-  productSchemaOption
-);
-menProductSchema.set("versionKey", "version");
+/////////
+const menProductSchema = new mongoose.Schema(productSchemaRequirement);
 menProductSchema.statics.build = (attrs: ProductAttrs) => {
   return new MenProduct(attrs);
 };
-export const MenProduct = mongoose.model<ProductDoc, ProductModel>(
+const MenProduct = mongoose.model<ProductDoc, ProductModel>(
   "men_product",
   menProductSchema
 );
 
+///////////
 // Women //
-const womenProductSchema = new mongoose.Schema(
-  productSchemaRequirement,
-  productSchemaOption
-);
-womenProductSchema.set("versionKey", "version");
+///////////
+const womenProductSchema = new mongoose.Schema(productSchemaRequirement);
 womenProductSchema.statics.build = (attrs: ProductAttrs) => {
   return new WomenProduct(attrs);
 };
-export const WomenProduct = mongoose.model<ProductDoc, ProductModel>(
+const WomenProduct = mongoose.model<ProductDoc, ProductModel>(
   "women_product",
   womenProductSchema
 );
 
-//  { KidsProduct, MenProduct, WomenProduct };
+export { KidsProduct, MenProduct, WomenProduct };

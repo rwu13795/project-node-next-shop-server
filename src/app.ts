@@ -4,7 +4,6 @@ import cors from "cors";
 import helmet from "helmet";
 import compression from "compression";
 import session from "express-session";
-// const MongoDBStore = require("connect-mongodb-session")(session);
 import MongoStore from "connect-mongo";
 
 import { adminRouter } from "./routes/admin/router";
@@ -58,7 +57,33 @@ app.use(
 //   }
 // );
 
+// app.use(
+//   session({
+//     secret: "my-secret",
+//     resave: true,
+//     saveUninitialized: true,
+//     // the MongoDBStore will set the expiration time the same as we set for the session
+//     // by using the expiration function offered by MongoDB
+//     cookie: { maxAge: 1000 * 60 * 60 }, // 1 hour
+//     // store: sessionStore, // additional config for using the MongoDBstore
+//     store: MongoStore.create({
+//       mongoUrl: process.env.MONGO_URI,
+//     }),
+//   })
+// );
+
+app.use(helmet());
+app.use(compression());
+
+// connect all routers to the app
+app.use("/api/products", productRouter);
+app.use("/api/admin", adminRouter);
+
+// only apply the session middleware to the auth route, let redux to get the session
+// from the server, so that I could use "getStaticProps" to fetch date without creating
+// duplicated session for the same user over and over
 app.use(
+  "/api/auth",
   session({
     secret: "my-secret",
     resave: true,
@@ -70,16 +95,9 @@ app.use(
     store: MongoStore.create({
       mongoUrl: process.env.MONGO_URI,
     }),
-  })
+  }),
+  authRouter
 );
-
-app.use(helmet());
-app.use(compression());
-
-// connect all routers to the app
-app.use("/api/products", productRouter);
-app.use("/api/admin", adminRouter);
-app.use("/api/auth", authRouter);
 
 // YOU HAVE TO APPLY THE errorHandler AT LAST //
 app.use(errorHandler);

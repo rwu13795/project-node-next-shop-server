@@ -31,10 +31,12 @@ export const getSubCat = asyncWrapper(async (req: Request, res: Response) => {
   let products;
   switch (main_cat) {
     case MainCategory.men:
-      products = await MenProduct.find({ main_cat, sub_cat })
+      // I can use the computed property to replace the string "productInfo.sub_cat"
+      products = await MenProduct.find({ [p_keys.sub_cat]: sub_cat })
         .skip((page - 1) * ITEMS_PER_PAGE)
         .limit(ITEMS_PER_PAGE)
-        .select([p_keys.colorPropsList, p_keys.title])
+        // I can also use the property key chain ("colorPropsList.imageFiles") to select the nested properties
+        .select([p_keys.imageFiles, p_keys.title, p_keys.main_cat])
         .lean();
       break;
     case MainCategory.women:
@@ -45,6 +47,7 @@ export const getSubCat = asyncWrapper(async (req: Request, res: Response) => {
       break;
   }
 
+  console.log(products);
   console.log("> > > fetching product page: ", page);
 
   res.status(200).send({ products });

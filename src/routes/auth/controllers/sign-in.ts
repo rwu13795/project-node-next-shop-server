@@ -35,10 +35,19 @@ export const signIn = asyncWrapper(
     };
     req.session.isLoggedIn = true;
 
-    res.status(200).send({
-      message: "Logged in",
-      currentUser: req.session.currentUser,
-      isLoggedIn: req.session.isLoggedIn,
-    });
+    // to test the loading spinner by delaying the response
+    setTimeout(() => {
+      res.status(200).send({
+        message: "Logged in",
+        currentUser: req.session.currentUser,
+        isLoggedIn: req.session.isLoggedIn,
+      });
+    }, 3000);
+
+    // res.status(200).send({
+    //   message: "Logged in",
+    //   currentUser: req.session.currentUser,
+    //   isLoggedIn: req.session.isLoggedIn,
+    // });
   }
 );

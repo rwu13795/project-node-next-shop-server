@@ -16,7 +16,7 @@ import {
   MainCategory,
   sizesArray,
 } from "../../../models/product/product-enums";
-import { ColorPropsFromClient } from "..";
+import { ColorPropsFromClient } from "./add-product";
 import mapStock from "../helpers/map-product-stock";
 import uploadImageTo_S3 from "../helpers/upload-to-S3";
 import deleteImages from "../helpers/delete-image-on-S3";

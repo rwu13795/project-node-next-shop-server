@@ -4,7 +4,9 @@ export interface CurrentUser {
   username: string;
   email?: string;
   userId?: string;
-  cart?: Object[];
+  cart?: [
+    { imageUrl: string; productId: string; quantity: number; price: number }
+  ];
 }
 
 export const getAuthStatus = async (
