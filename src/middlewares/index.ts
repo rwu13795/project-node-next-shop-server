@@ -15,3 +15,4 @@ export * from "./upload-multi-files/get-image-files";
 export * from "./upload-multi-files/multi-files-bodyParser";
 
 export * from "./async-wrapper";
+export * from "./create-session";

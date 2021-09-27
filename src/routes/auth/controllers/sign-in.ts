@@ -31,7 +31,7 @@ export const signIn = asyncWrapper(
       username: existingUser.firstName,
       email: existingUser.email,
       userId: existingUser.id,
-      //   cart: req.session.currentUser.cart,
+      cart: req.session.currentUser.cart,
     };
     req.session.isLoggedIn = true;
 

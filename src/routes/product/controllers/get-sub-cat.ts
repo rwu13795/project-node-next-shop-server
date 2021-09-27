@@ -47,8 +47,8 @@ export const getSubCat = asyncWrapper(async (req: Request, res: Response) => {
       break;
   }
 
-  console.log(products);
-  console.log("> > > fetching product page: ", page);
+  // console.log(products);
+  // console.log("> > > fetching product page: ", page);
 
   res.status(200).send({ products });
 });

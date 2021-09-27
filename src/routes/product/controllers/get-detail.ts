@@ -1,45 +1,56 @@
-import { Request, Response } from "express";
+import { NextFunction, Request, Response } from "express";
 
 import {
   MenProduct,
   WomenProduct,
   KidsProduct,
 } from "../../../models/product/product-schema";
-import { asyncWrapper } from "../../../middlewares";
+import { asyncWrapper, Bad_Request_Error } from "../../../middlewares";
 import { MainCategory, p_keys } from "../../../models/product/product-enums";
 
-export const getDetail = asyncWrapper(async (req: Request, res: Response) => {
-  const { productId, category } = req.params;
+export const getDetail = asyncWrapper(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const { productId, category } = req.params;
 
-  if (productId === "999") {
-    return res.status(200).send({ product: undefined }); //csrfToken: req.csrfToken()
+    if (productId === "999") {
+      return res.status(200).send({ product: null }); //csrfToken: req.csrfToken()
+    }
+
+    if (productId.length !== 24) {
+      return next(new Bad_Request_Error("Invalid product Id", "productId"));
+    }
+
+    const selectOption = [p_keys.productInfo, p_keys.colorPropsList];
+    let product;
+    switch (category.toLowerCase()) {
+      case MainCategory.men: {
+        product = await MenProduct.findById(productId)
+          .select(selectOption)
+          .lean();
+        break;
+      }
+      case MainCategory.women: {
+        product = await WomenProduct.findById(productId)
+          .select(selectOption)
+          .lean();
+        break;
+      }
+      case MainCategory.kids: {
+        product = await KidsProduct.findById(productId)
+          .select(selectOption)
+          .lean();
+      }
+      default: {
+        break;
+      }
+    }
+
+    // console.log("find by Id --------->", product);
+
+    if (!product) {
+      return next(new Bad_Request_Error("No product found", "get_detail"));
+    }
+
+    return res.status(200).send({ product }); //csrfToken: req.csrfToken()
   }
-
-  const selectOption = [p_keys.productInfo, p_keys.colorPropsList];
-  let product;
-  switch (category.toLowerCase()) {
-    case MainCategory.men: {
-      product = await MenProduct.findById(productId)
-        .select(selectOption)
-        .lean();
-      break;
-    }
-    case MainCategory.women: {
-      product = await WomenProduct.findById(productId)
-        .select(selectOption)
-        .lean();
-      break;
-    }
-    case MainCategory.kids: {
-      product = await KidsProduct.findById(productId)
-        .select(selectOption)
-        .lean();
-    }
-    default: {
-      break;
-    }
-  }
-
-  // console.log("find by Id --------->", product);
-  return res.status(200).send({ product }); //csrfToken: req.csrfToken()
-});
+);

@@ -1,12 +1,21 @@
 import { Request, Response, NextFunction } from "express";
 
+export interface CartItem {
+  imageUrl: string;
+  title: string;
+  main_cat: string;
+  productId: string;
+  quantity: number;
+  size: string;
+  price: number;
+  colorName: string;
+}
+
 export interface CurrentUser {
   username: string;
+  cart: CartItem[];
   email?: string;
   userId?: string;
-  cart?: [
-    { imageUrl: string; productId: string; quantity: number; price: number }
-  ];
 }
 
 export const getAuthStatus = async (
@@ -19,6 +28,7 @@ export const getAuthStatus = async (
     // saved the current session to the DB
     req.session.currentUser = {
       username: `guest__${req.session.id}`,
+      cart: [],
     };
     req.session.isLoggedIn = false;
   }
