@@ -16,3 +16,4 @@ export * from "./upload-multi-files/multi-files-bodyParser";
 
 export * from "./async-wrapper";
 export * from "./create-session";
+export * from "./require-auth";
