@@ -1,4 +1,5 @@
 import { Request, Response, NextFunction } from "express";
+import { UserAddressFields } from "../../../models/user/user-interfaces";
 
 export interface CartItem {
   imageUrl: string;
@@ -9,6 +10,7 @@ export interface CartItem {
   size: string;
   price: number;
   colorName: string;
+  totalQty?: number;
 }
 
 export interface CurrentUser {
@@ -16,6 +18,10 @@ export interface CurrentUser {
   cart: CartItem[];
   email?: string;
   userId?: string;
+  firstName?: string;
+  lastName?: string;
+  phone?: string;
+  shippingAddress?: UserAddressFields[];
 }
 
 export const getAuthStatus = async (

@@ -1,6 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 
 import { asyncWrapper, Bad_Request_Error } from "../../../middlewares";
+import { UserDoc } from "../../../models/user/user-interfaces";
 import { User } from "../../../models/user/user-schema";
 import { Password } from "../../../utils/hash-password";
 
@@ -10,7 +11,7 @@ export const signIn = asyncWrapper(
 
     const { email, password } = req.body;
 
-    const existingUser = await User.findOne({ email });
+    const existingUser: UserDoc = await User.findOne({ email });
 
     if (!existingUser) {
       return next(new Bad_Request_Error("This email does not exist", "email"));
@@ -29,9 +30,13 @@ export const signIn = asyncWrapper(
 
     req.session.currentUser = {
       username: existingUser.firstName,
+      cart: req.session.currentUser.cart,
       email: existingUser.email,
       userId: existingUser.id,
-      cart: req.session.currentUser.cart,
+      firstName: existingUser.firstName,
+      lastName: existingUser.lastName,
+      phone: existingUser.phone,
+      shippingAddress: existingUser.shippingAddress,
     };
     req.session.isLoggedIn = true;
 
