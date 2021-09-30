@@ -4,7 +4,12 @@ import { asyncWrapper } from "../../../middlewares";
 
 export const clearCart = asyncWrapper(
   async (req: Request, res: Response, next: NextFunction) => {
-    req.session.currentUser.cart = [];
+    if (
+      req.session.currentUser.cart !== undefined ||
+      req.session.currentUser.cart.length > 0
+    ) {
+      req.session.currentUser.cart = [];
+    }
 
     res.status(201).send({ currentUser: req.session.currentUser });
   }

@@ -45,12 +45,10 @@ export const getDetail = asyncWrapper(
       }
     }
 
-    // console.log("find by Id --------->", product);
-
     if (!product) {
       return next(new Bad_Request_Error("No product found", "get_detail"));
     }
 
-    return res.status(200).send({ product }); //csrfToken: req.csrfToken()
+    return res.status(200).send({ product });
   }
 );

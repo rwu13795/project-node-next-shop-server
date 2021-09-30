@@ -1,4 +1,5 @@
 import express from "express";
+import { csrf_protection } from "../../middlewares";
 
 import {
   addToCart,
@@ -21,6 +22,6 @@ router.post("/create-order-history", createOrder);
 
 router.post("/clear-cart", clearCart);
 
-router.post("/stripe-payment", stripePayment);
+router.post("/stripe-payment", csrf_protection, stripePayment);
 
 export { router as shopRouter };

@@ -21,6 +21,11 @@ export const errorHandler = (
     return res.status(err.statusCode).send({ errors: err.serializeErrors() });
   }
 
+  // if (err.stack === "EBADCSRFTOKEN") {
+  //   // handle CSRF token errors here
+  //   return res.status(403).send("form tampered with");
+  // }
+
   // the error which no handler can handle
   return res.status(400).send({
     message: "Something went worng badly",

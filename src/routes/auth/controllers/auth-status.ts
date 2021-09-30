@@ -1,4 +1,5 @@
 import { Request, Response, NextFunction } from "express";
+import { tokens } from "../../../middlewares";
 import { UserAddressFields } from "../../../models/user/user-interfaces";
 
 export interface CartItem {
@@ -37,6 +38,8 @@ export const getAuthStatus = async (
       cart: [],
     };
     req.session.isLoggedIn = false;
+    // create and save the csrf_secret in session for each user
+    req.session.csrf_secret = tokens.secretSync();
   }
 
   console.log(
@@ -45,8 +48,13 @@ export const getAuthStatus = async (
     req.session.isLoggedIn
   );
 
+  // create a new token and send it to client each time the getAuthStatus is called
+  const csrfToken = tokens.create(req.session.csrf_secret);
+  console.log("token in get auth", csrfToken);
+
   res.status(200).send({
     currentUser: req.session.currentUser,
     isLoggedIn: req.session.isLoggedIn,
+    csrfToken,
   });
 };

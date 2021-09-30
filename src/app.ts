@@ -17,6 +17,7 @@ declare module "express-session" {
   interface SessionData {
     currentUser: CurrentUser;
     isLoggedIn: boolean;
+    csrf_secret: string;
   }
 }
 
@@ -26,16 +27,16 @@ declare module "express-session" {
 
 const app = express();
 
-// app.use(express.json());
+app.use(express.json());
 // Use JSON parser for all non-webhook routes
 // parse all other routes to JSON, leave the /webhook route as rawBody
-app.use((req: Request, res: Response, next: NextFunction): void => {
-  if (req.originalUrl === "/webhook") {
-    next();
-  } else {
-    express.json()(req, res, next);
-  }
-});
+// app.use((req: Request, res: Response, next: NextFunction): void => {
+//   if (req.originalUrl === "/webhook") {
+//     next();
+//   } else {
+//     express.json()(req, res, next);
+//   }
+// });
 
 app.use(
   cors({
