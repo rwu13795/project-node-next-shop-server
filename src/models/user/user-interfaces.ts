@@ -15,8 +15,8 @@ export interface UserAttrs {
   email: string;
   phone: string;
   password: string;
-  orders: string[];
-  shippingAddress: UserAddressFields[];
+  addressInfo: UserAddressFields;
+  orders?: string[];
 }
 
 export interface UserDoc extends mongoose.Document {
@@ -25,8 +25,8 @@ export interface UserDoc extends mongoose.Document {
   email: string;
   phone: string;
   password: string;
-  orders: string[];
-  shippingAddress: UserAddressFields[];
+  addressInfo: UserAddressFields;
+  orders?: string[];
   resetToken?: string;
   resetTokenExpiration?: Date;
 }

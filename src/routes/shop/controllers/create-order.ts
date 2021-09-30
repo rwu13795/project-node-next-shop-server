@@ -4,6 +4,7 @@ import { asyncWrapper, Bad_Request_Error } from "../../../middlewares";
 import {
   OrderAddressFields,
   OrderContactInfo,
+  PaymentDetail,
 } from "../../../models/order/order-interfaces";
 import { Order } from "../../../models/order/order-schema";
 import { CurrentUser } from "../../auth/controllers";
@@ -13,6 +14,8 @@ interface ReqBody {
   shippingAddress: OrderAddressFields;
   billingAddress: OrderAddressFields;
   contactInfo: OrderContactInfo;
+  totalAmount: number;
+  paymentDetail: PaymentDetail;
 }
 
 export const createOrder = asyncWrapper(
@@ -22,6 +25,8 @@ export const createOrder = asyncWrapper(
       shippingAddress,
       billingAddress,
       contactInfo,
+      totalAmount,
+      paymentDetail,
     }: ReqBody = req.body;
 
     console.log(currentUser.cart);
@@ -45,9 +50,11 @@ export const createOrder = asyncWrapper(
       userId,
       date: new Date(),
       items: currentUser.cart,
+      total: totalAmount,
       shippingAddress,
       billingAddress,
       contactInfo,
+      paymentDetail,
     });
     await newOrder.save();
 

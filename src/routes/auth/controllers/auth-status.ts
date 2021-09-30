@@ -21,7 +21,7 @@ export interface CurrentUser {
   firstName?: string;
   lastName?: string;
   phone?: string;
-  shippingAddress?: UserAddressFields[];
+  addressInfo?: UserAddressFields;
 }
 
 export const getAuthStatus = async (

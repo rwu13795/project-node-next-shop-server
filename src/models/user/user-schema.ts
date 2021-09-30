@@ -13,15 +13,13 @@ const userSchema = new mongoose.Schema({
   },
   phone: { type: String, required: true },
   password: { type: String, required: true },
-  shippingAddress: [
-    {
-      address_1: { type: String, required: true },
-      address_2: { type: String, required: true },
-      city: { type: String, required: true },
-      state: { type: String, required: true },
-      zip_code: { type: String, required: true },
-    },
-  ],
+  addressInfo: {
+    address_1: { type: String, required: true },
+    address_2: { type: String, required: true },
+    city: { type: String, required: true },
+    state: { type: String, required: true },
+    zip_code: { type: String, required: true },
+  },
   resetToken: String,
   resetTokenExpiration: Date,
   orders: Array,

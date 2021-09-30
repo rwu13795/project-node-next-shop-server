@@ -8,7 +8,7 @@ export const stripePayment = asyncWrapper(
     const totalAmount: number = req.body.totalAmount;
 
     const paymentIntent = await stripe.paymentIntents.create({
-      amount: totalAmount,
+      amount: totalAmount * 100,
       currency: "usd",
       payment_method_types: ["card"],
       metadata: {

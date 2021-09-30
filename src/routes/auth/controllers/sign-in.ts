@@ -36,7 +36,7 @@ export const signIn = asyncWrapper(
       firstName: existingUser.firstName,
       lastName: existingUser.lastName,
       phone: existingUser.phone,
-      shippingAddress: existingUser.shippingAddress,
+      addressInfo: existingUser.addressInfo,
     };
     req.session.isLoggedIn = true;
 

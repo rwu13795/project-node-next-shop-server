@@ -1,8 +1,8 @@
 import { body } from "express-validator";
 
 export const body_signUp = [
-  body("first_name").notEmpty().withMessage("First name required"),
-  body("last_name").notEmpty().withMessage("Last name required"),
+  body("firstName").notEmpty().withMessage("First name required"),
+  body("lastName").notEmpty().withMessage("Last name required"),
   body("email").isEmail().withMessage("Email must be valid"),
   body("password")
     .trim()
@@ -14,7 +14,6 @@ export const body_signUp = [
     .withMessage("Password must be between 4 and 20 characters"),
   body("password")
     .custom((value, { req }) => {
-      console.log(req.body.confirm_password);
       if (value.trim() !== req.body.confirm_password.trim()) {
         return false;
       }
