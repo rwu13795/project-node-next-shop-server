@@ -29,14 +29,11 @@ export const signIn = asyncWrapper(
     // DB, so that we can use the info to find the user-DB-instance
 
     req.session.currentUser = {
-      username: existingUser.firstName,
+      username: existingUser.userInfo.first_name,
       cart: req.session.currentUser.cart,
       email: existingUser.email,
       userId: existingUser.id,
-      firstName: existingUser.firstName,
-      lastName: existingUser.lastName,
-      phone: existingUser.phone,
-      addressInfo: existingUser.addressInfo,
+      userInfo: existingUser.userInfo,
     };
     req.session.isLoggedIn = true;
 

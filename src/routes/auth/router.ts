@@ -1,7 +1,18 @@
 import express from "express";
 
-import { body_signIn, body_signUp, requestValidator } from "../../middlewares";
-import { getAuthStatus, signIn, signOut, signUp } from "./controllers";
+import {
+  body_signIn,
+  body_signUp,
+  csrf_protection,
+  requestValidator,
+} from "../../middlewares";
+import {
+  getAuthStatus,
+  signIn,
+  signOut,
+  signUp,
+  updateInfo,
+} from "./controllers";
 
 const router = express.Router();
 
@@ -18,5 +29,7 @@ router.post("/reset-request");
 router.post("/reset-pw");
 
 router.post("/reset-ckeck-token");
+
+router.post("/update-info", csrf_protection, updateInfo);
 
 export { router as authRouter };

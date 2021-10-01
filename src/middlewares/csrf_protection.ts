@@ -1,8 +1,6 @@
 import { Request, Response, NextFunction } from "express";
-import Tokens from "csrf";
 import { Bad_Request_Error } from ".";
-
-export const tokens = new Tokens();
+import { tokens } from "../app";
 
 export const csrf_protection = (
   req: Request,

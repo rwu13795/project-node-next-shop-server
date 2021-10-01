@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from "express";
-import { tokens } from "../../../middlewares";
-import { UserAddressFields } from "../../../models/user/user-interfaces";
+import { tokens } from "../../../app";
+import { UserInfo } from "../../../models/user/user-interfaces";
 
 export interface CartItem {
   imageUrl: string;
@@ -19,10 +19,7 @@ export interface CurrentUser {
   cart: CartItem[];
   email?: string;
   userId?: string;
-  firstName?: string;
-  lastName?: string;
-  phone?: string;
-  addressInfo?: UserAddressFields;
+  userInfo?: UserInfo;
 }
 
 export const getAuthStatus = async (
@@ -38,7 +35,7 @@ export const getAuthStatus = async (
       cart: [],
     };
     req.session.isLoggedIn = false;
-    // create and save the csrf_secret in session for each user
+    // create and save the csrf_secret in each session for each user
     req.session.csrf_secret = tokens.secretSync();
   }
 

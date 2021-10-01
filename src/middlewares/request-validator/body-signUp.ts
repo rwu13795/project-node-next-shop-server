@@ -1,8 +1,8 @@
 import { body } from "express-validator";
 
 export const body_signUp = [
-  body("firstName").notEmpty().withMessage("First name required"),
-  body("lastName").notEmpty().withMessage("Last name required"),
+  body("userInfo.first_name").notEmpty().withMessage("First name required"),
+  body("userInfo.last_name").notEmpty().withMessage("Last name required"),
   body("email").isEmail().withMessage("Email must be valid"),
   body("password")
     .trim()

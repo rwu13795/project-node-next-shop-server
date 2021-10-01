@@ -4,21 +4,21 @@ import { Password } from "../../utils/hash-password";
 import { UserAttrs, UserDoc, UserModel } from "./user-interfaces";
 
 const userSchema = new mongoose.Schema({
-  firstName: { type: String, required: true },
-  lastName: { type: String, required: true },
   email: {
     type: String,
     unique: true,
     required: true,
   },
-  phone: { type: String, required: true },
   password: { type: String, required: true },
-  addressInfo: {
+  userInfo: {
+    first_name: { type: String, required: true },
+    last_name: { type: String, required: true },
     address_1: { type: String, required: true },
     address_2: { type: String, required: true },
     city: { type: String, required: true },
     state: { type: String, required: true },
     zip_code: { type: String, required: true },
+    phone: { type: String, required: true },
   },
   resetToken: String,
   resetTokenExpiration: Date,

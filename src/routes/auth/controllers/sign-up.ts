@@ -3,7 +3,7 @@ import { NextFunction, Request, Response } from "express";
 // import nodemailerSendgrid from "nodemailer-sendgrid";
 
 import { asyncWrapper, Bad_Request_Error } from "../../../middlewares";
-import { UserAddressFields } from "../../../models/user/user-interfaces";
+import { UserInfo } from "../../../models/user/user-interfaces";
 import { User } from "../../../models/user/user-schema";
 
 // const mailTransporter = nodemailer.createTransport(
@@ -13,24 +13,14 @@ import { User } from "../../../models/user/user-schema";
 // );
 
 interface SignUpBody {
-  firstName: string;
-  lastName: string;
   email: string;
   password: string;
-  phone: string;
-  addressInfo: UserAddressFields;
+  userInfo: UserInfo;
 }
 
 export const signUp = asyncWrapper(
   async (req: Request, res: Response, next: NextFunction) => {
-    const {
-      firstName,
-      lastName,
-      email,
-      password,
-      phone,
-      addressInfo,
-    }: SignUpBody = req.body;
+    const { email, password, userInfo }: SignUpBody = req.body;
 
     const existingUser = await User.findOne({ email });
 
@@ -46,12 +36,9 @@ export const signUp = asyncWrapper(
     // no need to hash password here, we created a pre-save hook inside the User schema
     // to hash password whenever the it is modified
     const newUser = User.build({
-      firstName,
-      lastName,
       email,
       password,
-      phone,
-      addressInfo,
+      userInfo,
     });
 
     await newUser.save();
@@ -59,14 +46,11 @@ export const signUp = asyncWrapper(
     console.log(newUser);
 
     req.session.currentUser = {
-      username: newUser.firstName,
+      username: newUser.userInfo.first_name,
       cart: [],
       email: newUser.email,
       userId: newUser.id,
-      firstName: newUser.firstName,
-      lastName: newUser.lastName,
-      phone: newUser.phone,
-      addressInfo: newUser.addressInfo,
+      userInfo: newUser.userInfo,
     };
     req.session.isLoggedIn = true;
 

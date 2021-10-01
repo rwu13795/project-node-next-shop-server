@@ -1,31 +1,28 @@
 import mongoose from "mongoose";
 import { inputNames } from "../../utils/enums/input-names";
 
-export interface UserAddressFields {
+export interface UserInfo {
+  [inputNames.first_name]: string;
+  [inputNames.last_name]: string;
   [inputNames.address_1]: string;
   [inputNames.address_2]: string;
-  [inputNames.state]: string;
   [inputNames.city]: string;
+  [inputNames.state]: string;
   [inputNames.zip_code]: string;
+  [inputNames.phone]: string;
 }
 
 export interface UserAttrs {
-  firstName: string;
-  lastName: string;
-  email: string;
-  phone: string;
-  password: string;
-  addressInfo: UserAddressFields;
+  [inputNames.email]: string;
+  [inputNames.password]: string;
+  userInfo: UserInfo;
   orders?: string[];
 }
 
 export interface UserDoc extends mongoose.Document {
-  firstName: string;
-  lastName: string;
   email: string;
-  phone: string;
   password: string;
-  addressInfo: UserAddressFields;
+  userInfo: UserInfo;
   orders?: string[];
   resetToken?: string;
   resetTokenExpiration?: Date;

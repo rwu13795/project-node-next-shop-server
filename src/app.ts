@@ -1,4 +1,4 @@
-import express, { Request, Response, NextFunction } from "express";
+import express from "express";
 // import { config } from "dotenv";
 import cors from "cors";
 import helmet from "helmet";
@@ -12,6 +12,7 @@ import { authRouter } from "./routes/auth/router";
 import { errorHandler } from "./middlewares/error-handler/error-handler";
 import { CurrentUser } from "./routes/auth/controllers/auth-status";
 import { createSession } from "./middlewares";
+import Tokens from "csrf";
 
 declare module "express-session" {
   interface SessionData {
@@ -26,6 +27,7 @@ declare module "express-session" {
 // }
 
 const app = express();
+export const tokens = new Tokens();
 
 app.use(express.json());
 // Use JSON parser for all non-webhook routes
