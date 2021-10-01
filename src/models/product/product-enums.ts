@@ -37,7 +37,6 @@ export enum p_keys {
   colorPropsList = "colorPropsList",
   stock = "stock",
   searchTags = "searchTags",
-  version = "version",
   title = "productInfo.title",
   main_cat = "productInfo.main_cat",
   sub_cat = "productInfo.sub_cat",

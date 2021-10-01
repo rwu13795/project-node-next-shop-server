@@ -18,18 +18,6 @@ const productSchemaRequirement = {
   searchTags: { type: Array, required: true },
 };
 
-//////////
-// Kids //
-//////////
-const kidsProductSchema = new mongoose.Schema(productSchemaRequirement);
-kidsProductSchema.statics.build = (attrs: ProductAttrs) => {
-  return new KidsProduct(attrs);
-};
-const KidsProduct = mongoose.model<ProductDoc, ProductModel>(
-  "kids_product",
-  kidsProductSchema
-);
-
 /////////
 // Men //
 /////////
@@ -42,16 +30,4 @@ const MenProduct = mongoose.model<ProductDoc, ProductModel>(
   menProductSchema
 );
 
-///////////
-// Women //
-///////////
-const womenProductSchema = new mongoose.Schema(productSchemaRequirement);
-womenProductSchema.statics.build = (attrs: ProductAttrs) => {
-  return new WomenProduct(attrs);
-};
-const WomenProduct = mongoose.model<ProductDoc, ProductModel>(
-  "women_product",
-  womenProductSchema
-);
-
-export { KidsProduct, MenProduct, WomenProduct };
+export { MenProduct };

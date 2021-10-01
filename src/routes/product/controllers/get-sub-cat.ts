@@ -1,10 +1,6 @@
 import { Request, Response } from "express";
 
-import {
-  KidsProduct,
-  WomenProduct,
-  MenProduct,
-} from "../../../models/product/product-schema";
+import { MenProduct } from "../../../models/product/product-schema";
 import { asyncWrapper } from "../../../middlewares";
 import {
   MainCategory,
@@ -27,25 +23,16 @@ export const getSubCat = asyncWrapper(async (req: Request, res: Response) => {
   if (typeof req.query.page === "string") {
     page = parseInt(req.query.page);
   }
-
-  let products;
-  switch (main_cat) {
-    case MainCategory.men:
-      // I can use the computed property to replace the string "productInfo.sub_cat"
-      products = await MenProduct.find({ [p_keys.sub_cat]: sub_cat })
-        .skip((page - 1) * ITEMS_PER_PAGE)
-        .limit(ITEMS_PER_PAGE)
-        // I can also use the property key chain ("colorPropsList.imageFiles") to select the nested properties
-        .select([p_keys.imageFiles, p_keys.title, p_keys.main_cat])
-        .lean();
-      break;
-    case MainCategory.women:
-      break;
-    case MainCategory.kids:
-      break;
-    default:
-      break;
-  }
+  // I can use the computed property to replace the string "productInfo.sub_cat"
+  const products = await MenProduct.find({
+    [p_keys.main_cat]: main_cat,
+    [p_keys.sub_cat]: sub_cat,
+  })
+    .skip((page - 1) * ITEMS_PER_PAGE)
+    .limit(ITEMS_PER_PAGE)
+    // I can also use the property key chain ("colorPropsList.imageFiles") to select the nested properties
+    .select([p_keys.imageFiles, p_keys.title, p_keys.main_cat])
+    .lean();
 
   // console.log(products);
   // console.log("> > > fetching product page: ", page);

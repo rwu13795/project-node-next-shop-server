@@ -10,7 +10,7 @@ import { shopRouter } from "./routes/shop/router";
 import { authRouter } from "./routes/auth/router";
 
 import { errorHandler } from "./middlewares/error-handler/error-handler";
-import { CurrentUser } from "./routes/auth/controllers/auth-status";
+import { CurrentUser } from "./routes/auth/controllers/user-status";
 import { createSession } from "./middlewares";
 import Tokens from "csrf";
 

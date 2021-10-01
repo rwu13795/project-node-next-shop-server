@@ -8,6 +8,7 @@ import {
   stripePayment,
   createOrder,
   clearCart,
+  checkStock,
 } from "./controllers";
 
 const router = express.Router();
@@ -21,6 +22,8 @@ router.post("/change-quantity", changeQuantity);
 router.post("/create-order-history", createOrder);
 
 router.post("/clear-cart", clearCart);
+
+router.get("/check-stock", checkStock);
 
 router.post("/stripe-payment", csrf_protection, stripePayment);
 

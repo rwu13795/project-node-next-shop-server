@@ -7,7 +7,7 @@ import {
   requestValidator,
 } from "../../middlewares";
 import {
-  getAuthStatus,
+  getUserStatus,
   signIn,
   signOut,
   signUp,
@@ -16,7 +16,7 @@ import {
 
 const router = express.Router();
 
-router.get("/auth-status", getAuthStatus);
+router.get("/user-status", getUserStatus);
 
 router.post("/sign-in", body_signIn, requestValidator, signIn);
 

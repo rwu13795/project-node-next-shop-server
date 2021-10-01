@@ -1,5 +1,8 @@
 import { Request, Response, NextFunction } from "express";
+import { ObjectId } from "mongodb";
 import { tokens } from "../../../app";
+import { p_keys } from "../../../models/product/product-enums";
+import { MenProduct } from "../../../models/product/product-schema";
 import { UserInfo } from "../../../models/user/user-interfaces";
 
 export interface CartItem {
@@ -11,7 +14,11 @@ export interface CartItem {
   size: string;
   price: number;
   colorName: string;
-  totalQty?: number;
+  availableQty?: number;
+  stockErrors: {
+    outOfStock?: string;
+    notEnough?: string;
+  };
 }
 
 export interface CurrentUser {
@@ -22,7 +29,7 @@ export interface CurrentUser {
   userInfo?: UserInfo;
 }
 
-export const getAuthStatus = async (
+export const getUserStatus = async (
   req: Request,
   res: Response,
   next: NextFunction
@@ -39,11 +46,7 @@ export const getAuthStatus = async (
     req.session.csrf_secret = tokens.secretSync();
   }
 
-  console.log(
-    "checking currentUser ---->",
-    req.session.currentUser,
-    req.session.isLoggedIn
-  );
+  console.log("checking currentUser cart---->", req.session.currentUser.cart);
 
   // create a new token and send it to client each time the getAuthStatus is called
   const csrfToken = tokens.create(req.session.csrf_secret);

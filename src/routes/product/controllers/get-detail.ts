@@ -1,10 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 
-import {
-  MenProduct,
-  WomenProduct,
-  KidsProduct,
-} from "../../../models/product/product-schema";
+import { MenProduct } from "../../../models/product/product-schema";
 import { asyncWrapper, Bad_Request_Error } from "../../../middlewares";
 import { MainCategory, p_keys } from "../../../models/product/product-enums";
 
@@ -21,29 +17,9 @@ export const getDetail = asyncWrapper(
     }
 
     const selectOption = [p_keys.productInfo, p_keys.colorPropsList];
-    let product;
-    switch (category.toLowerCase()) {
-      case MainCategory.men: {
-        product = await MenProduct.findById(productId)
-          .select(selectOption)
-          .lean();
-        break;
-      }
-      case MainCategory.women: {
-        product = await WomenProduct.findById(productId)
-          .select(selectOption)
-          .lean();
-        break;
-      }
-      case MainCategory.kids: {
-        product = await KidsProduct.findById(productId)
-          .select(selectOption)
-          .lean();
-      }
-      default: {
-        break;
-      }
-    }
+    const product = await MenProduct.findById(productId)
+      .select(selectOption)
+      .lean();
 
     if (!product) {
       return next(new Bad_Request_Error("No product found", "get_detail"));
