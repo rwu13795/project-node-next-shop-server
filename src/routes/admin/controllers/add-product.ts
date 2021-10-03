@@ -1,10 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 
-import {
-  KidsProduct,
-  WomenProduct,
-  MenProduct,
-} from "../../../models/product/product-schema";
+import { Product } from "../../../models/product/product-schema";
 
 import {
   ColorProps,
@@ -79,26 +75,10 @@ export const addProduct = async (
     colorPropsList: colorPropsList_toBeSaved,
     stock,
     searchTags,
+    createdDate: new Date(),
   };
 
-  let product;
-  switch (main_cat.toLocaleLowerCase()) {
-    case MainCategory.men: {
-      product = MenProduct.build(productAttrs);
-      break;
-    }
-    case MainCategory.women: {
-      product = WomenProduct.build(productAttrs);
-      break;
-    }
-    case MainCategory.kids: {
-      product = KidsProduct.build(productAttrs);
-      break;
-    }
-    default: {
-      break;
-    }
-  }
+  let product = Product.build(productAttrs);
 
   await product.save();
 

@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 
-import { MenProduct } from "../../../models/product/product-schema";
+import { Product } from "../../../models/product/product-schema";
 import { asyncWrapper } from "../../../middlewares";
 import {
   MainCategory,
@@ -24,7 +24,7 @@ export const getSubCat = asyncWrapper(async (req: Request, res: Response) => {
     page = parseInt(req.query.page);
   }
   // I can use the computed property to replace the string "productInfo.sub_cat"
-  const products = await MenProduct.find({
+  const products = await Product.find({
     [p_keys.main_cat]: main_cat,
     [p_keys.sub_cat]: sub_cat,
   })

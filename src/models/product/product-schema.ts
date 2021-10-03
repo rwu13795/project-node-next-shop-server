@@ -16,18 +16,17 @@ const productSchemaRequirement = {
     bySize: { type: Object, required: true },
   },
   searchTags: { type: Array, required: true },
+  createdDate: { type: Date, required: true },
 };
 
-/////////
-// Men //
-/////////
-const menProductSchema = new mongoose.Schema(productSchemaRequirement);
-menProductSchema.statics.build = (attrs: ProductAttrs) => {
-  return new MenProduct(attrs);
+const productSchema = new mongoose.Schema(productSchemaRequirement);
+productSchema.statics.build = (attrs: ProductAttrs) => {
+  return new Product(attrs);
 };
-const MenProduct = mongoose.model<ProductDoc, ProductModel>(
-  "men_product",
-  menProductSchema
+
+const Product = mongoose.model<ProductDoc, ProductModel>(
+  "product",
+  productSchema
 );
 
-export { MenProduct };
+export { Product };

@@ -31,6 +31,7 @@ export interface ProductAttrs {
   colorPropsList: ColorProps[];
   stock: StockProps;
   searchTags: string[];
+  createdDate: Date;
 }
 
 export interface ProductDoc extends mongoose.Document {
@@ -38,7 +39,7 @@ export interface ProductDoc extends mongoose.Document {
   colorPropsList: ColorProps[];
   stock: StockProps;
   searchTags: string[];
-  version: number;
+  createdDate: Date;
 }
 
 export interface ProductModel extends mongoose.Model<ProductDoc> {

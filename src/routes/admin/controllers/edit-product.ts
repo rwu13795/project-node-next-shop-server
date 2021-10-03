@@ -2,11 +2,7 @@ import { NextFunction, Request, Response } from "express";
 
 import { ObjectId } from "mongodb";
 
-import {
-  KidsProduct,
-  WomenProduct,
-  MenProduct,
-} from "../../../models/product/product-schema";
+import { Product } from "../../../models/product/product-schema";
 
 import {
   ColorProps,
@@ -85,36 +81,11 @@ export const editProduct = async (
     searchTags,
   };
 
-  let product;
-  switch (main_cat.toLowerCase()) {
-    case MainCategory.men: {
-      product = await MenProduct.findOneAndUpdate(
-        { _id: new ObjectId(productId) },
-        productUpdate,
-        { new: true }
-      );
-      break;
-    }
-    case MainCategory.women: {
-      product = await WomenProduct.findOneAndUpdate(
-        { _id: new ObjectId(productId) },
-        productUpdate,
-        { new: true }
-      );
-      break;
-    }
-    case MainCategory.kids: {
-      product = await KidsProduct.findOneAndUpdate(
-        { _id: new ObjectId(productId) },
-        productUpdate,
-        { new: true }
-      );
-      break;
-    }
-    default: {
-      break;
-    }
-  }
+  let product = await Product.findOneAndUpdate(
+    { _id: new ObjectId(productId) },
+    productUpdate,
+    { new: true }
+  );
 
   if (!product) {
   }

@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 
-import { MenProduct } from "../../../models/product/product-schema";
+import { Product } from "../../../models/product/product-schema";
 import { asyncWrapper, Bad_Request_Error } from "../../../middlewares";
 import { MainCategory, p_keys } from "../../../models/product/product-enums";
 
@@ -17,7 +17,7 @@ export const getDetail = asyncWrapper(
     }
 
     const selectOption = [p_keys.productInfo, p_keys.colorPropsList];
-    const product = await MenProduct.findById(productId)
+    const product = await Product.findById(productId)
       .select(selectOption)
       .lean();
 

@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from "express";
 
 import { asyncWrapper } from "../../../middlewares";
-import { MenProduct } from "../../../models/product/product-schema";
+import { Product } from "../../../models/product/product-schema";
 import { p_keys } from "../../../models/product/product-enums";
 
 export const checkStock = asyncWrapper(
@@ -19,7 +19,7 @@ export const checkStock = asyncWrapper(
     for (let item of cart) {
       ids.push(item.productId);
     }
-    const stocks = await MenProduct.find({ _id: { $in: ids } }).select([
+    const stocks = await Product.find({ _id: { $in: ids } }).select([
       p_keys.stock,
       "_id",
     ]);
