@@ -1,4 +1,5 @@
 import { NextFunction, Request, Response } from "express";
+import { CartItem } from ".";
 // import nodemailer from "nodemailer";
 // import nodemailerSendgrid from "nodemailer-sendgrid";
 
@@ -39,15 +40,17 @@ export const signUp = asyncWrapper(
       email,
       password,
       userInfo,
+      cartDetail: {
+        cart: req.session.currentUser.cart,
+        expireAt: Date.now() + 1000 * 60 * 5,
+      },
     });
 
     await newUser.save();
 
-    console.log(newUser);
-
     req.session.currentUser = {
       username: newUser.userInfo.first_name,
-      cart: [],
+      cart: newUser.cartDetail.cart,
       email: newUser.email,
       userId: newUser.id,
       userInfo: newUser.userInfo,

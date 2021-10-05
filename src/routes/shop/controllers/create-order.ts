@@ -1,12 +1,14 @@
 import { Request, Response, NextFunction } from "express";
 
-import { asyncWrapper, Bad_Request_Error } from "../../../middlewares";
+import { asyncWrapper } from "../../../middlewares";
 import {
   OrderAddressFields,
   OrderContactInfo,
   PaymentDetail,
 } from "../../../models/order/order-interfaces";
 import { Order } from "../../../models/order/order-schema";
+import { UserDoc } from "../../../models/user/user-interfaces";
+import { User } from "../../../models/user/user-schema";
 import { CurrentUser } from "../../auth/controllers";
 
 interface ReqBody {
@@ -57,6 +59,17 @@ export const createOrder = asyncWrapper(
       paymentDetail,
     });
     await newOrder.save();
+
+    // save the order id in User
+    if (req.session.isLoggedIn) {
+      const user: UserDoc = await User.findById(currentUser.userId);
+      if (!user.orders || user.orders.length < 1) {
+        user.orders = [];
+      }
+      user.orders.push(newOrder._id);
+      user.markModified("orders");
+      await user.save();
+    }
 
     ///////////////////////////////////////////////
     // need to send email to user about the order ID

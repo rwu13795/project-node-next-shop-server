@@ -1,9 +1,9 @@
 import { Request, Response, NextFunction } from "express";
-import { ObjectId } from "mongodb";
+
 import { tokens } from "../../../app";
-import { p_keys } from "../../../models/product/product-enums";
-import { MenProduct } from "../../../models/product/product-schema";
-import { UserInfo } from "../../../models/user/user-interfaces";
+
+import { UserDoc, UserInfo } from "../../../models/user/user-interfaces";
+import { User } from "../../../models/user/user-schema";
 
 export interface CartItem {
   imageUrl: string;
@@ -44,6 +44,13 @@ export const getUserStatus = async (
     req.session.isLoggedIn = false;
     // create and save the csrf_secret in each session for each user
     req.session.csrf_secret = tokens.secretSync();
+  }
+
+  if (req.session.isLoggedIn) {
+    const existingUser: UserDoc = await User.findById(
+      req.session.currentUser.userId
+    );
+    req.session.currentUser.cart = existingUser.cartDetail.cart;
   }
 
   console.log("checking currentUser cart---->", req.session.currentUser.cart);

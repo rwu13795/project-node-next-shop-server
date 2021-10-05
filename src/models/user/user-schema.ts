@@ -20,6 +20,26 @@ const userSchema = new mongoose.Schema({
     zip_code: { type: String, required: true },
     phone: { type: String, required: true },
   },
+  cartDetail: {
+    expireAt: Date,
+    cart: [
+      {
+        imageUrl: String,
+        title: String,
+        main_cat: String,
+        productId: String,
+        quantity: Number,
+        size: String,
+        price: Number,
+        colorName: String,
+        availableQty: Number,
+        stockErrors: {
+          outOfStock: String,
+          notEnough: String,
+        },
+      },
+    ],
+  },
   resetToken: String,
   resetTokenExpiration: Date,
   orders: Array,

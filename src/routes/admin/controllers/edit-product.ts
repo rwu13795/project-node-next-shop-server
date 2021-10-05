@@ -16,6 +16,7 @@ import { ColorPropsFromClient } from "./add-product";
 import mapStock from "../helpers/map-product-stock";
 import uploadImageTo_S3 from "../helpers/upload-to-S3";
 import deleteImages from "../helpers/delete-image-on-S3";
+import { UploadedImages } from "../../../middlewares";
 
 interface EditProductBody {
   title: string;
@@ -33,7 +34,7 @@ export const editProduct = async (
   res: Response,
   next: NextFunction
 ) => {
-  const imageFiles = req.files;
+  const imageFiles: UploadedImages = req.files;
   const {
     title,
     main_cat,
@@ -79,6 +80,7 @@ export const editProduct = async (
     colorPropsList: colorPropsList_toBeSaved,
     stock,
     searchTags,
+    createdDate: new Date(),
   };
 
   let product = await Product.findOneAndUpdate(

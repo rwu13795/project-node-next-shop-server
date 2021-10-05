@@ -1,6 +1,8 @@
 import { Request, Response, NextFunction } from "express";
 
 import { asyncWrapper } from "../../../middlewares";
+import { UserDoc } from "../../../models/user/user-interfaces";
+import { User } from "../../../models/user/user-schema";
 import { CartItem } from "../../auth/controllers";
 
 interface Body {
@@ -15,6 +17,7 @@ export const addToCart = asyncWrapper(
 
     console.log("updated item", item);
 
+    // when the user tried to change the quantity after the session has expired
     if (!req.session.currentUser) {
       req.session.currentUser = {
         username: `guest__${req.session.id}`,
@@ -43,6 +46,10 @@ export const addToCart = asyncWrapper(
             // change the quantity of the same item
             i.quantity = item.quantity;
           }
+          // update the cart in DB
+          if (req.session.isLoggedIn) {
+            return next();
+          }
           return res.status(201).send({
             currentUser: req.session.currentUser,
           });
@@ -51,6 +58,11 @@ export const addToCart = asyncWrapper(
       // if not updating the same item, that means user needs to change size/color
       // so I use the replace the targeted item with the new updated item
       req.session.currentUser.cart[index] = item;
+
+      // also update the cart in User DB if user is logged in
+      if (req.session.isLoggedIn) {
+        return next();
+      }
       return res.status(201).send({
         currentUser: req.session.currentUser,
       });
@@ -66,6 +78,10 @@ export const addToCart = asyncWrapper(
       ) {
         i.quantity = i.quantity + item.quantity;
 
+        // also update the cart in User DB if user is logged in
+        if (req.session.isLoggedIn) {
+          return next();
+        }
         return res.status(201).send({
           currentUser: req.session.currentUser,
         });
@@ -74,6 +90,11 @@ export const addToCart = asyncWrapper(
 
     // add new item to cart
     req.session.currentUser.cart.push(item);
+    // also update the cart in User DB if user is logged in
+    if (req.session.isLoggedIn) {
+      return next();
+    }
+
     return res.status(201).send({
       currentUser: req.session.currentUser,
     });

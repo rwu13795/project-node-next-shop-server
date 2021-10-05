@@ -2,6 +2,12 @@ import { Request } from "express";
 
 import multer from "multer";
 
+export type UploadedImages =
+  | Express.Multer.File[]
+  | {
+      [fieldname: string]: Express.Multer.File[];
+    };
+
 // the filter also works for "multer.array", it will check each file inside the array
 const fileFilter = (req: Request, file, callback) => {
   if (

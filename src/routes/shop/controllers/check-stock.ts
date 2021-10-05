@@ -3,6 +3,8 @@ import { Request, Response, NextFunction } from "express";
 import { asyncWrapper } from "../../../middlewares";
 import { Product } from "../../../models/product/product-schema";
 import { p_keys } from "../../../models/product/product-enums";
+import { User } from "../../../models/user/user-schema";
+import { UserDoc } from "../../../models/user/user-interfaces";
 
 export const checkStock = asyncWrapper(
   async (req: Request, res: Response, next: NextFunction) => {
@@ -15,6 +17,9 @@ export const checkStock = asyncWrapper(
     }
 
     let cart = req.session.currentUser.cart;
+
+    // update the cart with the latest stock info, let the user know
+    // which item in the cart is out of stock
     let ids = [];
     for (let item of cart) {
       ids.push(item.productId);
@@ -34,8 +39,12 @@ export const checkStock = asyncWrapper(
     }
 
     req.session.currentUser.cart = cart;
-
-    console.log("updated cart ----->", req.session.currentUser.cart);
+    if (req.session.isLoggedIn) {
+      const user: UserDoc = await User.findById(req.session.currentUser.userId);
+      user.cartDetail.cart = req.session.currentUser.cart;
+      user.markModified("cartDetail");
+      await user.save();
+    }
 
     return res.status(200).send(req.session.currentUser.cart);
   }

@@ -11,6 +11,10 @@ export const clearCart = asyncWrapper(
       req.session.currentUser.cart = [];
     }
 
+    if (req.session.isLoggedIn) {
+      return next();
+    }
+
     res.status(201).send({ currentUser: req.session.currentUser });
   }
 );

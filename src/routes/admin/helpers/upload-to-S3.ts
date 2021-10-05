@@ -3,10 +3,18 @@ import { PutObjectCommand } from "@aws-sdk/client-s3";
 import { s3Client } from "../../../utils/aws-s3-client";
 import { ColorPropsFromClient } from "../controllers/add-product";
 import { ColorProps } from "../../../models/product/product-interfaces";
+import { UploadedImages } from "../../../middlewares";
+
+interface Params {
+  Bucket: string;
+  Key: string;
+  Body: string | Buffer;
+}
 
 export default async function uploadImageTo_S3(
   editMode: boolean,
-  uploadedImageFiles,
+  uploadedImageFiles: UploadedImages,
+
   colorPropsListFromClient: ColorPropsFromClient[],
   main_cat: string,
   sub_cat: string,
@@ -19,7 +27,7 @@ export default async function uploadImageTo_S3(
   const categoryUrl = `${main_cat}/${sub_cat}/${urlTitle}`;
   const awsUrl = `https://testing-images-on-s3.s3.us-east-2.amazonaws.com/${categoryUrl}`;
 
-  let params = {
+  let params: Params = {
     Bucket: "testing-images-on-s3", // The name of the bucket. For example, 'sample_bucket_101'.
     // The name of the object. For example, 'sample_upload.txt'. And the folder name will any
     // path in front of the file name, (testing_folder/xxxxx.txt)
@@ -35,7 +43,7 @@ export default async function uploadImageTo_S3(
     // colorPropsList.push({colorCode: prop.colorCode, colorName: prop.colorName, sizes:prop.sizes, imageCount: prop.imageCount, imageFiles: prop.modifiedImages})
     let count = 0;
     while (count < (editMode ? prop.modifiedIndex.length : prop.imageCount)) {
-      let originalnameToUrl = uploadedImageFiles[
+      let originalnameToUrl: string = uploadedImageFiles[
         fileIndex
       ].originalname.replace(allSpacesRegex, "-");
       // we need to attach tha category, title, and color to the url

@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 
 import { Bad_Request_Error, asyncWrapper } from "../../../middlewares";
-import { MenProduct } from "../../../models/product/product-schema";
+import { Product } from "../../../models/product/product-schema";
 
 export const getOneProduct = asyncWrapper(
   async (req: Request, res: Response, next: NextFunction) => {
@@ -11,7 +11,7 @@ export const getOneProduct = asyncWrapper(
     // specify the nested object property in a string `stock.byColor.${color}.total`
     const objectPath = `stock.byColor.${color}.total`;
     console.log(objectPath);
-    const product = await MenProduct.find({ [objectPath]: { $gt: 0 } }).lean();
+    const product = await Product.find({ [objectPath]: { $gt: 0 } }).lean();
 
     if (product.length < 1) {
       return next(new Bad_Request_Error("Product not found", "field"));

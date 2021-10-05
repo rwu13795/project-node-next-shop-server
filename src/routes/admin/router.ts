@@ -6,9 +6,12 @@ import {
   multiFiles_bodyParser,
 } from "../../middlewares";
 
-import { addProduct } from "./controllers/add-product";
-import { editProduct } from "./controllers/edit-product";
-import { getOneProduct } from "./controllers/get-one-product";
+import {
+  addProduct,
+  editProduct,
+  deleteProduct,
+  adminSignIn,
+} from "./controllers";
 
 const router = express.Router();
 
@@ -21,7 +24,7 @@ router.post(
   addProduct
 );
 
-router.post("/get-one-product", getOneProduct);
+// router.post("/get-one-product", getOneProduct);
 
 router.post(
   "/edit-product",
@@ -31,5 +34,9 @@ router.post(
   requestValidator,
   editProduct
 );
+
+router.post("/delete-product", deleteProduct);
+
+router.post("/admin-auth", adminSignIn);
 
 export { router as adminRouter };

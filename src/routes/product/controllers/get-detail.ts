@@ -3,6 +3,7 @@ import { NextFunction, Request, Response } from "express";
 import { Product } from "../../../models/product/product-schema";
 import { asyncWrapper, Bad_Request_Error } from "../../../middlewares";
 import { MainCategory, p_keys } from "../../../models/product/product-enums";
+import { ProductDoc } from "../../../models/product/product-interfaces";
 
 export const getDetail = asyncWrapper(
   async (req: Request, res: Response, next: NextFunction) => {
@@ -17,7 +18,7 @@ export const getDetail = asyncWrapper(
     }
 
     const selectOption = [p_keys.productInfo, p_keys.colorPropsList];
-    const product = await Product.findById(productId)
+    const product: ProductDoc = await Product.findById(productId)
       .select(selectOption)
       .lean();
 

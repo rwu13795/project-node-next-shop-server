@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import { CartItem } from "../../routes/auth/controllers";
 import { inputNames } from "../../utils/enums/input-names";
 
 export interface UserInfo {
@@ -12,10 +13,16 @@ export interface UserInfo {
   [inputNames.phone]: string;
 }
 
+interface CartDetail {
+  cart: CartItem[];
+  expireAt: number;
+}
+
 export interface UserAttrs {
   [inputNames.email]: string;
   [inputNames.password]: string;
   userInfo: UserInfo;
+  cartDetail?: CartDetail;
   orders?: string[];
 }
 
@@ -23,6 +30,7 @@ export interface UserDoc extends mongoose.Document {
   email: string;
   password: string;
   userInfo: UserInfo;
+  cartDetail?: CartDetail;
   orders?: string[];
   resetToken?: string;
   resetTokenExpiration?: Date;

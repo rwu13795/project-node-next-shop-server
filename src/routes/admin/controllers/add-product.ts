@@ -12,6 +12,7 @@ import {
 } from "../../../models/product/product-enums";
 import mapStock from "../helpers/map-product-stock";
 import uploadImageTo_S3 from "../helpers/upload-to-S3";
+import { UploadedImages } from "../../../middlewares";
 
 export interface ColorPropsFromClient {
   colorName: string;
@@ -36,7 +37,7 @@ export const addProduct = async (
   res: Response,
   next: NextFunction
 ) => {
-  const imageFiles = req.files;
+  const imageFiles: UploadedImages = req.files;
   const {
     title,
     main_cat,
