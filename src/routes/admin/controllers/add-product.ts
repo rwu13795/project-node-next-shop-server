@@ -30,6 +30,7 @@ interface AddProductBody {
   price: number;
   colorPropsListFromClient: ColorPropsFromClient[];
   description: string;
+  admin_id: string;
 }
 
 export const addProduct = async (
@@ -45,6 +46,7 @@ export const addProduct = async (
     price,
     colorPropsListFromClient,
     description,
+    admin_id,
   }: AddProductBody = req.body;
 
   // put keywords in search tags
@@ -77,6 +79,7 @@ export const addProduct = async (
     stock,
     searchTags,
     createdDate: new Date(),
+    admin_id,
   };
 
   let product = Product.build(productAttrs);

@@ -27,6 +27,7 @@ interface EditProductBody {
   description: string;
   productId: string;
   deletedImgaes: string[];
+  admin_id: string;
 }
 
 export const editProduct = async (
@@ -44,6 +45,7 @@ export const editProduct = async (
     description,
     productId,
     deletedImgaes,
+    admin_id,
   }: EditProductBody = req.body;
 
   // put keywords in search tags
@@ -81,6 +83,7 @@ export const editProduct = async (
     stock,
     searchTags,
     createdDate: new Date(),
+    admin_id,
   };
 
   let product = await Product.findOneAndUpdate(

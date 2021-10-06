@@ -6,7 +6,7 @@ import { AdminAttrs, AdminDoc, AdminModel } from "./admin-interfaces";
 const adminSchema = new mongoose.Schema({
   admin_id: { type: String, required: true },
   password: { type: String, required: true },
-  added_productIds: { type: Array, required: true },
+  product_ids: { type: Array, required: true },
 });
 
 adminSchema.statics.build = (attrs: AdminAttrs) => {

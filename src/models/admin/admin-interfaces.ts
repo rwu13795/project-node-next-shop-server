@@ -3,13 +3,13 @@ import mongoose from "mongoose";
 export interface AdminAttrs {
   admin_id: string;
   password: string;
-  added_productIds: string[];
+  product_ids: string[];
 }
 
 export interface AdminDoc extends mongoose.Document {
   admin_id: string;
   password: string;
-  added_productIds: string[];
+  product_ids: string[];
 }
 
 export interface AdminModel extends mongoose.Model<any> {
