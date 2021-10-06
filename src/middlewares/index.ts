@@ -9,13 +9,13 @@ export * from "./error-handler/request-validation-error";
 export * from "./request-validator/body-addProduct";
 export * from "./request-validator/body-signUp";
 export * from "./request-validator/body-signIn";
+export * from "./request-validator/body-admin-register";
 export * from "./request-validator/validator";
 
 export * from "./upload-multi-files/get-image-files";
 export * from "./upload-multi-files/multi-files-bodyParser";
 
-export * from "./create-session/user-session";
-export * from "./create-session/admin-session";
+export * from "./create-session";
 
 export * from "./async-wrapper";
 export * from "./require-auth";

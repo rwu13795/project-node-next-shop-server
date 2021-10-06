@@ -8,8 +8,6 @@ import { Password } from "../../../utils/hash-password";
 
 export const signIn = asyncWrapper(
   async (req: Request, res: Response, next: NextFunction) => {
-    console.log("in sign in");
-
     const { email, password } = req.body;
 
     const existingUser: UserDoc = await User.findOne({ email });
@@ -29,7 +27,15 @@ export const signIn = asyncWrapper(
     // retrieve the cart from the existing user's record, and merge the cart which
     // is added when the user is guest user, with the existing cart
     // if the existing cart is expired, then use the guest user's cart
-    let cart: CartItem[] = req.session.currentUser.cart;
+    console.log("req.session", req.session);
+
+    let cart: CartItem[];
+    if (req.session.currentUser?.cart) {
+      cart = req.session.currentUser.cart;
+    } else {
+      cart = [];
+    }
+
     const userCartExpiration = Date.now() + 1000 * 60 * 60 * 24; // 24 hours
     if (
       !existingUser.cartDetail.expireAt ||

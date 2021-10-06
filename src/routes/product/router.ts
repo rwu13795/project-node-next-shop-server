@@ -1,5 +1,5 @@
 import express from "express";
-import { userSession } from "../../middlewares";
+import { createSession } from "../../middlewares";
 
 import {
   getMainCat,
@@ -18,6 +18,6 @@ router.get("/:main_cat/:sub_cat", getSubCat);
 
 router.get("/detail/:category/:productId", getDetail);
 
-router.put("/update-quantity", userSession, updateQuantity);
+router.put("/update-quantity", createSession, updateQuantity);
 
 export { router as productRouter };

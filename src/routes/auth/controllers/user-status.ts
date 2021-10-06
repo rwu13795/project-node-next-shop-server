@@ -53,7 +53,7 @@ export const getUserStatus = async (
     req.session.currentUser.cart = existingUser.cartDetail.cart;
   }
 
-  console.log("checking currentUser cart---->", req.session.currentUser.cart);
+  console.log("checking session in getAuth---->", req.session);
 
   // create a new token and send it to client each time the getAuthStatus is called
   const csrfToken = tokens.create(req.session.csrf_secret);

@@ -1,6 +1,6 @@
 import { body } from "express-validator";
 
-export const body_signUp = [
+export const body_adminRegister = [
   body("password")
     .trim()
     .isLength({ min: 4, max: 20 })

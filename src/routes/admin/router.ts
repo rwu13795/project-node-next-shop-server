@@ -4,6 +4,7 @@ import {
   requestValidator,
   getImagesFromClient,
   multiFiles_bodyParser,
+  body_adminRegister,
 } from "../../middlewares";
 
 import {
@@ -11,6 +12,8 @@ import {
   editProduct,
   deleteProduct,
   adminSignIn,
+  adminRegister,
+  getAdminStatus,
 } from "./controllers";
 
 const router = express.Router();
@@ -37,6 +40,15 @@ router.post(
 
 router.post("/delete-product", deleteProduct);
 
-router.post("/admin-auth", adminSignIn);
+router.get("/admin-status", getAdminStatus);
+
+router.post("/admin-sign-in", adminSignIn);
+
+router.post(
+  "/admin-register",
+  body_adminRegister,
+  requestValidator,
+  adminRegister
+);
 
 export { router as adminRouter };
