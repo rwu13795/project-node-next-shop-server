@@ -1,5 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 import { Bad_Request_Error } from "../../../middlewares";
+import { AdminDoc } from "../../../models/admin/admin-interfaces";
+import { Admin } from "../../../models/admin/admin-schema";
 import { ProductDoc } from "../../../models/product/product-interfaces";
 import { Product } from "../../../models/product/product-schema";
 
@@ -11,11 +13,20 @@ export const deleteProduct = async (
   next: NextFunction
 ) => {
   const productId: string = req.body.productId;
+  const admin_username: string = req.body.admin_username;
 
-  const product: ProductDoc = await Product.findById(productId);
+  const [product, adminUser]: [ProductDoc, AdminDoc] = await Promise.all([
+    Product.findById(productId),
+    Admin.findOne({ admin_username }),
+  ]);
 
-  if (!product) {
-    return next(new Bad_Request_Error("This product is not found in database"));
+  // const product: ProductDoc = await Product.findById(productId);
+  // const adminUser: AdminDoc = await Admin.findOne({ admin_username });
+
+  if (!product || !adminUser) {
+    return next(
+      new Bad_Request_Error("Something wrong with the product_id or admin_id")
+    );
   }
 
   let imagesToBeDeleted: string[] = [];
@@ -24,7 +35,15 @@ export const deleteProduct = async (
   }
 
   deleteImages(imagesToBeDeleted);
-  const result = await Product.findByIdAndRemove(productId);
+
+  adminUser.product_ids = adminUser.product_ids.filter(
+    (id) => id.toString() !== productId.toString()
+  );
+
+  const result = await Promise.all([
+    adminUser.save(),
+    Product.findByIdAndRemove(productId),
+  ]);
 
   console.log("> > > product deleted < < <", result);
   res.status(201).send({ message: "OK" });

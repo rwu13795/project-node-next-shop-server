@@ -7,12 +7,14 @@ import { Password } from "../../../utils/hash-password";
 
 export const adminSignIn = asyncWrapper(
   async (req: Request, res: Response, next: NextFunction) => {
-    const { admin_id, password } = req.body;
+    const { admin_username, password } = req.body;
 
-    const existingAdmin: AdminDoc = await Admin.findOne({ admin_id });
+    const existingAdmin: AdminDoc = await Admin.findOne({ admin_username });
 
     if (!existingAdmin) {
-      return next(new Bad_Request_Error("This ID does not exist", "admin_id"));
+      return next(
+        new Bad_Request_Error("This ID does not exist", "admin_username")
+      );
     }
 
     const checkPassword = await Password.compare(
@@ -24,8 +26,8 @@ export const adminSignIn = asyncWrapper(
     }
 
     req.session.adminUser = {
-      admin_id: existingAdmin.admin_id,
-      _id: existingAdmin._id,
+      admin_username: existingAdmin.admin_username,
+      admin_id: existingAdmin._id,
       loggedInAsAdmin: true,
     };
 

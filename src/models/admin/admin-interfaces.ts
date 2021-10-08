@@ -1,13 +1,13 @@
 import mongoose from "mongoose";
 
 export interface AdminAttrs {
-  admin_id: string;
+  admin_username: string;
   password: string;
   product_ids: string[];
 }
 
 export interface AdminDoc extends mongoose.Document {
-  admin_id: string;
+  admin_username: string;
   password: string;
   product_ids: string[];
 }

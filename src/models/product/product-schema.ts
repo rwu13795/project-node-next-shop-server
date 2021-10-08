@@ -17,6 +17,7 @@ const productSchemaRequirement = {
   },
   searchTags: { type: Array, required: true },
   createdDate: { type: Date, required: true },
+  admin_username: { type: String, required: true },
 };
 
 const productSchema = new mongoose.Schema(productSchemaRequirement);

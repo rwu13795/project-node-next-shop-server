@@ -88,15 +88,13 @@ export const signIn = asyncWrapper(
       email: existingUser.email,
       userId: existingUser.id,
       userInfo: existingUser.userInfo,
+      isLoggedIn: true,
     };
-    req.session.isLoggedIn = true;
 
     // to test the loading spinner by delaying the response
     setTimeout(() => {
       res.status(200).send({
-        message: "Logged in",
         currentUser: req.session.currentUser,
-        isLoggedIn: req.session.isLoggedIn,
       });
     }, 3000);
 

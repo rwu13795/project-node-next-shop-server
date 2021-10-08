@@ -2,12 +2,14 @@ import { NextFunction, Request, Response } from "express";
 
 import { Product } from "../../../models/product/product-schema";
 import { asyncWrapper, Bad_Request_Error } from "../../../middlewares";
-import { MainCategory, p_keys } from "../../../models/product/product-enums";
+import { p_keys } from "../../../models/product/product-enums";
 import { ProductDoc } from "../../../models/product/product-interfaces";
 
 export const getDetail = asyncWrapper(
   async (req: Request, res: Response, next: NextFunction) => {
-    const { productId, category } = req.params;
+    const { productId } = req.params;
+
+    console.log("productId", productId);
 
     if (productId === "999") {
       return res.status(200).send({ product: null }); //csrfToken: req.csrfToken()
@@ -25,6 +27,8 @@ export const getDetail = asyncWrapper(
     if (!product) {
       return next(new Bad_Request_Error("No product found", "get_detail"));
     }
+
+    console.log(product);
 
     return res.status(200).send({ product });
   }

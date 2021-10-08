@@ -61,7 +61,7 @@ export const createOrder = asyncWrapper(
     await newOrder.save();
 
     // save the order id in User
-    if (req.session.isLoggedIn) {
+    if (req.session.currentUser.isLoggedIn) {
       const user: UserDoc = await User.findById(currentUser.userId);
       if (!user.orders || user.orders.length < 1) {
         user.orders = [];

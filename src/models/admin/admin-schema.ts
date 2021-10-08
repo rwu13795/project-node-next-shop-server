@@ -4,7 +4,7 @@ import { Password } from "../../utils/hash-password";
 import { AdminAttrs, AdminDoc, AdminModel } from "./admin-interfaces";
 
 const adminSchema = new mongoose.Schema({
-  admin_id: { type: String, required: true },
+  admin_username: { type: String, required: true, unique: true },
   password: { type: String, required: true },
   product_ids: { type: Array, required: true },
 });

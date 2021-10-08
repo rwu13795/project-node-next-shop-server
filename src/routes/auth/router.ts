@@ -3,7 +3,7 @@ import express from "express";
 import {
   body_signIn,
   body_signUp,
-  csrf_protection,
+  csrf_protection_user,
   requestValidator,
 } from "../../middlewares";
 import {
@@ -30,6 +30,6 @@ router.post("/reset-pw");
 
 router.post("/reset-ckeck-token");
 
-router.post("/update-info", csrf_protection, updateInfo);
+router.post("/update-info", csrf_protection_user, updateInfo);
 
 export { router as authRouter };

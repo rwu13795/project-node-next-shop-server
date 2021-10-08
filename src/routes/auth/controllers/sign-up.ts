@@ -54,8 +54,8 @@ export const signUp = asyncWrapper(
       email: newUser.email,
       userId: newUser.id,
       userInfo: newUser.userInfo,
+      isLoggedIn: true,
     };
-    req.session.isLoggedIn = true;
 
     /******/
     // send a email telling the user the signup is successful
@@ -70,7 +70,6 @@ export const signUp = asyncWrapper(
 
     res.status(201).send({
       currentUser: req.session.currentUser,
-      isLoggedIn: req.session.isLoggedIn,
     });
   }
 );

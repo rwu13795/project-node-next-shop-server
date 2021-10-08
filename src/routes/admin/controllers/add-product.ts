@@ -12,7 +12,9 @@ import {
 } from "../../../models/product/product-enums";
 import mapStock from "../helpers/map-product-stock";
 import uploadImageTo_S3 from "../helpers/upload-to-S3";
-import { UploadedImages } from "../../../middlewares";
+import { Not_Authorized_Error, UploadedImages } from "../../../middlewares";
+import { Admin } from "../../../models/admin/admin-schema";
+import { AdminDoc } from "../../../models/admin/admin-interfaces";
 
 export interface ColorPropsFromClient {
   colorName: string;
@@ -30,7 +32,7 @@ interface AddProductBody {
   price: number;
   colorPropsListFromClient: ColorPropsFromClient[];
   description: string;
-  admin_id: string;
+  admin_username: string;
 }
 
 export const addProduct = async (
@@ -46,8 +48,13 @@ export const addProduct = async (
     price,
     colorPropsListFromClient,
     description,
-    admin_id,
+    admin_username,
   }: AddProductBody = req.body;
+
+  const adminUser: AdminDoc = await Admin.findOne({ admin_username });
+  if (!adminUser) {
+    return next(new Not_Authorized_Error());
+  }
 
   // put keywords in search tags
   const tagsRegex = /[\s-]+/g; // match all "space" and "dash-line"
@@ -79,13 +86,15 @@ export const addProduct = async (
     stock,
     searchTags,
     createdDate: new Date(),
-    admin_id,
+    admin_username,
   };
 
   let product = Product.build(productAttrs);
 
-  await product.save();
+  adminUser.product_ids.push(product._id);
 
-  console.log("> > > new product added < < <");
+  const result = await Promise.all([adminUser.save(), product.save()]);
+
+  console.log("> > > new product added < < <", result);
   res.status(201).send({ message: "OK" });
 };

@@ -5,6 +5,8 @@ import {
   getImagesFromClient,
   multiFiles_bodyParser,
   body_adminRegister,
+  csrf_protection_admin,
+  requireAdminAuth,
 } from "../../middlewares";
 
 import {
@@ -14,14 +16,17 @@ import {
   adminSignIn,
   adminRegister,
   getAdminStatus,
+  getProductsList,
 } from "./controllers";
 
 const router = express.Router();
 
 router.post(
-  "/post-new-product",
+  "/add-product",
   getImagesFromClient,
   multiFiles_bodyParser,
+  requireAdminAuth,
+  csrf_protection_admin,
   body_addProduct,
   requestValidator,
   addProduct
@@ -33,12 +38,19 @@ router.post(
   "/edit-product",
   getImagesFromClient,
   multiFiles_bodyParser,
+  requireAdminAuth,
+  csrf_protection_admin,
   body_addProduct,
   requestValidator,
   editProduct
 );
 
-router.post("/delete-product", deleteProduct);
+router.post(
+  "/delete-product",
+  requireAdminAuth,
+  csrf_protection_admin,
+  deleteProduct
+);
 
 router.get("/admin-status", getAdminStatus);
 
@@ -50,5 +62,7 @@ router.post(
   requestValidator,
   adminRegister
 );
+
+router.get("/get-products-list", requireAdminAuth, getProductsList);
 
 export { router as adminRouter };

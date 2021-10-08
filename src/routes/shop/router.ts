@@ -1,5 +1,5 @@
 import express from "express";
-import { csrf_protection, updateCartInDatebase } from "../../middlewares";
+import { csrf_protection_user, updateCartInDatebase } from "../../middlewares";
 
 import {
   addToCart,
@@ -25,6 +25,6 @@ router.post("/clear-cart", clearCart, updateCartInDatebase);
 
 router.get("/check-stock", checkStock);
 
-router.post("/stripe-payment", csrf_protection, stripePayment);
+router.post("/stripe-payment", csrf_protection_user, stripePayment);
 
 export { router as shopRouter };
