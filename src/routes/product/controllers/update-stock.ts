@@ -5,7 +5,7 @@ import { asyncWrapper, Bad_Request_Error } from "../../../middlewares";
 import { MainCategory, p_keys } from "../../../models/product/product-enums";
 import mongoose from "mongoose";
 
-export const updateQuantity = asyncWrapper(
+export const updateStock = asyncWrapper(
   async (req: Request, res: Response, next: NextFunction) => {
     const cart = req.session.currentUser.cart;
 

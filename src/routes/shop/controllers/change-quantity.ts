@@ -11,7 +11,7 @@ export const changeQuantity = asyncWrapper(
     req.session.currentUser.cart[index].quantity = quantity;
 
     // also update the cart in User DB if user is logged in
-    if (req.session.isLoggedIn) {
+    if (req.session.currentUser.isLoggedIn) {
       return next();
     }
 

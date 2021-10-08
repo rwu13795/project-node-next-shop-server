@@ -22,8 +22,9 @@ export const addToCart = asyncWrapper(
       req.session.currentUser = {
         username: `guest__${req.session.id}`,
         cart: [item],
+        isLoggedIn: false,
       };
-      req.session.isLoggedIn = false;
+      req.session.currentUser.isLoggedIn = false;
       return res.status(201).send({
         currentUser: req.session.currentUser,
       });
@@ -47,7 +48,7 @@ export const addToCart = asyncWrapper(
             i.quantity = item.quantity;
           }
           // update the cart in DB
-          if (req.session.isLoggedIn) {
+          if (req.session.currentUser.isLoggedIn) {
             return next();
           }
           return res.status(201).send({
@@ -60,7 +61,7 @@ export const addToCart = asyncWrapper(
       req.session.currentUser.cart[index] = item;
 
       // also update the cart in User DB if user is logged in
-      if (req.session.isLoggedIn) {
+      if (req.session.currentUser.isLoggedIn) {
         return next();
       }
       return res.status(201).send({
@@ -79,7 +80,7 @@ export const addToCart = asyncWrapper(
         i.quantity = i.quantity + item.quantity;
 
         // also update the cart in User DB if user is logged in
-        if (req.session.isLoggedIn) {
+        if (req.session.currentUser.isLoggedIn) {
           return next();
         }
         return res.status(201).send({
@@ -91,7 +92,7 @@ export const addToCart = asyncWrapper(
     // add new item to cart
     req.session.currentUser.cart.push(item);
     // also update the cart in User DB if user is logged in
-    if (req.session.isLoggedIn) {
+    if (req.session.currentUser.isLoggedIn) {
       return next();
     }
 

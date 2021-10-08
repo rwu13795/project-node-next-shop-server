@@ -13,7 +13,7 @@ export const removeFromCart = asyncWrapper(
     req.session.currentUser.cart.splice(index, 1);
 
     // also update the cart in User DB if user is logged in
-    if (req.session.isLoggedIn) {
+    if (req.session.currentUser.isLoggedIn) {
       return next();
     }
 

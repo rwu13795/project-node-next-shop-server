@@ -11,7 +11,7 @@ export const clearCart = asyncWrapper(
       req.session.currentUser.cart = [];
     }
 
-    if (req.session.isLoggedIn) {
+    if (req.session.currentUser.isLoggedIn) {
       return next();
     }
 

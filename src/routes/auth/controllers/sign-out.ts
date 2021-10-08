@@ -4,7 +4,12 @@ import { asyncWrapper, Bad_Request_Error } from "../../../middlewares";
 
 export const signOut = asyncWrapper(
   async (req: Request, res: Response, next: NextFunction) => {
-    req.session.destroy(() => {});
+    if (req.session.adminUser.loggedInAsAdmin) {
+      req.session.currentUser = null;
+      req.session.csrf_secret_user = null;
+    } else {
+      req.session.destroy(() => {});
+    }
 
     res.status(201).send({ message: "Signed out" });
   }
