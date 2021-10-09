@@ -6,6 +6,7 @@ import { CartItem } from ".";
 import { asyncWrapper, Bad_Request_Error } from "../../../middlewares";
 import { UserInfo } from "../../../models/user/user-interfaces";
 import { User } from "../../../models/user/user-schema";
+import { inputNames } from "../../../utils/enums/input-names";
 
 // const mailTransporter = nodemailer.createTransport(
 //   nodemailerSendgrid({
@@ -29,7 +30,7 @@ export const signUp = asyncWrapper(
       return next(
         new Bad_Request_Error(
           "This email address is already used by other user",
-          "email"
+          inputNames.email
         )
       );
     }

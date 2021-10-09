@@ -10,6 +10,7 @@ export * from "./request-validator/body-addProduct";
 export * from "./request-validator/body-signUp";
 export * from "./request-validator/body-signIn";
 export * from "./request-validator/body-admin-register";
+export * from "./request-validator/body-reset-pw";
 export * from "./request-validator/validator";
 
 export * from "./upload-multi-files/get-image-files";

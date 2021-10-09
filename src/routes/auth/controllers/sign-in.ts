@@ -4,6 +4,7 @@ import { CartItem } from ".";
 import { asyncWrapper, Bad_Request_Error } from "../../../middlewares";
 import { UserDoc } from "../../../models/user/user-interfaces";
 import { User } from "../../../models/user/user-schema";
+import { inputNames } from "../../../utils/enums/input-names";
 import { Password } from "../../../utils/hash-password";
 
 export const signIn = asyncWrapper(
@@ -13,7 +14,9 @@ export const signIn = asyncWrapper(
     const existingUser: UserDoc = await User.findOne({ email });
 
     if (!existingUser) {
-      return next(new Bad_Request_Error("This email does not exist", "email"));
+      return next(
+        new Bad_Request_Error("This email does not exist", inputNames.email)
+      );
     }
 
     const checkPassword = await Password.compare(
@@ -21,7 +24,9 @@ export const signIn = asyncWrapper(
       password
     );
     if (!checkPassword) {
-      return next(new Bad_Request_Error("Password is incorrect", "password"));
+      return next(
+        new Bad_Request_Error("Password is incorrect", inputNames.password)
+      );
     }
 
     // retrieve the cart from the existing user's record, and merge the cart which

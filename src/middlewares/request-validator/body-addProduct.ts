@@ -1,11 +1,12 @@
 import { body } from "express-validator";
+import { inputNames } from "../../utils/enums/input-names";
 
 // the client-site check should be able to prevent user sending invalid data
 // this body validator is action as the second check
 export const body_addProduct = [
-  body("title").notEmpty().withMessage("Title cannot be empty"),
-  body("main_cat").notEmpty().withMessage("Main category cannot be empty"),
-  body("sub_cat").notEmpty().withMessage("Sub category cannot be empty"),
+  body(inputNames.title).notEmpty().withMessage("Title cannot be empty"),
+  body(inputNames.main).notEmpty().withMessage("Main category cannot be empty"),
+  body(inputNames.sub).notEmpty().withMessage("Sub category cannot be empty"),
   // (1) //
   body("colorPropsListFromClient")
     .custom((value, { req }) => {
@@ -16,7 +17,7 @@ export const body_addProduct = [
       }
       return true;
     })
-    .withMessage("colorName"),
+    .withMessage(inputNames.colorName),
   // have to use the message to indicate specific error field, since the "param" will
   // be "colorProps" for all element inside this colorProps array
   body("colorPropsListFromClient")
@@ -28,7 +29,7 @@ export const body_addProduct = [
       }
       return true;
     })
-    .withMessage("colorCode"),
+    .withMessage(inputNames.colorCode),
   body("colorPropsListFromClient")
     .custom((value, { req }) => {
       for (let elem of req.body.colorPropsListFromClient) {
@@ -38,8 +39,8 @@ export const body_addProduct = [
       }
       return true;
     })
-    .withMessage("imageCount"),
-  body("description").notEmpty().withMessage("Description cannot be empty"),
+    .withMessage(inputNames.imagesCount),
+  body(inputNames.desc).notEmpty().withMessage("Description cannot be empty"),
 ];
 
 /**
