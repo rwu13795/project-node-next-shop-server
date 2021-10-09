@@ -14,11 +14,9 @@ export interface CartItem {
   size: string;
   price: number;
   colorName: string;
+  colorCode: string;
   availableQty?: number;
-  stockErrors: {
-    outOfStock?: string;
-    notEnough?: string;
-  };
+  stockError?: string;
 }
 
 export interface CurrentUser {
@@ -43,9 +41,6 @@ export const getUserStatus = async (
       cart: [],
       isLoggedIn: false,
     };
-
-    // create and save the csrf_secret in each session for each user
-    req.session.csrf_secret_user = tokens.secretSync();
   }
 
   if (req.session.currentUser.isLoggedIn) {
@@ -59,6 +54,9 @@ export const getUserStatus = async (
     "checking session in get user auth---->",
     req.session.currentUser
   );
+
+  // create and save the csrf_secret in each session for each user
+  req.session.csrf_secret_user = tokens.secretSync();
 
   // create a new token and send it to client each time the getAuthStatus is called
   const csrfToken = tokens.create(req.session.csrf_secret_user);

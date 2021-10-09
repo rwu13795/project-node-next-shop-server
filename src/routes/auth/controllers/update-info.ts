@@ -47,6 +47,7 @@ export const updateInfo = asyncWrapper(
       email: updatedUser.email,
       userId: updatedUser.id,
       userInfo: updatedUser.userInfo,
+      isLoggedIn: true,
     };
 
     setTimeout(() => {

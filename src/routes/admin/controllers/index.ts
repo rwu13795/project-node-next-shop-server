@@ -4,5 +4,6 @@ export * from "./edit-product";
 export * from "./get-products-list";
 
 export * from "./admin-sign-in";
+export * from "./admin-sign-out";
 export * from "./admin-register";
 export * from "./admin-status";

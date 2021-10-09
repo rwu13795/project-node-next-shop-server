@@ -17,6 +17,7 @@ import {
   adminRegister,
   getAdminStatus,
   getProductsList,
+  adminSignOut,
 } from "./controllers";
 
 const router = express.Router();
@@ -55,6 +56,8 @@ router.post(
 router.get("/admin-status", getAdminStatus);
 
 router.post("/admin-sign-in", adminSignIn);
+
+router.post("/admin-sign-out", adminSignOut);
 
 router.post(
   "/admin-register",

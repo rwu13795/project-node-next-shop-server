@@ -1,5 +1,9 @@
 import express from "express";
-import { csrf_protection_user, updateCartInDatebase } from "../../middlewares";
+import {
+  csrf_protection_user,
+  requireUserAuth,
+  updateCartInDatebase,
+} from "../../middlewares";
 
 import {
   addToCart,
@@ -9,6 +13,7 @@ import {
   createOrder,
   clearCart,
   checkStock,
+  orderHistory,
 } from "./controllers";
 
 const router = express.Router();
@@ -20,6 +25,8 @@ router.post("/remove-from-cart", removeFromCart, updateCartInDatebase);
 router.post("/change-quantity", changeQuantity, updateCartInDatebase);
 
 router.post("/create-order-history", createOrder);
+
+router.post("/get-order-history", requireUserAuth, orderHistory);
 
 router.post("/clear-cart", clearCart, updateCartInDatebase);
 

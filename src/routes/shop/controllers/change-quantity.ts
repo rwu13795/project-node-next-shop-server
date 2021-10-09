@@ -1,8 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 
 import { asyncWrapper } from "../../../middlewares";
-import { UserDoc } from "../../../models/user/user-interfaces";
-import { User } from "../../../models/user/user-schema";
 
 export const changeQuantity = asyncWrapper(
   async (req: Request, res: Response, next: NextFunction) => {

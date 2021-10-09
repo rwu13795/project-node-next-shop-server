@@ -3,6 +3,7 @@ import { NextFunction, Request, Response } from "express";
 import { Not_Authorized_Error, asyncWrapper } from "../../../middlewares";
 import { AdminDoc } from "../../../models/admin/admin-interfaces";
 import { Admin } from "../../../models/admin/admin-schema";
+import { p_keys } from "../../../models/product/product-enums";
 import { ProductDoc } from "../../../models/product/product-interfaces";
 import { Product } from "../../../models/product/product-schema";
 
@@ -32,7 +33,9 @@ export const getProductsList = asyncWrapper(
           : productsTotal - 1;
       const selected_ids = product_ids.slice(starIndex, endIndex);
 
-      products = await Product.find({ _id: { $in: selected_ids } });
+      products = await Product.find({ _id: { $in: selected_ids } })
+        .select([p_keys.colorPropsList, p_keys.productInfo, "_id"])
+        .lean();
     } else {
       products = null;
     }

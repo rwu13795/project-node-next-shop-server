@@ -5,3 +5,4 @@ export * from "./stripe-payment";
 export * from "./create-order";
 export * from "./clear-cart";
 export * from "./check-stock";
+export * from "./order-history";
