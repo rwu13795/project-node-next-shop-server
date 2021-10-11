@@ -24,6 +24,11 @@ export const tokenCheck = asyncWrapper(
       return next(new Bad_Request_Error("Reset link expired"));
     }
 
-    res.status(200).send({ userId: userWithValidToken._id });
+    console.log(userWithValidToken.resetTokenExpiration);
+
+    res.status(200).send({
+      userId: userWithValidToken._id,
+      expiration: userWithValidToken.resetTokenExpiration - Date.now(),
+    });
   }
 );

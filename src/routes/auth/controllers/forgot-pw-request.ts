@@ -21,7 +21,7 @@ export const forgotPassword_Request = asyncWrapper(
     }
 
     existingUser.resetToken = token;
-    existingUser.resetTokenExpiration = Date.now() + 1000 * 60 * 5; // 5 mins
+    existingUser.resetTokenExpiration = Date.now() + 1000 * 60 * 2 + 4000; // 5 mins + 4 sec
     await existingUser.save();
 
     transporter.sendMail({

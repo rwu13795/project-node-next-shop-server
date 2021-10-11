@@ -17,7 +17,7 @@ export const forgotPassword_Reset = asyncWrapper(
 
     if (!userWithValidToken) {
       console.log("Reset link expired");
-      return next(new Bad_Request_Error("Reset link expired"));
+      return next(new Bad_Request_Error("Reset link expired", "expired-link"));
     }
 
     userWithValidToken.password = new_password;
