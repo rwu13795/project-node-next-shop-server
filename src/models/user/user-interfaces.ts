@@ -33,7 +33,7 @@ export interface UserDoc extends mongoose.Document {
   cartDetail?: CartDetail;
   orders?: string[];
   resetToken?: string;
-  resetTokenExpiration?: Date;
+  resetTokenExpiration?: number;
 }
 
 export interface UserModel extends mongoose.Model<any> {

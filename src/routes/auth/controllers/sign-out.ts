@@ -4,7 +4,7 @@ import { asyncWrapper, Bad_Request_Error } from "../../../middlewares";
 
 export const signOut = asyncWrapper(
   async (req: Request, res: Response, next: NextFunction) => {
-    if (req.session.adminUser.loggedInAsAdmin) {
+    if (req.session.adminUser && req.session.adminUser?.loggedInAsAdmin) {
       req.session.currentUser = null;
       req.session.csrf_secret_user = null;
     } else {

@@ -4,3 +4,6 @@ export * from "./sign-up";
 export * from "./user-status";
 export * from "./update-info";
 export * from "./reset-pw";
+export * from "./forgot-pw-request";
+export * from "./forgot-pw-reset";
+export * from "./token-check";

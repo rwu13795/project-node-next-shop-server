@@ -1,18 +1,9 @@
 import { NextFunction, Request, Response } from "express";
-import { CartItem } from ".";
-// import nodemailer from "nodemailer";
-// import nodemailerSendgrid from "nodemailer-sendgrid";
 
 import { asyncWrapper, Bad_Request_Error } from "../../../middlewares";
 import { UserInfo } from "../../../models/user/user-interfaces";
 import { User } from "../../../models/user/user-schema";
 import { inputNames } from "../../../utils/enums/input-names";
-
-// const mailTransporter = nodemailer.createTransport(
-//   nodemailerSendgrid({
-//     apiKey: process.env.SENDGRID_API_KEY,
-//   })
-// );
 
 interface SignUpBody {
   email: string;

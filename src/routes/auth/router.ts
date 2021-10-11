@@ -1,4 +1,6 @@
 import express from "express";
+import nodemailer from "nodemailer";
+import nodemailerSendgrid from "nodemailer-sendgrid";
 
 import {
   body_resetPassword,
@@ -14,7 +16,16 @@ import {
   signUp,
   updateInfo,
   resetPassword,
+  forgotPassword_Request,
+  forgotPassword_Reset,
+  tokenCheck,
 } from "./controllers";
+
+export const transporter = nodemailer.createTransport(
+  nodemailerSendgrid({
+    apiKey: process.env.SENDGRID_API_KEY,
+  })
+);
 
 const router = express.Router();
 
@@ -26,7 +37,14 @@ router.post("/sign-out", signOut);
 
 router.post("/sign-up", body_signUp, requestValidator, signUp);
 
-router.post("/reset-request");
+router.post("/forgot-password-request", forgotPassword_Request);
+
+router.post(
+  "/forgot-password-reset",
+  body_resetPassword,
+  requestValidator,
+  forgotPassword_Reset
+);
 
 router.post(
   "/reset-password",
@@ -36,7 +54,7 @@ router.post(
   resetPassword
 );
 
-router.post("/reset-ckeck-token");
+router.post("/token-check", tokenCheck);
 
 router.post("/update-info", csrf_protection_user, updateInfo);
 
