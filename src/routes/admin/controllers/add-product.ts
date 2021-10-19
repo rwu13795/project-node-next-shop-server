@@ -93,6 +93,9 @@ export const addProduct = async (
 
   adminUser.product_ids.push(product._id);
 
+  //find all keywords docus that matches the search tag, and add this new item's
+  // id to all these keywords docus
+
   const result = await Promise.all([adminUser.save(), product.save()]);
 
   console.log("> > > new product added < < <", result);
