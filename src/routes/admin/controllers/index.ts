@@ -7,3 +7,4 @@ export * from "./admin-sign-in";
 export * from "./admin-sign-out";
 export * from "./admin-register";
 export * from "./admin-status";
+export * from "./get-master-products-list";

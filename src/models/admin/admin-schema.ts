@@ -7,6 +7,7 @@ const adminSchema = new mongoose.Schema({
   admin_username: { type: String, required: true, unique: true },
   password: { type: String, required: true },
   product_ids: { type: Array, required: true },
+  master_admin: { type: Boolean },
 });
 
 adminSchema.statics.build = (attrs: AdminAttrs) => {
@@ -23,6 +24,5 @@ adminSchema.pre("save", async function (done) {
 });
 
 const Admin = mongoose.model<AdminDoc, AdminModel>("admin", adminSchema);
-adminSchema;
 
 export { Admin };

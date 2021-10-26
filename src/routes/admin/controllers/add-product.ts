@@ -58,9 +58,9 @@ export const addProduct = async (
 
   // put keywords in search tags
   const tagsRegex = /[\s-]+/g; // match all "space" and "dash-line"
-  let searchTags: string[] = [...title.split(tagsRegex)];
+  let searchTags: string[] = title.toLowerCase().split(tagsRegex);
   for (let e of colorPropsListFromClient) {
-    searchTags.push(e.colorName);
+    searchTags.push(e.colorName.toLowerCase());
   }
 
   const stock = mapStock(sizesArray, colorPropsListFromClient);

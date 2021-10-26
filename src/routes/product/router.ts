@@ -1,7 +1,13 @@
 import express from "express";
 import { createSession } from "../../middlewares";
 
-import { getMainCat, getSubCat, getDetail, updateStock } from "./controllers";
+import {
+  getMainCat,
+  getSubCat,
+  getDetail,
+  updateStock,
+  searchProduct,
+} from "./controllers";
 
 const router = express.Router();
 
@@ -16,5 +22,7 @@ router.get("/:main_cat", getMainCat);
 router.get("/:main_cat/:sub_cat", getSubCat);
 
 router.put("/update-stock", createSession, updateStock);
+
+router.post("/search-product", searchProduct);
 
 export { router as productRouter };
