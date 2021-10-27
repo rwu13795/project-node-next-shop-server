@@ -8,12 +8,12 @@ interface ReviewProps {
 }
 
 export interface ReviewAttrs {
-  product_id: string;
-  reviews: ReviewProps[];
+  productId: string;
+  reviews: ReviewProps[] | string[];
 }
 
 export interface ReviewDoc extends mongoose.Document {
-  product_id: string;
+  productId: string;
   reviews: ReviewProps[];
 }
 

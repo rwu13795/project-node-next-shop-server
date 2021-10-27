@@ -15,6 +15,7 @@ import uploadImageTo_S3 from "../helpers/upload-to-S3";
 import { Not_Authorized_Error, UploadedImages } from "../../../middlewares";
 import { Admin } from "../../../models/admin/admin-schema";
 import { AdminDoc } from "../../../models/admin/admin-interfaces";
+import { Review } from "../../../models/review/review-schema";
 
 export interface ColorPropsFromClient {
   colorName: string;
@@ -89,15 +90,14 @@ export const addProduct = async (
     admin_username,
   };
 
-  let product = Product.build(productAttrs);
+  const product = Product.build(productAttrs);
+  const review = Review.build({ productId: product._id, reviews: [] });
 
   adminUser.product_ids.push(product._id);
+  product.reviewId = review._id;
 
-  //find all keywords docus that matches the search tag, and add this new item's
-  // id to all these keywords docus
+  await Promise.all([adminUser.save(), product.save(), review.save()]);
 
-  const result = await Promise.all([adminUser.save(), product.save()]);
-
-  console.log("> > > new product added < < <", result);
+  console.log("> > > new product added < < <");
   res.status(201).send({ message: "OK" });
 };

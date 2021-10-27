@@ -18,6 +18,7 @@ const productSchemaRequirement = {
   searchTags: { type: Array, required: true },
   createdDate: { type: Date, required: true },
   admin_username: { type: String, required: true },
+  reviewId: { type: String, ref: "review" },
 };
 
 const productSchema = new mongoose.Schema(productSchemaRequirement);

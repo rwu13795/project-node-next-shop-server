@@ -18,7 +18,7 @@ import Tokens from "csrf";
 declare module "express-session" {
   interface SessionData {
     currentUser: CurrentUser;
-    adminUser: AdminUser;
+    adminUser?: AdminUser;
     csrf_secret_user?: string;
     csrf_secret_admin?: string;
   }

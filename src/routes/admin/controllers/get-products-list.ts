@@ -30,8 +30,10 @@ export const getProductsList = asyncWrapper(
       const endIndex =
         starIndex + PRODUCTS_PER_PAGE < productsTotal
           ? starIndex + PRODUCTS_PER_PAGE
-          : productsTotal - 1;
+          : productsTotal;
       const selected_ids = product_ids.slice(starIndex, endIndex);
+
+      console.log(selected_ids);
 
       products = await Product.find({ _id: { $in: selected_ids } })
         .select([p_keys.colorPropsList, p_keys.productInfo, "_id"])

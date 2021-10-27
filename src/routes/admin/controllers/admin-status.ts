@@ -13,15 +13,15 @@ export const getAdminStatus = async (
   res: Response,
   next: NextFunction
 ) => {
-  if (!req.session.adminUser) {
+  if (!req.session.adminUser || !req.session.csrf_secret_admin) {
     req.session.adminUser = {
       admin_username: "",
       admin_id: "",
       loggedInAsAdmin: false,
     };
-  }
 
-  req.session.csrf_secret_admin = tokens.secretSync();
+    req.session.csrf_secret_admin = tokens.secretSync();
+  }
 
   const csrfToken = tokens.create(req.session.csrf_secret_admin);
   console.log("token in get admin auth", csrfToken);

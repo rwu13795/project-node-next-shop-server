@@ -33,6 +33,7 @@ export interface ProductAttrs {
   searchTags: string[];
   createdDate: Date;
   admin_username: string;
+  reviewId?: string;
 }
 
 export interface ProductDoc extends mongoose.Document {
@@ -42,6 +43,7 @@ export interface ProductDoc extends mongoose.Document {
   searchTags: string[];
   createdDate: Date;
   admin_username: string;
+  reviewId: string;
 }
 
 export interface ProductModel extends mongoose.Model<ProductDoc> {
