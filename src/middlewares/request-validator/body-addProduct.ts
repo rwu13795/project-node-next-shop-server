@@ -8,6 +8,14 @@ export const body_addProduct = [
   body(inputNames.main).notEmpty().withMessage("Main category cannot be empty"),
   body(inputNames.sub).notEmpty().withMessage("Sub category cannot be empty"),
   // (1) //
+  body(inputNames.price)
+    .custom((value, { req }) => {
+      if (isNaN(value) || value === "" || value === null) {
+        return false; // returning "false" means "not validated"
+      }
+      return true;
+    })
+    .withMessage("Please enter a valid price"),
   body("colorPropsListFromClient")
     .custom((value, { req }) => {
       for (let elem of req.body.colorPropsListFromClient) {
@@ -30,6 +38,27 @@ export const body_addProduct = [
       return true;
     })
     .withMessage(inputNames.colorCode),
+  body("colorPropsListFromClient")
+    .custom((value, { req }) => {
+      for (let elem of req.body.colorPropsListFromClient) {
+        console.log("ckeck size props", elem.sizes.small === null);
+        if (
+          isNaN(elem.sizes.small) ||
+          elem.sizes.small === "" ||
+          elem.sizes.small === null ||
+          isNaN(elem.sizes.medium) ||
+          elem.sizes.medium === "" ||
+          elem.sizes.medium === null ||
+          isNaN(elem.sizes.large) ||
+          elem.sizes.large === "" ||
+          elem.sizes.large === null
+        ) {
+          return false; // returning "false" means "not validated"
+        }
+      }
+      return true;
+    })
+    .withMessage(inputNames.size),
   body("colorPropsListFromClient")
     .custom((value, { req }) => {
       for (let elem of req.body.colorPropsListFromClient) {
