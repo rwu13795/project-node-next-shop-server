@@ -2,18 +2,7 @@ import { Request, Response } from "express";
 
 import { Product } from "../../../models/product/product-schema";
 import { asyncWrapper } from "../../../middlewares";
-import {
-  MainCategory,
-  WomenCategory,
-  MenCategory,
-  KidsCategory,
-  p_keys,
-} from "../../../models/product/product-enums";
-
-/* send (1) product id 
-        (2) preview image Url for each color
-        (3) an array contains all colors
-*/
+import { p_keys } from "../../../models/product/product-enums";
 
 export const getSubCat = asyncWrapper(async (req: Request, res: Response) => {
   const { main_cat, sub_cat } = req.params;
@@ -33,7 +22,7 @@ export const getSubCat = asyncWrapper(async (req: Request, res: Response) => {
     .skip((page - 1) * ITEMS_PER_PAGE)
     .limit(ITEMS_PER_PAGE)
     // I can also use the property key chain ("colorPropsList.imageFiles") to select the nested properties
-    .select([p_keys.imageFiles, p_keys.title, p_keys.main_cat])
+    .select([p_keys.productInfo, p_keys.colorPropsList])
     .lean();
 
   console.log(products);
