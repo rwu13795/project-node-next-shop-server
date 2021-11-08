@@ -91,7 +91,13 @@ export const addProduct = async (
   };
 
   const product = Product.build(productAttrs);
-  const review = Review.build({ productId: product._id, reviews: [] });
+  const review = Review.build({
+    productId: product._id,
+    averageRating: 0,
+    allRatings: { one: 0, two: 0, three: 0, four: 0, five: 0 },
+    reviews: [],
+    total: 0,
+  });
 
   adminUser.product_ids.push(product._id);
   product.reviewId = review._id;

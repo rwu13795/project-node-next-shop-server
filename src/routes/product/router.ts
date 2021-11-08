@@ -7,6 +7,7 @@ import {
   getDetail,
   updateStock,
   searchProduct,
+  addReview,
 } from "./controllers";
 
 const router = express.Router();
@@ -24,5 +25,7 @@ router.get("/:main_cat/:sub_cat", getSubCat);
 router.put("/update-stock", createSession, updateStock);
 
 router.post("/search-product", searchProduct);
+
+router.post("/add-review", addReview);
 
 export { router as productRouter };
