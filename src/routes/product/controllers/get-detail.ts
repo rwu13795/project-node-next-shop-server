@@ -4,6 +4,7 @@ import { Product } from "../../../models/product/product-schema";
 import { asyncWrapper, Bad_Request_Error } from "../../../middlewares";
 import { p_keys } from "../../../models/product/product-enums";
 import { ProductDoc } from "../../../models/product/product-interfaces";
+import { Review } from "../../../models/review/review-schema";
 
 export const getDetail = asyncWrapper(
   async (req: Request, res: Response, next: NextFunction) => {
@@ -20,16 +21,16 @@ export const getDetail = asyncWrapper(
     }
 
     const selectOption = [p_keys.productInfo, p_keys.colorPropsList];
-    const product: ProductDoc = await Product.findById(productId)
-      .select(selectOption)
-      .lean();
+    const [product, reviews] = await Promise.all([
+      Product.findById(productId).select(selectOption).lean(),
+      // get the first 6 reviews initially, and use pagination if user wants to read more reviews
+      Review.findOne({ productId }, { reviews: { $slice: 6 } }).lean(),
+    ]);
 
     if (!product) {
       return next(new Bad_Request_Error("No product found", "get_detail"));
     }
 
-    console.log(product);
-
-    return res.status(200).send({ product });
+    return res.status(200).send({ product, reviews });
   }
 );

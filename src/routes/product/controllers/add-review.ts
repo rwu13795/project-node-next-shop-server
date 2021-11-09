@@ -12,6 +12,8 @@ export const addReview = asyncWrapper(
     const reviewProps: ReviewProps = req.body.reviewProps;
     const productId: string = req.body.productId;
 
+    reviewProps.date = new Date();
+
     // the MongoDB update will lock the document to prevent race condition
     let update = {
       $inc: {
