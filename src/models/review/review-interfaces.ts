@@ -11,18 +11,18 @@ export interface ReviewProps {
 }
 
 interface AllRatings {
-  one: number;
-  two: number;
-  three: number;
-  four: number;
   five: number;
+  four: number;
+  three: number;
+  two: number;
+  one: number;
 }
 
 export interface ReviewAttrs {
   productId: string;
   averageRating: number;
   allRatings: AllRatings;
-  reviews: ReviewProps[] | string[];
+  allReviews: ReviewProps[] | string[];
   total: number;
 }
 
@@ -30,7 +30,14 @@ export interface ReviewDoc extends mongoose.Document {
   productId: string;
   averageRating: number;
   allRatings: AllRatings;
-  reviews: ReviewProps[];
+  allReviews: ReviewProps[];
+  reviewsByRating: {
+    five?: ReviewProps[];
+    four?: ReviewProps[];
+    three?: ReviewProps[];
+    two?: ReviewProps[];
+    one?: ReviewProps[];
+  };
   total: number;
 }
 

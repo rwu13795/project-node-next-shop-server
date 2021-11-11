@@ -95,7 +95,7 @@ export const addProduct = async (
     productId: product._id,
     averageRating: 0,
     allRatings: { one: 0, two: 0, three: 0, four: 0, five: 0 },
-    reviews: [],
+    allReviews: [],
     total: 0,
   });
 

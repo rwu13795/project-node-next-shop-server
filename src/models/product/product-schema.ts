@@ -31,4 +31,6 @@ const Product = mongoose.model<ProductDoc, ProductModel>(
   productSchema
 );
 
+Product.createIndexes({ colorPropsList: 1 });
+
 export { Product };

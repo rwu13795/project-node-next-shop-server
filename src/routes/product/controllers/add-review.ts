@@ -20,7 +20,13 @@ export const addReview = asyncWrapper(
         total: 1,
         [`allRatings.${reviewProps.rating}`]: 1,
       },
-      $push: { reviews: reviewProps },
+      $push: {
+        allReviews: { $each: [reviewProps], $position: 0 },
+        [`reviewsByRating.${reviewProps.rating}`]: {
+          $each: [reviewProps],
+          $position: 0,
+        },
+      },
     };
 
     const reviews: ReviewDoc = await Review.findOneAndUpdate(
@@ -31,10 +37,10 @@ export const addReview = asyncWrapper(
 
     // after update the reviews, update the average
     let sum = 0;
-    let multiplier = 1;
+    let multiplier = 5;
     for (let rating of Object.values(reviews.allRatings)) {
       sum = sum + rating * multiplier;
-      multiplier++;
+      multiplier--;
     }
     const average = Math.round((sum / reviews.total) * 10) / 10;
     reviews.averageRating = average;

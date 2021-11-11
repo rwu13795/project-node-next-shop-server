@@ -24,8 +24,20 @@ export const getDetail = asyncWrapper(
     const [product, reviews] = await Promise.all([
       Product.findById(productId).select(selectOption).lean(),
       // get the first 6 reviews initially, and use pagination if user wants to read more reviews
-      Review.findOne({ productId }, { reviews: { $slice: 6 } }).lean(),
+      Review.findOne({ productId }, { allReviews: { $slice: 6 } })
+        .select([
+          "_id",
+          "productId",
+          // "allReviews", after using "{ allReviews: { $slice: 6 } }", I don't need to
+          // specifically select the "allReviews"
+          "allRatings",
+          "averageRating",
+          "total",
+        ])
+        .lean(),
     ]);
+
+    console.log("reviews", reviews);
 
     if (!product) {
       return next(new Bad_Request_Error("No product found", "get_detail"));

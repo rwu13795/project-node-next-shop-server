@@ -8,6 +8,7 @@ import {
   updateStock,
   searchProduct,
   addReview,
+  getReviews,
 } from "./controllers";
 
 const router = express.Router();
@@ -27,5 +28,7 @@ router.put("/update-stock", createSession, updateStock);
 router.post("/search-product", searchProduct);
 
 router.post("/add-review", addReview);
+
+router.post("/get-reviews", getReviews);
 
 export { router as productRouter };
