@@ -8,6 +8,8 @@ export interface ReviewProps {
   user_name: string;
   user_email: string;
   size: string;
+  _id: string;
+  id_allReviews?: { type: String };
 }
 
 interface AllRatings {

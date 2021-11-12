@@ -26,6 +26,7 @@ export const searchProduct = asyncWrapper(
 
     let products = await Product.find({
       ...filter,
+      // if any one of the keywords matched, get that document
       searchTags: { $in: keywords },
     })
       .select(p_keys.productInfo)

@@ -9,6 +9,7 @@ import {
   searchProduct,
   addReview,
   getReviews,
+  deleteReview,
 } from "./controllers";
 
 const router = express.Router();
@@ -30,5 +31,7 @@ router.post("/search-product", searchProduct);
 router.post("/add-review", addReview);
 
 router.post("/get-reviews", getReviews);
+
+router.post("/delete-review", deleteReview);
 
 export { router as productRouter };

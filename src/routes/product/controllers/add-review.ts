@@ -7,10 +7,14 @@ import {
   ReviewProps,
 } from "../../../models/review/review-interfaces";
 
+interface Body {
+  reviewProps: ReviewProps;
+  productId: string;
+}
+
 export const addReview = asyncWrapper(
   async (req: Request, res: Response, next: NextFunction) => {
-    const reviewProps: ReviewProps = req.body.reviewProps;
-    const productId: string = req.body.productId;
+    const { reviewProps, productId } = req.body as Body;
 
     reviewProps.date = new Date();
 
@@ -35,6 +39,10 @@ export const addReview = asyncWrapper(
       { new: true }
     );
 
+    if (!reviews) {
+      return next(new Bad_Request_Error("No product found !"));
+    }
+
     // after update the reviews, update the average
     let sum = 0;
     let multiplier = 5;
@@ -44,9 +52,12 @@ export const addReview = asyncWrapper(
     }
     const average = Math.round((sum / reviews.total) * 10) / 10;
     reviews.averageRating = average;
-    await reviews.save();
 
-    console.log(reviews);
+    // add the allReviews id to the new filtered review
+    reviews.reviewsByRating[reviewProps.rating][0].id_allReviews =
+      reviews.allReviews[0]._id;
+
+    await reviews.save();
 
     return res.status(201).send({ message: "OK" });
   }

@@ -37,8 +37,6 @@ export const getDetail = asyncWrapper(
         .lean(),
     ]);
 
-    console.log("reviews", reviews);
-
     if (!product) {
       return next(new Bad_Request_Error("No product found", "get_detail"));
     }

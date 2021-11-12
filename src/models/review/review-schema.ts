@@ -1,4 +1,4 @@
-import mongoose from "mongoose";
+import mongoose, { mongo } from "mongoose";
 
 import { ReviewAttrs, ReviewDoc, ReviewModel } from "./review-interfaces";
 
@@ -10,6 +10,7 @@ const reviewProps = {
   user_name: { type: String },
   user_email: { type: String },
   size: { type: String },
+  id_allReviews: { type: String },
 };
 
 const reviewSchema = new mongoose.Schema({
