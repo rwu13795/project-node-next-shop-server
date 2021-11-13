@@ -14,18 +14,20 @@ export const getProductsList = asyncWrapper(
 
     console.log(req.query);
 
-    const productsTotal = await Product.countDocuments({ admin_username });
-    console.log("total", productsTotal);
+    const [productsTotal, { product_ids }]: [
+      productsTotal: number,
+      adminDoc: AdminDoc
+    ] = await Promise.all([
+      Product.countDocuments({ admin_username }),
+      Admin.findOne({ admin_username }).select("product_ids").lean(),
+    ]);
 
-    const { product_ids }: AdminDoc = await Admin.findOne({ admin_username })
-      .select("product_ids")
-      .lean();
-
+    console.log("product total", productsTotal);
     console.log("product_ids", product_ids);
 
     let products;
     if (product_ids && product_ids.length > 0) {
-      const PRODUCTS_PER_PAGE = 3;
+      const PRODUCTS_PER_PAGE = 10;
       const starIndex = (page_num - 1) * PRODUCTS_PER_PAGE;
       const endIndex =
         starIndex + PRODUCTS_PER_PAGE < productsTotal

@@ -57,7 +57,7 @@ export const addToCart = asyncWrapper(
         }
       }
       // if not updating the same item, that means user needs to change size/color
-      // so I use the replace the targeted item with the new updated item
+      // so I replace the targeted item with the new updated item
       req.session.currentUser.cart[index] = item;
 
       // also update the cart in User DB if user is logged in
