@@ -17,6 +17,10 @@ export const deleteReview = asyncWrapper(
   async (req: Request, res: Response, next: NextFunction) => {
     const { id_allReviews, reviewPrimaryId, rating } = req.body as Body;
 
+    console.log("id_allReviews", id_allReviews);
+    console.log("reviewPrimaryId", reviewPrimaryId);
+    console.log("rating", rating);
+
     const update = {
       $inc: {
         total: -1,
@@ -40,7 +44,13 @@ export const deleteReview = asyncWrapper(
       sum = sum + rating * multiplier;
       multiplier--;
     }
-    const average = Math.round((sum / updatedReviews.total) * 10) / 10;
+    let average: number;
+    if (updatedReviews.total === 0) {
+      average = 0;
+    } else {
+      average = Math.round((sum / updatedReviews.total) * 10) / 10;
+    }
+
     updatedReviews.averageRating = average;
 
     await updatedReviews.save();
