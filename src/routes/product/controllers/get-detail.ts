@@ -1,7 +1,11 @@
 import { NextFunction, Request, Response } from "express";
 
 import { Product } from "../../../models/product/product-schema";
-import { asyncWrapper, Bad_Request_Error } from "../../../middlewares";
+import {
+  asyncWrapper,
+  Bad_Request_Error,
+  Not_Authorized_Error,
+} from "../../../middlewares";
 import { p_keys } from "../../../models/product/product-enums";
 import { ProductDoc } from "../../../models/product/product-interfaces";
 import { Review } from "../../../models/review/review-schema";
@@ -9,11 +13,16 @@ import { Review } from "../../../models/review/review-schema";
 export const getDetail = asyncWrapper(
   async (req: Request, res: Response, next: NextFunction) => {
     const { productId } = req.params;
+    const { admin } = req.query;
 
-    console.log("productId", productId);
+    console.log("req.query ----------->", req.query);
+
+    if (!req.session.adminUser.loggedInAsAdmin && admin === "yes") {
+      return next(new Not_Authorized_Error());
+    }
 
     if (productId === "999") {
-      return res.status(200).send({ product: null }); //csrfToken: req.csrfToken()
+      return res.status(200).send({ product: null });
     }
 
     if (productId.length !== 24) {

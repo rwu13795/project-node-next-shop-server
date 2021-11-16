@@ -10,9 +10,9 @@ import { Product } from "../../../models/product/product-schema";
 export const getProductsList = asyncWrapper(
   async (req: Request, res: Response, next: NextFunction) => {
     const admin_username = req.session.adminUser.admin_username;
-    let pageNum = parseInt(req.query.page_num as string) | 1;
+    let pageNum = parseInt(req.query.pageNum as string) || 1;
 
-    console.log(admin_username);
+    console.log("pageNum", pageNum);
 
     const [productsTotal, { product_ids }]: [
       productsTotal: number,
@@ -22,12 +22,9 @@ export const getProductsList = asyncWrapper(
       Admin.findOne({ admin_username }).select("product_ids").lean(),
     ]);
 
-    console.log("product total", productsTotal);
-    console.log("product_ids", product_ids);
-
     let products;
     if (product_ids && product_ids.length > 0) {
-      const PRODUCTS_PER_PAGE = 10;
+      const PRODUCTS_PER_PAGE = 6;
       const starIndex = (pageNum - 1) * PRODUCTS_PER_PAGE;
       const endIndex =
         starIndex + PRODUCTS_PER_PAGE < productsTotal
@@ -35,8 +32,13 @@ export const getProductsList = asyncWrapper(
           : productsTotal;
       const selected_ids = product_ids.slice(starIndex, endIndex);
 
-      products = await Product.find({ _id: { $in: selected_ids } })
+      console.log("selected_ids", selected_ids);
+
+      products = await Product.find({
+        _id: { $in: selected_ids },
+      })
         .select([p_keys.colorPropsList, p_keys.productInfo, "_id"])
+        .sort({ createdDate: -1 })
         .lean();
     } else {
       products = null;

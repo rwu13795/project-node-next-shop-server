@@ -99,7 +99,7 @@ export const addProduct = async (
     total: 0,
   });
 
-  adminUser.product_ids.push(product._id);
+  adminUser.product_ids.unshift(product._id);
   product.reviewId = review._id;
 
   await Promise.all([adminUser.save(), product.save(), review.save()]);
