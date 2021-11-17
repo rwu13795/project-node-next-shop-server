@@ -17,7 +17,10 @@ export const getDetail = asyncWrapper(
 
     console.log("req.query ----------->", req.query);
 
-    if (!req.session.adminUser.loggedInAsAdmin && admin === "yes") {
+    if (
+      (!req.session.adminUser || !req.session.adminUser?.loggedInAsAdmin) &&
+      admin === "yes"
+    ) {
       return next(new Not_Authorized_Error());
     }
 

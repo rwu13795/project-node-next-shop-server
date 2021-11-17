@@ -7,7 +7,7 @@ import { p_keys } from "../../../models/product/product-enums";
 export const getSubCat = asyncWrapper(async (req: Request, res: Response) => {
   const { main_cat, sub_cat } = req.params;
 
-  console.log("in get sub cat route");
+  console.log("get sub cat", req.query);
 
   const ITEMS_PER_PAGE = 4;
   let page = 1;
@@ -19,13 +19,14 @@ export const getSubCat = asyncWrapper(async (req: Request, res: Response) => {
     [p_keys.main_cat]: main_cat,
     [p_keys.sub_cat]: sub_cat,
   })
+    .sort({ createdDate: -1 })
     .skip((page - 1) * ITEMS_PER_PAGE)
     .limit(ITEMS_PER_PAGE)
     // I can also use the property key chain ("colorPropsList.imageFiles") to select the nested properties
     .select([p_keys.productInfo, p_keys.colorPropsList])
     .lean();
 
-  console.log(products);
+  // console.log(products);
   // console.log("> > > fetching product page: ", page);
 
   res.status(200).send({ products });
