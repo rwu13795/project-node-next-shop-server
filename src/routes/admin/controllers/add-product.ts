@@ -57,13 +57,6 @@ export const addProduct = async (
     return next(new Not_Authorized_Error());
   }
 
-  // put keywords in search tags
-  const tagsRegex = /[\s-]+/g; // match all "space" and "dash-line"
-  let searchTags: string[] = title.toLowerCase().split(tagsRegex);
-  for (let e of colorPropsListFromClient) {
-    searchTags.push(e.colorName.toLowerCase());
-  }
-
   const stock = mapStock(sizesArray, colorPropsListFromClient);
 
   const colorPropsList_toBeSaved: ColorProps[] = await uploadImageTo_S3(
@@ -74,6 +67,20 @@ export const addProduct = async (
     sub_cat.toLocaleLowerCase(),
     title
   );
+
+  // put keywords in search tags
+  const tagsRegex = /[\s-]+/g; // match all "space" and "dash-line"
+  let searchTags: string[] = title.toLowerCase().split(tagsRegex);
+  for (let elem of colorPropsListFromClient) {
+    searchTags.push(elem.colorName.toLowerCase());
+    // push the same repeated used images link to the product's imageFiles
+    elem.imageCount += 5;
+    for (let i = 1; i <= 5; i++) {
+      elem.imageFiles.push(
+        `https://testing-images-on-s3.s3.us-east-2.amazonaws.com/other-images/more-images-${i}.jpg`
+      );
+    }
+  }
 
   const productAttrs: ProductAttrs = {
     productInfo: {
@@ -101,6 +108,8 @@ export const addProduct = async (
 
   adminUser.product_ids.unshift(product._id);
   product.reviewId = review._id;
+
+  for (let i = 1; i <= 5; i++) {}
 
   await Promise.all([adminUser.save(), product.save(), review.save()]);
 
