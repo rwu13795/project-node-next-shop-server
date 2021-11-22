@@ -17,6 +17,7 @@ import mapStock from "../helpers/map-product-stock";
 import uploadImageTo_S3 from "../helpers/upload-to-S3";
 import deleteImages from "../helpers/delete-image-on-S3";
 import { UploadedImages } from "../../../middlewares";
+import updateFilterStats from "../helpers/update-filter-stats";
 
 interface EditProductBody {
   title: string;
@@ -86,14 +87,13 @@ export const editProduct = async (
     admin_username,
   };
 
-  let product = await Product.findOneAndUpdate(
+  await Product.findOneAndUpdate(
     { _id: new ObjectId(productId) },
     productUpdate,
     { new: true }
   );
 
-  if (!product) {
-  }
+  await updateFilterStats(main_cat, sub_cat);
 
   console.log("> > > product edited < < <");
   res.status(201).send({ message: "OK" });

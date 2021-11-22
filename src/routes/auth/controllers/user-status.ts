@@ -9,6 +9,7 @@ export interface CartItem {
   imageUrl: string;
   title: string;
   main_cat: string;
+  sub_cat: string;
   productId: string;
   quantity: number;
   size: string;

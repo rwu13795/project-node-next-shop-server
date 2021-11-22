@@ -1,13 +1,13 @@
 import mongoose from "mongoose";
 
-interface Sizes {
+export interface FilterSizes {
   small: number;
   medium: number;
   large: number;
   [size: string]: number;
 }
 
-interface Colors {
+export interface FilterColors {
   White: number;
   Silver: number;
   Gray: number;
@@ -33,15 +33,15 @@ interface Colors {
 export interface FilterStats_Attrs {
   main_cat: string;
   sub_cat: string;
-  sizes: Sizes;
-  colors: Colors;
+  sizes: FilterSizes;
+  colors: FilterColors;
 }
 
 export interface FilterStats_Doc extends mongoose.Document {
   main_cat: string;
   sub_cat: string;
-  sizes: Sizes;
-  colors: Colors;
+  sizes: FilterSizes;
+  colors: FilterColors;
 }
 
 export interface FilterStats_Model extends mongoose.Model<any> {

@@ -1,12 +1,11 @@
 import { Request, Response } from "express";
-import { FilterQuery } from "mongoose";
 
 import { Product } from "../../../models/product/product-schema";
-import { ProductDoc } from "../../../models/product/product-interfaces";
 import { asyncWrapper } from "../../../middlewares";
 import { p_keys } from "../../../models/product/product-enums";
+import productFilter from "../helpers/product-filter";
 
-interface Query {
+interface Filter {
   sizes?: string[];
   colors?: string[];
   priceSort?: number;
@@ -15,58 +14,56 @@ interface Query {
 export const getSubCat = asyncWrapper(async (req: Request, res: Response) => {
   const { main_cat, sub_cat } = req.params;
 
-  console.log("get sub cat", req.query);
+  console.log("get sub cat query", req.query);
+  let query_page = req.query.page as string;
+  let query_filter = req.query.filter as string;
 
-  let filter: FilterQuery<ProductDoc>[] = [{ $and: [] }, { $and: [] }];
+  let page: number;
+  if (query_page) {
+    page = parseInt(query_page);
+  } else {
+    page = 1;
+  }
+
+  let colors: string[] = [];
+  let sizes: string[] = [];
+  let db_filter: any = [{}];
   let sorting = { createdDate: -1 };
 
-  const colorFilter = [req.query.colors, "Brown"];
-  const sizeFilter = [req.query.sizes];
+  if (req.query.filter) {
+    let filter: Filter = JSON.parse(query_filter);
+    colors = filter.colors;
+    sizes = filter.sizes;
 
-  filter = colorFilter
-    .map((color) => {
-      return sizeFilter.map((size) => {
-        return {
-          $and: [
-            { [p_keys.colorName]: { $eq: color } },
-            { [`stock.byColor.${color}.${size}`]: { $gt: 1 } },
-          ],
-        };
-      });
-    })
-    .flat();
+    if (colors.length > 0 || sizes.length > 0) {
+      db_filter = productFilter(colors, sizes);
+    }
 
-  console.log(filter);
+    console.log("db_filter", db_filter);
+  }
 
   const ITEMS_PER_PAGE = 6;
-  let page = 1;
-  if (typeof req.query.page === "string") {
-    page = parseInt(req.query.page);
-  }
+  const startIndex = (page - 1) * ITEMS_PER_PAGE;
+  const endIndex = startIndex + ITEMS_PER_PAGE;
+
   // I can use the computed property to replace the string "productInfo.sub_cat"
   let products = await Product.find({
     [p_keys.main_cat]: main_cat,
     [p_keys.sub_cat]: sub_cat,
-    $or: filter,
-    //]
-    // {
-    // $or: [
-    // { [p_keys.colorName]: { $eq: "white" } },
-    // { [p_keys.colorName]: { $eq: "Blue" } },
-    // ],
-    // },
-    // { "colorPropsList.sizes.medium": { $gt: 1 } },
-    // ],
+    $or: db_filter,
   })
     .sort(sorting) // [p_keys.price]: -1
-    .skip((page - 1) * ITEMS_PER_PAGE)
-    .limit(ITEMS_PER_PAGE)
-    // I can also use the property key chain ("colorPropsList.imageFiles") to select the nested properties
     .select([p_keys.productInfo, p_keys.colorPropsList])
     .lean();
 
-  // console.log(products);
-  // console.log("> > > fetching product page: ", page);
+  // count the availability of the filter
+  /************************************* */
+
+  // can't use the ".skip((page - 1) * ITEMS_PER_PAGE).limit(ITEMS_PER_PAGE)" here,
+  // because I have to count the available colors and sizes when the filter is being used
+  products = products.slice(startIndex, endIndex);
+
+  console.log("products---------------", products);
 
   res.status(200).send({ products });
 });

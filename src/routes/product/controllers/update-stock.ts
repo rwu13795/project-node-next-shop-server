@@ -4,17 +4,21 @@ import { Product } from "../../../models/product/product-schema";
 import { asyncWrapper, Bad_Request_Error } from "../../../middlewares";
 import { MainCategory, p_keys } from "../../../models/product/product-enums";
 import mongoose from "mongoose";
+import updateFilterStats from "../../admin/helpers/update-filter-stats";
 
 export const updateStock = asyncWrapper(
   async (req: Request, res: Response, next: NextFunction) => {
     const cart = req.session.currentUser.cart;
-    // const cart = req.body.cart; // for postmen testing
+
+    const categorySet = new Set<string>();
 
     for (let item of cart) {
       let query = {
         _id: item.productId,
         colorPropsList: { $elemMatch: { colorName: item.colorName } },
       };
+
+      categorySet.add(`${item.main_cat}@${item.sub_cat}`);
 
       let update = {
         $inc: {
@@ -27,6 +31,11 @@ export const updateStock = asyncWrapper(
       };
 
       await Product.findOneAndUpdate(query, update);
+    }
+
+    for (let value of categorySet.values()) {
+      const [main_cat, sub_cat] = value.split("@");
+      await updateFilterStats(main_cat, sub_cat);
     }
 
     res.status(201).send({ message: "OK" });

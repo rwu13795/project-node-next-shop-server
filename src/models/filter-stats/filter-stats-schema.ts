@@ -6,6 +6,8 @@ import {
   FilterStats_Model,
 } from "./filter-stats-interfaces";
 
+// currently available colors and sizes in the specific sub-cat
+// use this stats as initial filter stats to show user the availability
 const filterStats_Schema = new mongoose.Schema({
   main_cat: { type: String, required: true },
   sub_cat: { type: String, required: true },

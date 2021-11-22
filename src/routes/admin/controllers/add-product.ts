@@ -16,6 +16,9 @@ import { Not_Authorized_Error, UploadedImages } from "../../../middlewares";
 import { Admin } from "../../../models/admin/admin-schema";
 import { AdminDoc } from "../../../models/admin/admin-interfaces";
 import { Review } from "../../../models/review/review-schema";
+import { FilterStats } from "../../../models/filter-stats/filter-stats-schema";
+import { FilterSizes } from "../../../models/filter-stats/filter-stats-interfaces";
+import updateFilterStats from "../helpers/update-filter-stats";
 
 export interface ColorPropsFromClient {
   colorName: string;
@@ -109,9 +112,12 @@ export const addProduct = async (
   adminUser.product_ids.unshift(product._id);
   product.reviewId = review._id;
 
-  for (let i = 1; i <= 5; i++) {}
-
-  await Promise.all([adminUser.save(), product.save(), review.save()]);
+  await Promise.all([
+    adminUser.save(),
+    product.save(),
+    review.save(),
+    updateFilterStats(main_cat, sub_cat),
+  ]);
 
   console.log("> > > new product added < < <");
   res.status(201).send({ message: "OK" });
