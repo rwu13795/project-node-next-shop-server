@@ -1,9 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 
 import { Product } from "../../../models/product/product-schema";
-import { asyncWrapper, Bad_Request_Error } from "../../../middlewares";
-import { MainCategory, p_keys } from "../../../models/product/product-enums";
-import mongoose from "mongoose";
+import { asyncWrapper } from "../../../middlewares";
 import { updateFilterStats } from "../../admin/helpers/update-filter-stats";
 
 export const updateStock = asyncWrapper(

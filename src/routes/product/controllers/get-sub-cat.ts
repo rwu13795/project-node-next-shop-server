@@ -5,9 +5,9 @@ import { asyncWrapper } from "../../../middlewares";
 import { p_keys } from "../../../models/product/product-enums";
 import productFilter from "../helpers/product-filter";
 import { FilterStats } from "../../../models/filter-stats/filter-stats-schema";
-import { updateAvailability } from "../../admin/helpers/update-filter-stats";
 import { ProductDoc } from "../../../models/product/product-interfaces";
 import { FilterStats_Attrs } from "../../../models/filter-stats/filter-stats-interfaces";
+import getCurrentFilterStats from "../helpers/get-current-filter-stats";
 
 interface Filter {
   sizes?: string[];
@@ -61,19 +61,26 @@ export const getSubCat = asyncWrapper(async (req: Request, res: Response) => {
     .lean();
 
   // count the availability of the filter
-  /************************************* */
-  let filterStats: FilterStats_Attrs;
+  let filterStats: FilterStats_Attrs = await FilterStats.findOne({
+    main_cat,
+    sub_cat,
+  }).lean();
   if (colors.length > 0 || sizes.length > 0) {
-    filterStats = await updateAvailability(main_cat, sub_cat, products);
-  } else {
-    filterStats = await FilterStats.findOne({ main_cat, sub_cat }).lean();
+    filterStats = getCurrentFilterStats(
+      main_cat,
+      sub_cat,
+      products,
+      sizes,
+      colors,
+      filterStats
+    );
   }
 
   // can't use the ".skip((page - 1) * ITEMS_PER_PAGE).limit(ITEMS_PER_PAGE)" here,
   // because I have to count the available colors and sizes when the filter is being used
   products = products.slice(startIndex, endIndex);
 
-  console.log("products---------------", products);
+  // console.log("products---------------", products);
 
   res.status(200).send({ products, filterStats });
 });

@@ -1,32 +1,32 @@
 import mongoose from "mongoose";
 
 export interface FilterSizes {
-  small: number;
-  medium: number;
-  large: number;
+  small?: number;
+  medium?: number;
+  large?: number;
   [size: string]: number;
 }
 
 export interface FilterColors {
-  White: number;
-  Silver: number;
-  Gray: number;
-  Black: number;
-  Red: number;
-  Orange: number;
-  Brown: number;
-  Maroon: number;
-  Yellow: number;
-  Olive: number;
-  Lime: number;
-  Green: number;
-  Aqua: number;
-  Teal: number;
-  Blue: number;
-  Navy: number;
-  Pink: number;
-  Fuchsia: number;
-  Purple: number;
+  White?: number;
+  Silver?: number;
+  Gray?: number;
+  Black?: number;
+  Red?: number;
+  Orange?: number;
+  Brown?: number;
+  Maroon?: number;
+  Yellow?: number;
+  Olive?: number;
+  Lime?: number;
+  Green?: number;
+  Aqua?: number;
+  Teal?: number;
+  Blue?: number;
+  Navy?: number;
+  Pink?: number;
+  Fuchsia?: number;
+  Purple?: number;
   [color: string]: number;
 }
 
