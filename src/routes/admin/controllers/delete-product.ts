@@ -7,6 +7,7 @@ import { Product } from "../../../models/product/product-schema";
 import { Review } from "../../../models/review/review-schema";
 
 import deleteImages from "../helpers/delete-image-on-S3";
+import { updateFilterStats } from "../helpers/update-filter-stats";
 
 export const deleteProduct = async (
   req: Request,
@@ -29,6 +30,7 @@ export const deleteProduct = async (
       new Bad_Request_Error("Something wrong with the product_id or admin_id")
     );
   }
+  const { main_cat, sub_cat } = product.productInfo;
 
   let imagesToBeDeleted: string[] = [];
   for (let prop of product.colorPropsList) {
@@ -41,12 +43,14 @@ export const deleteProduct = async (
     (id) => id.toString() !== productId.toString()
   );
 
-  const result = await Promise.all([
+  await Promise.all([
     adminUser.save(),
     Product.findByIdAndRemove(productId),
     Review.findOneAndRemove({ productId }),
   ]);
 
-  console.log("> > > product deleted < < <", result);
+  await updateFilterStats(main_cat, sub_cat);
+
+  // console.log("> > > product deleted < < <", result);
   res.status(201).send({ message: "OK" });
 };

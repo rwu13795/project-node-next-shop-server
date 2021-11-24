@@ -18,7 +18,7 @@ import { AdminDoc } from "../../../models/admin/admin-interfaces";
 import { Review } from "../../../models/review/review-schema";
 import { FilterStats } from "../../../models/filter-stats/filter-stats-schema";
 import { FilterSizes } from "../../../models/filter-stats/filter-stats-interfaces";
-import updateFilterStats from "../helpers/update-filter-stats";
+import { updateFilterStats } from "../helpers/update-filter-stats";
 
 export interface ColorPropsFromClient {
   colorName: string;

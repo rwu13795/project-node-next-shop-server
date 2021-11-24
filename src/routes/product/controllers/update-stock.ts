@@ -4,7 +4,7 @@ import { Product } from "../../../models/product/product-schema";
 import { asyncWrapper, Bad_Request_Error } from "../../../middlewares";
 import { MainCategory, p_keys } from "../../../models/product/product-enums";
 import mongoose from "mongoose";
-import updateFilterStats from "../../admin/helpers/update-filter-stats";
+import { updateFilterStats } from "../../admin/helpers/update-filter-stats";
 
 export const updateStock = asyncWrapper(
   async (req: Request, res: Response, next: NextFunction) => {

@@ -4,6 +4,10 @@ import { Product } from "../../../models/product/product-schema";
 import { asyncWrapper } from "../../../middlewares";
 import { p_keys } from "../../../models/product/product-enums";
 import productFilter from "../helpers/product-filter";
+import { FilterStats } from "../../../models/filter-stats/filter-stats-schema";
+import { updateAvailability } from "../../admin/helpers/update-filter-stats";
+import { ProductDoc } from "../../../models/product/product-interfaces";
+import { FilterStats_Attrs } from "../../../models/filter-stats/filter-stats-interfaces";
 
 interface Filter {
   sizes?: string[];
@@ -47,7 +51,7 @@ export const getSubCat = asyncWrapper(async (req: Request, res: Response) => {
   const endIndex = startIndex + ITEMS_PER_PAGE;
 
   // I can use the computed property to replace the string "productInfo.sub_cat"
-  let products = await Product.find({
+  let products: ProductDoc[] = await Product.find({
     [p_keys.main_cat]: main_cat,
     [p_keys.sub_cat]: sub_cat,
     $or: db_filter,
@@ -58,6 +62,12 @@ export const getSubCat = asyncWrapper(async (req: Request, res: Response) => {
 
   // count the availability of the filter
   /************************************* */
+  let filterStats: FilterStats_Attrs;
+  if (colors.length > 0 || sizes.length > 0) {
+    filterStats = await updateAvailability(main_cat, sub_cat, products);
+  } else {
+    filterStats = await FilterStats.findOne({ main_cat, sub_cat }).lean();
+  }
 
   // can't use the ".skip((page - 1) * ITEMS_PER_PAGE).limit(ITEMS_PER_PAGE)" here,
   // because I have to count the available colors and sizes when the filter is being used
@@ -65,5 +75,5 @@ export const getSubCat = asyncWrapper(async (req: Request, res: Response) => {
 
   console.log("products---------------", products);
 
-  res.status(200).send({ products });
+  res.status(200).send({ products, filterStats });
 });

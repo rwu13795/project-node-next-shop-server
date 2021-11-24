@@ -2,9 +2,11 @@ import {
   FilterColors,
   FilterSizes,
   FilterStats_Doc,
+  FilterStats_Attrs,
 } from "../../../models/filter-stats/filter-stats-interfaces";
 import { FilterStats } from "../../../models/filter-stats/filter-stats-schema";
 import { p_keys } from "../../../models/product/product-enums";
+import { ProductDoc } from "../../../models/product/product-interfaces";
 import { Product } from "../../../models/product/product-schema";
 
 const initialSizes: FilterSizes = { small: 0, medium: 0, large: 0 };
@@ -30,7 +32,7 @@ const initialColors: FilterColors = {
   Purple: 0,
 };
 
-export default async function updateFilterStats(
+export async function updateFilterStats(
   main_cat: string,
   sub_cat: string
 ): Promise<void> {
@@ -51,6 +53,7 @@ export default async function updateFilterStats(
       sub_cat: sub,
       sizes,
       colors,
+      matchingTotal: 0,
     });
     await filterStats.save();
     await updateAvailability(main, sub);
@@ -62,10 +65,11 @@ export default async function updateFilterStats(
 // update the initial filter stats only when the there is change in the product
 // so that the client won't need to count the Availability repeatly
 // whenever the sub-cat page is loaded
-async function updateAvailability(
+export async function updateAvailability(
   main_cat: string,
-  sub_cat: string
-): Promise<void> {
+  sub_cat: string,
+  filtered_products?: ProductDoc[]
+): Promise<FilterStats_Attrs> {
   // need to use the spread operator to copy an the values of an object
   // without using the spread operator, it only assigns the address of the object
   // and it will alter the values of "initialSizes" and "initialColors"
@@ -73,14 +77,17 @@ async function updateAvailability(
   let sizes = { ...initialSizes };
   let colors = { ...initialColors };
 
-  console.log(sizes);
-
-  let products = await Product.find({
-    [p_keys.main_cat]: main_cat,
-    [p_keys.sub_cat]: sub_cat,
-  })
-    .select(["colorPropsList"])
-    .lean();
+  let products;
+  if (filtered_products) {
+    products = filtered_products;
+  } else {
+    products = await Product.find({
+      [p_keys.main_cat]: main_cat,
+      [p_keys.sub_cat]: sub_cat,
+    })
+      .select(["colorPropsList"])
+      .lean();
+  }
 
   for (let product of products) {
     for (let elem of product.colorPropsList) {
@@ -92,6 +99,14 @@ async function updateAvailability(
       colors[elem.colorName] += 1;
     }
   }
+  const matchingTotal = products.length;
 
-  await FilterStats.findOneAndUpdate({ main_cat, sub_cat }, { sizes, colors });
+  if (filtered_products) {
+    return { main_cat, sub_cat, sizes, colors, matchingTotal };
+  }
+
+  return await FilterStats.findOneAndUpdate(
+    { main_cat, sub_cat },
+    { sizes, colors, matchingTotal }
+  );
 }

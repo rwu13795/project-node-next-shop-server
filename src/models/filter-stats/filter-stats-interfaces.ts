@@ -35,6 +35,7 @@ export interface FilterStats_Attrs {
   sub_cat: string;
   sizes: FilterSizes;
   colors: FilterColors;
+  matchingTotal: number;
 }
 
 export interface FilterStats_Doc extends mongoose.Document {
@@ -42,6 +43,7 @@ export interface FilterStats_Doc extends mongoose.Document {
   sub_cat: string;
   sizes: FilterSizes;
   colors: FilterColors;
+  matchingTotal: number;
 }
 
 export interface FilterStats_Model extends mongoose.Model<any> {

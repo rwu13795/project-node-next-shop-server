@@ -13,6 +13,7 @@ const filterStats_Schema = new mongoose.Schema({
   sub_cat: { type: String, required: true },
   sizes: { type: Object, required: true },
   colors: { type: Object, required: true },
+  matchingTotal: { type: Number, required: true },
 });
 
 filterStats_Schema.statics.build = (attrs: FilterStats_Attrs) => {
