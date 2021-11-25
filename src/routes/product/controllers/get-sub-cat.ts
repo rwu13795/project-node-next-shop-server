@@ -15,6 +15,11 @@ interface Filter {
   priceSort?: number;
 }
 
+interface Sorting {
+  createdDate?: number;
+  "productInfo.price"?: number;
+}
+
 export const getSubCat = asyncWrapper(async (req: Request, res: Response) => {
   const { main_cat, sub_cat } = req.params;
 
@@ -32,12 +37,16 @@ export const getSubCat = asyncWrapper(async (req: Request, res: Response) => {
   let colors: string[] = [];
   let sizes: string[] = [];
   let db_filter: any = [{}];
-  let sorting = { createdDate: -1 };
+  let sorting: Sorting = { createdDate: -1 };
 
   if (req.query.filter) {
     let filter: Filter = JSON.parse(query_filter);
     colors = filter.colors;
     sizes = filter.sizes;
+    if (filter.priceSort && filter.priceSort !== 0) {
+      sorting["productInfo.price"] = filter.priceSort;
+      delete sorting.createdDate;
+    }
 
     if (colors.length > 0 || sizes.length > 0) {
       db_filter = productFilter(colors, sizes);
@@ -49,6 +58,8 @@ export const getSubCat = asyncWrapper(async (req: Request, res: Response) => {
   const ITEMS_PER_PAGE = 6;
   const startIndex = (page - 1) * ITEMS_PER_PAGE;
   const endIndex = startIndex + ITEMS_PER_PAGE;
+
+  // console.log("db_filter", sorting);
 
   // I can use the computed property to replace the string "productInfo.sub_cat"
   let products: ProductDoc[] = await Product.find({
