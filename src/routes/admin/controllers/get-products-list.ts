@@ -18,7 +18,7 @@ export const getProductsList = asyncWrapper(
     console.log("sub_cat ----------------->", sub_cat);
     console.log("pageNum ----------------->", pageNum);
 
-    const [productsTotal, { product_ids }]: [
+    const [productsTotal, { product_category }]: [
       productsTotal: number,
       adminDoc: AdminDoc
     ] = await Promise.all([
@@ -27,7 +27,7 @@ export const getProductsList = asyncWrapper(
         [p_keys.main_cat]: main_cat.toLowerCase(),
         [p_keys.sub_cat]: sub_cat.toLowerCase(),
       }),
-      Admin.findOne({ admin_username }).select("product_ids").lean(),
+      Admin.findOne({ admin_username }).select("product_category").lean(),
     ]);
 
     const ITEMS_PER_PAGE = 6;
@@ -47,6 +47,7 @@ export const getProductsList = asyncWrapper(
     res.status(200).send({
       productsTotal,
       products,
+      product_category,
     });
   }
 );

@@ -19,6 +19,7 @@ import { Review } from "../../../models/review/review-schema";
 import { FilterStats } from "../../../models/filter-stats/filter-stats-schema";
 import { FilterSizes } from "../../../models/filter-stats/filter-stats-interfaces";
 import { updateFilterStats } from "../helpers/update-filter-stats";
+import updateCategoryNumber from "../helpers/update-cat-number";
 
 export interface ColorPropsFromClient {
   colorName: string;
@@ -97,7 +98,8 @@ export const addProduct = async (
     stock,
     searchTags,
     createdDate: new Date(),
-    admin_username,
+    admin_id: adminUser._id,
+    admin_username: adminUser.admin_username,
   };
 
   const product = Product.build(productAttrs);
@@ -112,11 +114,11 @@ export const addProduct = async (
   adminUser.product_ids.unshift(product._id);
   product.reviewId = review._id;
 
+  await Promise.all([product.save(), review.save()]);
+
   await Promise.all([
-    adminUser.save(),
-    product.save(),
-    review.save(),
     updateFilterStats(main_cat, sub_cat),
+    updateCategoryNumber(adminUser),
   ]);
 
   console.log("> > > new product added < < <");

@@ -29,6 +29,7 @@ export const adminRegister = asyncWrapper(
       admin_username,
       password,
       product_ids: [],
+      product_category: {},
     });
 
     await newAdmin.save();

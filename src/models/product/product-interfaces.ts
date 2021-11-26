@@ -32,6 +32,7 @@ export interface ProductAttrs {
   stock: StockProps;
   searchTags: string[];
   createdDate: Date;
+  admin_id: string;
   admin_username: string;
   reviewId?: string;
 }
@@ -42,6 +43,7 @@ export interface ProductDoc extends mongoose.Document {
   stock: StockProps;
   searchTags: string[];
   createdDate: Date;
+  admin_id: string;
   admin_username: string;
   reviewId: string;
 }

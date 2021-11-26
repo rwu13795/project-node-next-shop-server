@@ -17,6 +17,7 @@ const productSchemaRequirement = {
   },
   searchTags: { type: Array, required: true },
   createdDate: { type: Date, required: true },
+  admin_id: { type: String, required: true },
   admin_username: { type: String, required: true },
   reviewId: { type: String, ref: "review" },
 };

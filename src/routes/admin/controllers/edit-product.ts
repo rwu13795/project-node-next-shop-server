@@ -72,7 +72,7 @@ export const editProduct = async (
 
   console.log(colorPropsList_toBeSaved);
 
-  const productUpdate: ProductAttrs = {
+  const productUpdate = {
     productInfo: {
       title,
       main_cat: main_cat.toLowerCase(),
@@ -84,7 +84,6 @@ export const editProduct = async (
     stock,
     searchTags,
     createdDate: new Date(),
-    admin_username,
   };
 
   await Product.findOneAndUpdate(

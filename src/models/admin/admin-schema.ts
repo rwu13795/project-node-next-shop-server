@@ -7,6 +7,7 @@ const adminSchema = new mongoose.Schema({
   admin_username: { type: String, required: true, unique: true },
   password: { type: String, required: true },
   product_ids: { type: Array, required: true },
+  product_category: { type: Object },
   master_admin: { type: Boolean },
 });
 

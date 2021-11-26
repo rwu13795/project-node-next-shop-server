@@ -7,6 +7,7 @@ import { Product } from "../../../models/product/product-schema";
 import { Review } from "../../../models/review/review-schema";
 
 import deleteImages from "../helpers/delete-image-on-S3";
+import updateCategoryNumber from "../helpers/update-cat-number";
 import { updateFilterStats } from "../helpers/update-filter-stats";
 
 export const deleteProduct = async (
@@ -49,7 +50,10 @@ export const deleteProduct = async (
     Review.findOneAndRemove({ productId }),
   ]);
 
-  await updateFilterStats(main_cat, sub_cat);
+  await Promise.all([
+    updateFilterStats(main_cat, sub_cat),
+    updateCategoryNumber(adminUser),
+  ]);
 
   // console.log("> > > product deleted < < <", result);
   res.status(201).send({ message: "OK" });
