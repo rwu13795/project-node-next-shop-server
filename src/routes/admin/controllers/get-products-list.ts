@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 
-import { Not_Authorized_Error, asyncWrapper } from "../../../middlewares";
+import { asyncWrapper } from "../../../middlewares";
 import { AdminDoc } from "../../../models/admin/admin-interfaces";
 import { Admin } from "../../../models/admin/admin-schema";
 import { p_keys } from "../../../models/product/product-enums";
@@ -11,38 +11,38 @@ export const getProductsList = asyncWrapper(
   async (req: Request, res: Response, next: NextFunction) => {
     const admin_username = req.session.adminUser.admin_username;
     let pageNum = parseInt(req.query.pageNum as string) || 1;
+    let main_cat = req.query.main as string;
+    let sub_cat = req.query.sub as string;
 
-    console.log("pageNum", pageNum);
+    console.log("main_cat ----------------->", main_cat);
+    console.log("sub_cat ----------------->", sub_cat);
+    console.log("pageNum ----------------->", pageNum);
 
     const [productsTotal, { product_ids }]: [
       productsTotal: number,
       adminDoc: AdminDoc
     ] = await Promise.all([
-      Product.countDocuments({ admin_username }),
+      Product.countDocuments({
+        admin_username,
+        [p_keys.main_cat]: main_cat.toLowerCase(),
+        [p_keys.sub_cat]: sub_cat.toLowerCase(),
+      }),
       Admin.findOne({ admin_username }).select("product_ids").lean(),
     ]);
 
-    let products;
-    if (product_ids && product_ids.length > 0) {
-      const PRODUCTS_PER_PAGE = 6;
-      const starIndex = (pageNum - 1) * PRODUCTS_PER_PAGE;
-      const endIndex =
-        starIndex + PRODUCTS_PER_PAGE < productsTotal
-          ? starIndex + PRODUCTS_PER_PAGE
-          : productsTotal;
-      const selected_ids = product_ids.slice(starIndex, endIndex);
+    const ITEMS_PER_PAGE = 6;
+    const skipToIndex = (pageNum - 1) * ITEMS_PER_PAGE;
 
-      console.log("selected_ids", selected_ids);
-
-      products = await Product.find({
-        _id: { $in: selected_ids },
-      })
-        .select([p_keys.colorPropsList, p_keys.productInfo, "_id"])
-        .sort({ createdDate: -1 })
-        .lean();
-    } else {
-      products = null;
-    }
+    const products = await Product.find({
+      admin_username,
+      [p_keys.main_cat]: main_cat.toLowerCase(),
+      [p_keys.sub_cat]: sub_cat.toLowerCase(),
+    })
+      .select([p_keys.colorPropsList, p_keys.productInfo, "_id"])
+      .sort({ createdDate: -1 })
+      .skip(skipToIndex)
+      .limit(ITEMS_PER_PAGE)
+      .lean();
 
     res.status(200).send({
       productsTotal,
@@ -50,3 +50,15 @@ export const getProductsList = asyncWrapper(
     });
   }
 );
+
+// select products by using the IDs in admin //
+
+//   products = await Product.find({
+//     // _id: { $in: selected_ids },
+//     admin_username,
+//     [p_keys.main_cat]: main_cat.toLowerCase(),
+//     [p_keys.sub_cat]: sub_cat.toLowerCase(),
+//   })
+//     .select([p_keys.colorPropsList, p_keys.productInfo, "_id"])
+//     .sort({ createdDate: -1 })
+//     .lean();
