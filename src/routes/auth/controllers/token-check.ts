@@ -13,6 +13,7 @@ export const tokenCheck = asyncWrapper(
     // {$gt: Date.new()} is Moogoose method to check if resetTokenExpiration is greated than the current time
     const userWithValidToken: UserDoc = await User.findOne({
       resetToken: token,
+      isValidToken: true,
       resetTokenExpiration: { $gt: Date.now() },
       // the Mongoose will convert the DB timestamp to the local Node server time for comparison
     });
@@ -23,8 +24,6 @@ export const tokenCheck = asyncWrapper(
       console.log("Reset link expired");
       return next(new Bad_Request_Error("Reset link expired"));
     }
-
-    console.log(userWithValidToken.resetTokenExpiration);
 
     res.status(200).send({
       userId: userWithValidToken._id,

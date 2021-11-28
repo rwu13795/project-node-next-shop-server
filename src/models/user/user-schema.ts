@@ -42,6 +42,7 @@ const userSchema = new mongoose.Schema({
   },
   resetToken: String,
   resetTokenExpiration: Number,
+  isValidToken: Boolean,
   orders: Array,
 });
 

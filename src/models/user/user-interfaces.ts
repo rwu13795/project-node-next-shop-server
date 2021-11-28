@@ -34,6 +34,7 @@ export interface UserDoc extends mongoose.Document {
   orders?: string[];
   resetToken?: string;
   resetTokenExpiration?: number;
+  isValidToken?: boolean;
 }
 
 export interface UserModel extends mongoose.Model<any> {

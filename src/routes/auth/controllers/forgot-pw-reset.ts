@@ -11,6 +11,7 @@ export const forgotPassword_Reset = asyncWrapper(
     const userWithValidToken: UserDoc = await User.findOne({
       userId,
       resetToken: token,
+      isValidToken: true,
       resetTokenExpiration: { $gt: Date.now() },
       // the Mongoose will convert the DB timestamp to the local Node server time for comparison
     });
@@ -21,6 +22,7 @@ export const forgotPassword_Reset = asyncWrapper(
     }
 
     userWithValidToken.password = new_password;
+    userWithValidToken.isValidToken = false;
     await userWithValidToken.save();
 
     console.log("Password reset");
