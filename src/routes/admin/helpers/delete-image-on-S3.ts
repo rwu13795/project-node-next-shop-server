@@ -10,6 +10,9 @@ export default async function deleteImages(images: string[]) {
   if (images?.length < 1 || !images) return;
   for (let i of images) {
     let key = i.slice(str.length);
+    if (key.slice(0, 12) === "other-images") {
+      continue;
+    }
     params.Key = key;
     await s3Client.send(new DeleteObjectCommand(params));
   }

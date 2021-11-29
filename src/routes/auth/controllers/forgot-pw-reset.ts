@@ -22,6 +22,8 @@ export const forgotPassword_Reset = asyncWrapper(
     }
 
     userWithValidToken.password = new_password;
+    // set "isValidToken" to false after user resetting the PW, so that user will not be
+    // able to use the same token which is not yet expired again
     userWithValidToken.isValidToken = false;
     await userWithValidToken.save();
 
