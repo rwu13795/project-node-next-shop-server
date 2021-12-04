@@ -26,7 +26,7 @@ router.post("/change-quantity", changeQuantity, updateCartInDatebase);
 
 router.post("/create-order-history", createOrder);
 
-router.post("/get-order-history", requireUserAuth, orderHistory);
+router.get("/get-order-history", requireUserAuth, orderHistory);
 
 router.post("/clear-cart", clearCart, updateCartInDatebase);
 

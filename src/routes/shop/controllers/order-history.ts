@@ -8,10 +8,8 @@ export const orderHistory = asyncWrapper(
   async (req: Request, res: Response, next: NextFunction) => {
     const userId = req.session.currentUser.userId;
     const ORDER_PER_PAGE = 5;
-    let pageNum = 1;
-    if (typeof req.body.pageNum === "number") {
-      pageNum = parseInt(req.body.pageNum);
-    }
+
+    let pageNum = parseInt(req.query.pageNum as string) || 1;
 
     console.log("pageNUm", pageNum);
 
@@ -21,9 +19,10 @@ export const orderHistory = asyncWrapper(
     }
 
     const ordersHistory = await Order.find({ userId })
+      .select(["items", "total", "date"])
+      .sort({ date: -1 })
       .skip((pageNum - 1) * ORDER_PER_PAGE)
       .limit(ORDER_PER_PAGE)
-      .select(["items", "total", "date"])
       .lean();
 
     // console.log(ordersHistory);
