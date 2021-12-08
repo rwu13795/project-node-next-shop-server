@@ -1,4 +1,5 @@
 import { Request, Response, NextFunction } from "express";
+import { transporter } from "../../auth/router";
 
 import { asyncWrapper } from "../../../middlewares";
 import {
@@ -9,6 +10,7 @@ import {
 import { Order } from "../../../models/order/order-schema";
 import { UserDoc } from "../../../models/user/user-interfaces";
 import { User } from "../../../models/user/user-schema";
+import { capitalizeAddress } from "../../../utils/capitalize-letter";
 import { CurrentUser } from "../../auth/controllers";
 
 interface ReqBody {
@@ -31,8 +33,8 @@ export const createOrder = asyncWrapper(
       paymentDetail,
     }: ReqBody = req.body;
 
-    console.log(currentUser.cart);
-    console.log(req.session.currentUser.cart);
+    const capShippingAddress = capitalizeAddress(shippingAddress);
+    const capBillingAddress = capitalizeAddress(billingAddress);
 
     // if (currentUser.cart !== req.session.currentUser.cart) {
     //   console.log("not match!!");
@@ -53,8 +55,8 @@ export const createOrder = asyncWrapper(
       date: new Date(),
       items: currentUser.cart,
       total: totalAmount,
-      shippingAddress,
-      billingAddress,
+      shippingAddress: capShippingAddress,
+      billingAddress: capBillingAddress,
       contactInfo,
       paymentDetail,
     });
@@ -71,9 +73,30 @@ export const createOrder = asyncWrapper(
       await user.save();
     }
 
-    ///////////////////////////////////////////////
-    // need to send email to user about the order ID
+    console.log("contactInfo.email", contactInfo.email);
 
-    res.status(201).send({ message: "Order saved" });
+    // send order ID to user email
+    transporter.sendMail({
+      from: "rwu13795.work@gmail.com",
+      to: contactInfo.email,
+      subject: "Thank you for your purchase!",
+      html: `<h2>Thank you for your purchase!</h2>
+      <p><strong>Order ID: ${newOrder._id}</strong></P>
+        <p>You could use this ID on the 
+        <a href="http://localhost:3000/shop/order-status"><strong>Order Status</strong></a>
+         page to track your order</P>
+        `,
+    });
+
+    res.status(201).send({
+      currentOrder: {
+        _id: newOrder._id,
+        date: newOrder.date,
+        items: newOrder.items,
+        total: newOrder.total,
+        shippingAddress: newOrder.shippingAddress,
+        paymentDetail,
+      },
+    });
   }
 );

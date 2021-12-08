@@ -2,7 +2,6 @@ import { Request, Response, NextFunction } from "express";
 
 import { asyncWrapper } from "../../../middlewares";
 import { Order } from "../../../models/order/order-schema";
-import { User } from "../../../models/user/user-schema";
 
 export const orderHistory = asyncWrapper(
   async (req: Request, res: Response, next: NextFunction) => {
@@ -19,7 +18,7 @@ export const orderHistory = asyncWrapper(
     }
 
     const ordersHistory = await Order.find({ userId })
-      .select(["items", "total", "date"])
+      .select(["items", "total", "date", "shippingAddress", "paymentDetail"])
       .sort({ date: -1 })
       .skip((pageNum - 1) * ORDER_PER_PAGE)
       .limit(ORDER_PER_PAGE)
