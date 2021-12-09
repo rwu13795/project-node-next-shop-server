@@ -5,26 +5,6 @@ export enum mainCategory {
 }
 export const mainCatArray = Object.values(mainCategory);
 
-export enum womenCategory {
-  jeans = "jeans",
-  shorts = "shorts",
-  dresses = "dresses",
-}
-export const womenCatArray = Object.values(womenCategory);
-
-export enum menCategory {
-  Tshirts = "t-shirts",
-  coats = "coats",
-  shorts = "shorts",
-}
-export const menCatArray = Object.values(menCategory);
-
-export enum kidsCategory {
-  Tshirts = "t-shirts",
-  shorts = "shorts",
-}
-export const kidsCatArray = Object.values(kidsCategory);
-
 export enum sizesCategory {
   small = "small",
   medium = "medium",
@@ -47,3 +27,66 @@ export enum p_keys {
   sizes = "colorPropsList.sizes",
   imageFiles = "colorPropsList.imageFiles",
 }
+
+// used in the search route, to see if the keywords match the category
+
+export const main_cat = {
+  men: "men",
+  man: "men",
+  male: "men",
+  women: "women",
+  woman: "women",
+  female: "women",
+  kids: "kids",
+  kid: "kids",
+  child: "kids",
+  children: "kids",
+};
+export const sub_cat = {
+  // men
+  "t-shirts": "t-shirts",
+  "t-shirt": "t-shirts",
+  tshirt: "t-shirts",
+  shirts: "shirts",
+  shirt: "shirts",
+  coat: "coats",
+  coats: "coats",
+  blazers: "blazers",
+  blazer: "blazers",
+  short: "shorts",
+  shorts: "shorts",
+  pant: "pants",
+  pants: "pants",
+  jean: "jeans",
+  jeans: "jeans",
+  shoe: "shoes",
+  shoes: "shoes",
+  hat: "hats",
+  hats: "hats",
+  "sun-glasses": "glasses",
+  glasses: "glasses",
+  // women
+
+  // kids
+};
+export const colors_map = {
+  white: "White",
+  silver: "Silver",
+  gray: "Gray",
+  black: "Black",
+  red: "Red",
+  orange: "Orange",
+  brown: "Brown",
+  maroon: "Maroon",
+  yellow: "Yellow",
+  olive: "Olive",
+  lime: "Lime",
+  green: "Green",
+  aqua: "Aqua",
+  teal: "Teal",
+  blue: "Blue",
+  navy: "Navy",
+  pink: "Pink",
+  fuchsia: "Fuchsia",
+  purple: "Purple",
+};

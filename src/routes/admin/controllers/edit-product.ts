@@ -8,10 +8,7 @@ import {
   ColorProps,
   ProductAttrs,
 } from "../../../models/product/product-interfaces";
-import {
-  MainCategory,
-  sizesArray,
-} from "../../../models/product/product-enums";
+import { sizesArray } from "../../../models/product/product-enums";
 import { ColorPropsFromClient } from "./add-product";
 import mapStock from "../helpers/map-product-stock";
 import uploadImageTo_S3 from "../helpers/upload-to-S3";

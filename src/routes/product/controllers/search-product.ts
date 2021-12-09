@@ -3,18 +3,11 @@ import { NextFunction, Request, Response } from "express";
 import { Product } from "../../../models/product/product-schema";
 import { asyncWrapper, Bad_Request_Error } from "../../../middlewares";
 import { p_keys } from "../../../models/product/product-enums";
-
-// need to add more matching keys
-const mainCat = { men: "men", women: "women", kids: "kids" };
-const subCat = {
-  "t-shirt": "t-shirts",
-  "t-shirts": "t-shirts",
-  shirt: "shirts",
-  short: "shorts",
-  shorts: "shorts",
-};
-
-const colorsMap = { lime: "Lime", black: "Black" };
+import {
+  main_cat,
+  sub_cat,
+  colors_map,
+} from "../../../models/product/product-enums";
 
 export const searchProduct = asyncWrapper(
   async (req: Request, res: Response, next: NextFunction) => {
@@ -30,17 +23,17 @@ export const searchProduct = asyncWrapper(
     // try to match the keywords with the main, sub and color
     let filter = {};
     for (let key of keywords) {
-      if (mainCat[key] !== undefined) {
-        // main_cat = mainCat[key];
-        filter[p_keys.main_cat] = mainCat[key];
+      if (main_cat[key] !== undefined) {
+        // main_cat = main_cat[key];
+        filter[p_keys.main_cat] = main_cat[key];
       }
-      if (subCat[key] !== undefined) {
-        // sub_cat = subCat[key];
-        filter[p_keys.sub_cat] = subCat[key];
+      if (sub_cat[key] !== undefined) {
+        // sub_cat = sub_cat[key];
+        filter[p_keys.sub_cat] = sub_cat[key];
       }
-      if (colorsMap[key] !== undefined) {
-        // colorName = colorsMap[key]
-        filter[p_keys.colorName] = colorsMap[key];
+      if (colors_map[key] !== undefined) {
+        // colorName = colors_map[key]
+        filter[p_keys.colorName] = colors_map[key];
       }
     }
     // if none of keywords matches any category, use the searchTag in the DB

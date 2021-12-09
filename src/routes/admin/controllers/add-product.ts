@@ -6,18 +6,13 @@ import {
   ColorProps,
   ProductAttrs,
 } from "../../../models/product/product-interfaces";
-import {
-  MainCategory,
-  sizesArray,
-} from "../../../models/product/product-enums";
+import { sizesArray } from "../../../models/product/product-enums";
 import mapStock from "../helpers/map-product-stock";
 import uploadImageTo_S3 from "../helpers/upload-to-S3";
 import { Not_Authorized_Error, UploadedImages } from "../../../middlewares";
 import { Admin } from "../../../models/admin/admin-schema";
 import { AdminDoc } from "../../../models/admin/admin-interfaces";
 import { Review } from "../../../models/review/review-schema";
-import { FilterStats } from "../../../models/filter-stats/filter-stats-schema";
-import { FilterSizes } from "../../../models/filter-stats/filter-stats-interfaces";
 import { updateFilterStats } from "../helpers/update-filter-stats";
 import updateCategoryNumber from "../helpers/update-cat-number";
 
