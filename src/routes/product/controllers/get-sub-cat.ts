@@ -59,9 +59,6 @@ export const getSubCat = asyncWrapper(async (req: Request, res: Response) => {
   const startIndex = (page - 1) * ITEMS_PER_PAGE;
   const endIndex = startIndex + ITEMS_PER_PAGE;
 
-  // console.log("db_filter", sorting);
-
-  // I can use the computed property to replace the string "productInfo.sub_cat"
   let products: ProductDoc[] = await Product.find({
     [p_keys.main_cat]: main_cat,
     [p_keys.sub_cat]: sub_cat,
@@ -90,8 +87,6 @@ export const getSubCat = asyncWrapper(async (req: Request, res: Response) => {
   // can't use the ".skip((page - 1) * ITEMS_PER_PAGE).limit(ITEMS_PER_PAGE)" here,
   // because I have to count the available colors and sizes when the filter is being used
   products = products.slice(startIndex, endIndex);
-
-  // console.log("products---------------", products);
 
   res.status(200).send({ products, filterStats });
 });

@@ -1,36 +1,36 @@
-export enum MainCategory {
+export enum mainCategory {
   men = "men",
   women = "women",
   kids = "kids",
 }
-export const mainCatArray = Object.values(MainCategory);
+export const mainCatArray = Object.values(mainCategory);
 
-export enum WomenCategory {
+export enum womenCategory {
   jeans = "jeans",
   shorts = "shorts",
   dresses = "dresses",
 }
-export const womenCatArray = Object.values(WomenCategory);
+export const womenCatArray = Object.values(womenCategory);
 
-export enum MenCategory {
+export enum menCategory {
   Tshirts = "t-shirts",
   coats = "coats",
   shorts = "shorts",
 }
-export const menCatArray = Object.values(MenCategory);
+export const menCatArray = Object.values(menCategory);
 
-export enum KidsCategory {
+export enum kidsCategory {
   Tshirts = "t-shirts",
   shorts = "shorts",
 }
-export const kidsCatArray = Object.values(KidsCategory);
+export const kidsCatArray = Object.values(kidsCategory);
 
-export enum SizesCategory {
+export enum sizesCategory {
   small = "small",
   medium = "medium",
   large = "large",
 }
-export const sizesArray = Object.values(SizesCategory);
+export const sizesArray = Object.values(sizesCategory);
 
 export enum p_keys {
   productInfo = "productInfo",

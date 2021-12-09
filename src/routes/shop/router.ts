@@ -14,6 +14,7 @@ import {
   clearCart,
   checkStock,
   orderHistory,
+  orderStatus,
 } from "./controllers";
 
 const router = express.Router();
@@ -33,5 +34,7 @@ router.post("/clear-cart", clearCart, updateCartInDatebase);
 router.get("/check-stock", checkStock);
 
 router.post("/stripe-payment", csrf_protection_user, stripePayment);
+
+router.post("/order-status", orderStatus);
 
 export { router as shopRouter };

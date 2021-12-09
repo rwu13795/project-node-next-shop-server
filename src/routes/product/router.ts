@@ -18,6 +18,8 @@ const router = express.Router();
 
 // this route must be in front of the "/:main_cat/:sub_cat", since /:main_cat will
 // try to match any thing
+router.get("/search-product", searchProduct);
+
 router.get("/detail/:productId", createSession, getDetail);
 
 router.get("/:main_cat", getMainCat);
@@ -25,8 +27,6 @@ router.get("/:main_cat", getMainCat);
 router.get("/:main_cat/:sub_cat", getSubCat);
 
 router.put("/update-stock", createSession, updateStock);
-
-router.post("/search-product", searchProduct);
 
 router.post("/add-review", addReview);
 
