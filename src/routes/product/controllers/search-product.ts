@@ -36,9 +36,10 @@ export const searchProduct = asyncWrapper(
         filter[p_keys.colorName] = colors_map[key];
       }
     }
-    // if none of keywords matches any category, use the searchTag in the DB
-    if (Object.keys(filter).length === 0) {
-      filter = { searchTags: { $in: keywords } };
+    // if none or only one of keywords matches any category,
+    // add the searchTag in the filter
+    if (Object.keys(filter).length < 2) {
+      filter = { ...filter, searchTags: { $in: keywords } };
     }
 
     console.log(filter);

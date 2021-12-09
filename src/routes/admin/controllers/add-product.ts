@@ -68,7 +68,8 @@ export const addProduct = async (
   );
 
   // put keywords in search tags
-  const tagsRegex = /[\s-]+/g; // match all "space" and "dash-line"
+  // const tagsRegex = /[\s-]+/g; // match all "space" and "dash-line"
+  const tagsRegex = /[\s]+/g; // only match all "space"
   let searchTags: string[] = title.toLowerCase().split(tagsRegex);
   for (let elem of colorPropsListFromClient) {
     searchTags.push(elem.colorName.toLowerCase());

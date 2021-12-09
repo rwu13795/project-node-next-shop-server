@@ -47,7 +47,8 @@ export const editProduct = async (
   }: EditProductBody = req.body;
 
   // put keywords in search tags
-  const tagsRegex = /[\s-]+/g; // match all "space" and "dash-line"
+  // const tagsRegex = /[\s-]+/g; // match all "space" and "dash-line"
+  const tagsRegex = /[\s]+/g; // only match all "space"
   let searchTags: string[] = [...title.split(tagsRegex)];
   for (let e of colorPropsListFromClient) {
     searchTags.push(e.colorName);
