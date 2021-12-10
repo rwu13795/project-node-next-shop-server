@@ -18,7 +18,6 @@ import {
   getAdminStatus,
   getProductsList,
   adminSignOut,
-  getMasterProductsList,
 } from "./controllers";
 
 const router = express.Router();
@@ -68,11 +67,5 @@ router.post(
 );
 
 router.get("/get-products-list", requireAdminAuth, getProductsList);
-
-router.get(
-  "/get-master-products-list",
-  requireAdminAuth,
-  getMasterProductsList
-);
 
 export { router as adminRouter };
