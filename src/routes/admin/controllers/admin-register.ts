@@ -38,6 +38,7 @@ export const adminRegister = asyncWrapper(
       admin_username: newAdmin.admin_username,
       admin_id: newAdmin._id,
       loggedInAsAdmin: true,
+      isMasterAdmin: existingAdmin.master_admin,
     };
 
     res.status(201).send({

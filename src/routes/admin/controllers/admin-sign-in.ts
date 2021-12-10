@@ -30,6 +30,7 @@ export const adminSignIn = asyncWrapper(
       admin_username: existingAdmin.admin_username,
       admin_id: existingAdmin._id,
       loggedInAsAdmin: true,
+      isMasterAdmin: existingAdmin.master_admin,
     };
 
     req.session.csrf_secret_admin = tokens.secretSync();

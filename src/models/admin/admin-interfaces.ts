@@ -8,7 +8,7 @@ export interface AdminAttrs {
   admin_username: string;
   password: string;
   product_ids: string[];
-  product_category: { [main_cat: string]: { [sub_cat: string]: number } };
+  product_category: ProductCatAdmin;
 }
 
 export interface AdminDoc extends mongoose.Document {
@@ -16,6 +16,7 @@ export interface AdminDoc extends mongoose.Document {
   password: string;
   product_ids: string[];
   product_category: ProductCatAdmin;
+  // product_category_master?: ProductCatAdmin;
   master_admin?: boolean;
 }
 

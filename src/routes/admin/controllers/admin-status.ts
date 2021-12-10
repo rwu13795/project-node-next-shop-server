@@ -6,6 +6,7 @@ export interface AdminUser {
   admin_username: string;
   admin_id: string;
   loggedInAsAdmin: boolean;
+  isMasterAdmin: boolean;
 }
 
 export const getAdminStatus = async (
@@ -18,6 +19,7 @@ export const getAdminStatus = async (
       admin_username: "",
       admin_id: "",
       loggedInAsAdmin: false,
+      isMasterAdmin: false,
     };
 
     req.session.csrf_secret_admin = tokens.secretSync();

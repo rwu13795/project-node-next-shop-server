@@ -55,6 +55,14 @@ export const deleteProduct = async (
     updateCategoryNumber(adminUser),
   ]);
 
+  // // update the master's category number whenever a none-master is adding/deleting a product
+  // if (adminUser.master_admin) {
+  //   await updateCategoryNumber(adminUser, true);
+  // } else {
+  //   const adminMaster = await Admin.findOne({ master_admin: true });
+  //   await updateCategoryNumber(adminMaster, true);
+  // }
+
   // console.log("> > > product deleted < < <", result);
   res.status(201).send({ message: "OK" });
 };

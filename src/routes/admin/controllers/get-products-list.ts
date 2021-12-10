@@ -9,14 +9,17 @@ import { Product } from "../../../models/product/product-schema";
 
 export const getProductsList = asyncWrapper(
   async (req: Request, res: Response, next: NextFunction) => {
-    const admin_username = req.session.adminUser.admin_username;
+    let admin_username = req.session.adminUser.admin_username;
     let pageNum = parseInt(req.query.pageNum as string) || 1;
     let main_cat = req.query.main as string;
     let sub_cat = req.query.sub as string;
+    let selectedAdmin = req.query.admin_username as string;
 
-    console.log("main_cat ----------------->", main_cat);
-    console.log("sub_cat ----------------->", sub_cat);
-    console.log("pageNum ----------------->", pageNum);
+    if (req.session.adminUser.isMasterAdmin && selectedAdmin) {
+      admin_username = selectedAdmin;
+    }
+
+    console.log("admin_username ----------------->", admin_username);
 
     const [productsTotal, { product_category }]: [
       productsTotal: number,
@@ -44,10 +47,23 @@ export const getProductsList = asyncWrapper(
       .limit(ITEMS_PER_PAGE)
       .lean();
 
+    let admin_username_array = [];
+    if (req.session.adminUser.isMasterAdmin) {
+      admin_username_array = await Admin.find({})
+        .select("admin_username")
+        .lean();
+      admin_username_array = admin_username_array.map((doc) => {
+        return doc.admin_username;
+      });
+    }
+
+    console.log(admin_username_array);
+
     res.status(200).send({
       productsTotal,
       products,
       product_category,
+      admin_username_array,
     });
   }
 );

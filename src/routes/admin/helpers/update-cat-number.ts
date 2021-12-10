@@ -29,7 +29,6 @@ export default async function updateCategoryNumber(adminDoc: AdminDoc) {
   }
 
   adminDoc.product_category = { ...product_category };
-
   adminDoc.markModified("product_category");
 
   await adminDoc.save();
