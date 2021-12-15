@@ -15,6 +15,7 @@ import { AdminDoc } from "../../../models/admin/admin-interfaces";
 import { Review } from "../../../models/review/review-schema";
 import { updateFilterStats } from "../helpers/update-filter-stats";
 import updateCategoryNumber from "../helpers/update-cat-number";
+import { ReviewDoc } from "../../../models/review/review-interfaces";
 
 export interface ColorPropsFromClient {
   colorName: string;
@@ -117,14 +118,82 @@ export const addProduct = async (
     updateCategoryNumber(adminUser),
   ]);
 
-  // update the master's category number whenever a none-master is adding/deleting a product
-  // if (adminUser.master_admin) {
-  //   await updateCategoryNumber(adminUser, true);
-  // } else {
-  //   const adminMaster = await Admin.findOne({ master_admin: true });
-  //   await updateCategoryNumber(adminMaster, true);
-  // }
+  /* ****************************************** */
+  /* add testing reviews after adding new items */
+  /* ****************************************** */
+  const sizes = ["Small", "Medium", "Large"];
+  const body_length_reduction = [0, 100, 200, 300];
+  const rating = ["one", "two", "three", "four", "five"];
+
+  let reviews_num = 5 + getRandomInt(10);
+
+  for (let i = 1; i <= reviews_num; i++) {
+    let random_rating = rating[getRandomInt(5)];
+    let random_size = sizes[getRandomInt(3)];
+    let sliceNum = body_length_reduction[getRandomInt(4)] - getRandomInt(20);
+    let review = `review ${i} review ${i} review ${i} review ${i} review ${i} review ${i} review ${i} review ${i} review ${i} review ${i} review ${i} review ${i} review ${i} review ${i} review ${i} review ${i} review ${i} review ${i} review ${i} review ${i} review ${i} review ${i} review ${i} review ${i} review ${i} review ${i} review ${i} review ${i} review ${i} review ${i} review ${i} review ${i} review ${i} review ${i} review ${i} review ${i} review ${i} review ${i} review ${i} review ${i} review ${i} review ${i} review ${i} review ${i} review ${i} review ${i} review ${i} review ${i} review ${i} review ${i} review ${i}`;
+    let random_review = review.slice(0, review.length - sliceNum);
+    let reviewProps: ReviewProps = {
+      title: `testing review ${i}`,
+      review: random_review,
+      rating: random_rating,
+      date: new Date(),
+      user_name: `user ${i}`,
+      user_email: `user${i}@test.com`,
+      size: random_size,
+    };
+
+    let update = {
+      $inc: {
+        total: 1,
+        [`allRatings.${reviewProps.rating}`]: 1,
+      },
+      $push: {
+        allReviews: { $each: [reviewProps], $position: 0 },
+        [`reviewsByRating.${reviewProps.rating}`]: {
+          $each: [reviewProps],
+          $position: 0,
+        },
+      },
+    };
+
+    const reviews: ReviewDoc = await Review.findOneAndUpdate(
+      { productId: product._id },
+      update,
+      { new: true }
+    );
+
+    // after update the reviews, update the average
+    let sum = 0;
+    let multiplier = 5;
+    for (let rating of Object.values(reviews.allRatings)) {
+      sum = sum + rating * multiplier;
+      multiplier--;
+    }
+    const average = Math.round((sum / reviews.total) * 10) / 10;
+    reviews.averageRating = average;
+
+    // add the allReviews id to the new filtered review
+    reviews.reviewsByRating[reviewProps.rating][0].id_allReviews =
+      reviews.allReviews[0]._id;
+
+    await reviews.save();
+  }
 
   console.log("> > > new product added < < <");
   res.status(201).send({ message: "OK" });
 };
+
+interface ReviewProps {
+  title: string;
+  review: string;
+  rating: string;
+  date: Date;
+  user_name: string;
+  user_email: string;
+  size: string;
+}
+
+function getRandomInt(max) {
+  return Math.floor(Math.random() * max);
+}
