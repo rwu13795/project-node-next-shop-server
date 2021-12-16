@@ -122,16 +122,16 @@ export const addProduct = async (
   /* add testing reviews after adding new items */
   /* ****************************************** */
   const sizes = ["Small", "Medium", "Large"];
-  const body_length_reduction = [0, 100, 200, 300];
+  const body_length_reduction = [0, 200, 400, 600];
   const rating = ["one", "two", "three", "four", "five"];
 
-  let reviews_num = 5 + getRandomInt(10);
+  let reviews_num = 5 + getRandomInt(20);
 
   for (let i = 1; i <= reviews_num; i++) {
     let random_rating = rating[getRandomInt(5)];
     let random_size = sizes[getRandomInt(3)];
     let sliceNum = body_length_reduction[getRandomInt(4)] - getRandomInt(20);
-    let review = `review ${i} review ${i} review ${i} review ${i} review ${i} review ${i} review ${i} review ${i} review ${i} review ${i} review ${i} review ${i} review ${i} review ${i} review ${i} review ${i} review ${i} review ${i} review ${i} review ${i} review ${i} review ${i} review ${i} review ${i} review ${i} review ${i} review ${i} review ${i} review ${i} review ${i} review ${i} review ${i} review ${i} review ${i} review ${i} review ${i} review ${i} review ${i} review ${i} review ${i} review ${i} review ${i} review ${i} review ${i} review ${i} review ${i} review ${i} review ${i} review ${i} review ${i} review ${i}`;
+    let review = `review ${i} review ${i} review ${i} review ${i} review ${i} review ${i} review ${i} review ${i} review ${i} review ${i} review ${i} review ${i} review ${i} review ${i} review ${i} review ${i} review ${i} review ${i} review ${i} review ${i} review ${i} review ${i} review ${i} review ${i} review ${i} review ${i} review ${i} review ${i} review ${i} review ${i} review ${i} review ${i} review ${i} review ${i} review ${i} review ${i} review ${i} review ${i} review ${i} review ${i} review ${i} review ${i} review ${i} review ${i} review ${i} review ${i} review ${i} review ${i} review ${i} review ${i} review ${i} review ${i} review ${i} review ${i} review ${i} review ${i} review ${i} review ${i} review ${i} review ${i} review ${i} review ${i} review ${i} review ${i} review ${i} review ${i} review ${i} review ${i} review ${i} review ${i} review ${i} review ${i} review ${i} review ${i} review ${i} review ${i} review ${i} review ${i} review ${i} review ${i} review ${i} review ${i} review ${i} review ${i} review ${i}`;
     let random_review = review.slice(0, review.length - sliceNum);
     let reviewProps: ReviewProps = {
       title: `testing review ${i}`,

@@ -40,13 +40,12 @@ export default async function uploadImageTo_S3(
   let colorPropsList: ColorProps[] = [];
   let fileIndex = 0;
   for (let prop of colorPropsListFromClient) {
-    // colorPropsList.push({colorCode: prop.colorCode, colorName: prop.colorName, sizes:prop.sizes, imageCount: prop.imageCount, imageFiles: prop.modifiedImages})
     let count = 0;
     while (count < (editMode ? prop.modifiedIndex.length : prop.imageCount)) {
       let originalnameToUrl: string = uploadedImageFiles[
         fileIndex
       ].originalname.replace(allSpacesRegex, "-");
-      // we need to attach tha category, title, and color to the url
+      // we need to attach the category, title, and color to the url
       // aws.com/images/men/t-shirt/"title"/"color-01".jpeg
       params.Key = `${categoryUrl}/${originalnameToUrl}`;
       params.Body = uploadedImageFiles[fileIndex].buffer;

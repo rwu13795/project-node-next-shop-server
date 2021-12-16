@@ -25,7 +25,7 @@ interface EditProductBody {
   description: string;
   productId: string;
   deletedImgaes: string[];
-  admin_username: string;
+  // admin_username: string;
 }
 
 export const editProduct = async (
@@ -43,8 +43,8 @@ export const editProduct = async (
     description,
     productId,
     deletedImgaes,
-    admin_username,
-  }: EditProductBody = req.body;
+  }: // admin_username,
+  EditProductBody = req.body;
 
   // put keywords in search tags
   // const tagsRegex = /[\s-]+/g; // match all "space" and "dash-line"
