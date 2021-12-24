@@ -181,7 +181,7 @@ export const addProduct = async (
   }
 
   console.log("> > > new product added < < <");
-  res.status(201).send({ message: "OK" });
+  res.status(201).send({ main_cat, sub_cat });
 };
 
 interface ReviewProps {

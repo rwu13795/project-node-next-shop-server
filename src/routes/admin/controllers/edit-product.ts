@@ -93,5 +93,5 @@ export const editProduct = async (
   await updateFilterStats(main_cat, sub_cat);
 
   console.log("> > > product edited < < <");
-  res.status(201).send({ message: "OK" });
+  res.status(201).send({ main_cat, sub_cat });
 };
