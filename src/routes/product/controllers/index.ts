@@ -6,3 +6,4 @@ export * from "./search-product";
 export * from "./add-review";
 export * from "./get-reviews";
 export * from "./delete-review";
+export * from "./get-accessories";

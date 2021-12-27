@@ -10,6 +10,7 @@ import {
   addReview,
   getReviews,
   deleteReview,
+  getAccessories,
 } from "./controllers";
 
 const router = express.Router();
@@ -17,6 +18,8 @@ const router = express.Router();
 router.get("/search-product", searchProduct);
 
 router.get("/detail/:productId", createSession, getDetail);
+
+router.get("/get-accessories", getAccessories);
 
 router.get("/get/:main_cat", getMainCat);
 
