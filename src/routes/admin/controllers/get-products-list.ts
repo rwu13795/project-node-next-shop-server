@@ -13,13 +13,12 @@ export const getProductsList = asyncWrapper(
     let pageNum = parseInt(req.query.pageNum as string) || 1;
     let main_cat = req.query.main as string;
     let sub_cat = req.query.sub as string;
+
     let selectedAdmin = req.query.admin_username as string;
 
     if (req.session.adminUser.isMasterAdmin && selectedAdmin) {
       admin_username = selectedAdmin;
     }
-
-    console.log("admin_username ----------------->", admin_username);
 
     const [productsTotal, { product_category }]: [
       productsTotal: number,
@@ -59,11 +58,16 @@ export const getProductsList = asyncWrapper(
 
     console.log(admin_username_array);
 
+    if (selectedAdmin === undefined) {
+      selectedAdmin = "";
+    }
+
     res.status(200).send({
       productsTotal,
       products,
       product_category,
       admin_username_array,
+      start_selectedAdmin: selectedAdmin,
     });
   }
 );

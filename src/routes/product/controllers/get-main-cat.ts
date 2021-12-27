@@ -13,7 +13,7 @@ export const getMainCat = asyncWrapper(async (req: Request, res: Response) => {
   const sub_cat_women = ["t-shirts", "blouses", "shorts", "dresses"];
   const sub_cat_kids = ["t-shirts", "sweaters", "shorts", "jeans"];
 
-  let sub_cat;
+  let sub_cat: string[];
   if (main_cat === "men") {
     sub_cat = sub_cat_men;
   } else if (main_cat === "women") {
@@ -22,12 +22,12 @@ export const getMainCat = asyncWrapper(async (req: Request, res: Response) => {
     sub_cat = sub_cat_kids;
   }
 
-  let query_1 = getSubCatPreview(main_cat, sub_cat[0]);
-  let query_2 = getSubCatPreview(main_cat, sub_cat[1]);
-  let query_3 = getSubCatPreview(main_cat, sub_cat[2]);
-  let query_4 = getSubCatPreview(main_cat, sub_cat[3]);
+  const query_1 = getSubCatPreview(main_cat, sub_cat[0]);
+  const query_2 = getSubCatPreview(main_cat, sub_cat[1]);
+  const query_3 = getSubCatPreview(main_cat, sub_cat[2]);
+  const query_4 = getSubCatPreview(main_cat, sub_cat[3]);
 
-  let [cat_1, cat_2, cat_3, cat_4] = await Promise.all([
+  const [cat_1, cat_2, cat_3, cat_4] = await Promise.all([
     query_1,
     query_2,
     query_3,

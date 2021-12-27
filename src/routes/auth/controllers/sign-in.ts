@@ -29,11 +29,6 @@ export const signIn = asyncWrapper(
       );
     }
 
-    // retrieve the cart from the existing user's record, and merge the cart which
-    // is added when the user is guest user, with the existing cart
-    // if the existing cart is expired, then use the guest user's cart
-    console.log("req.session", req.session);
-
     let cart: CartItem[];
     if (req.session.currentUser?.cart) {
       cart = req.session.currentUser.cart;
@@ -97,16 +92,14 @@ export const signIn = asyncWrapper(
     };
 
     // to test the loading spinner by delaying the response
-    setTimeout(() => {
-      res.status(200).send({
-        currentUser: req.session.currentUser,
-      });
-    }, 3000);
+    // setTimeout(() => {
+    //   res.status(200).send({
+    //     currentUser: req.session.currentUser,
+    //   });
+    // }, 3000);
 
-    // res.status(200).send({
-    //   message: "Logged in",
-    //   currentUser: req.session.currentUser,
-    //   isLoggedIn: req.session.isLoggedIn,
-    // });
+    res.status(200).send({
+      currentUser: req.session.currentUser,
+    });
   }
 );

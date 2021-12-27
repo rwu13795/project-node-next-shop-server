@@ -15,6 +15,8 @@ import uploadImageTo_S3 from "../helpers/upload-to-S3";
 import deleteImages from "../helpers/delete-image-on-S3";
 import { UploadedImages } from "../../../middlewares";
 import { updateFilterStats } from "../helpers/update-filter-stats";
+import updateCategoryNumber from "../helpers/update-cat-number";
+import { Admin } from "../../../models/admin/admin-schema";
 
 interface EditProductBody {
   title: string;
@@ -25,7 +27,7 @@ interface EditProductBody {
   description: string;
   productId: string;
   deletedImgaes: string[];
-  // admin_username: string;
+  selected_admin_username: string;
 }
 
 export const editProduct = async (
@@ -43,8 +45,8 @@ export const editProduct = async (
     description,
     productId,
     deletedImgaes,
-  }: // admin_username,
-  EditProductBody = req.body;
+    selected_admin_username,
+  }: EditProductBody = req.body;
 
   // put keywords in search tags
   // const tagsRegex = /[\s-]+/g; // match all "space" and "dash-line"
@@ -84,13 +86,28 @@ export const editProduct = async (
     createdDate: new Date(),
   };
 
-  await Product.findOneAndUpdate(
-    { _id: new ObjectId(productId) },
-    productUpdate,
-    { new: true }
-  );
+  console.log("selected_admin_username------>", selected_admin_username);
 
-  await updateFilterStats(main_cat, sub_cat);
+  let admin_username: string;
+  if (selected_admin_username !== "" && req.session.adminUser.isMasterAdmin) {
+    admin_username = selected_admin_username;
+  } else {
+    admin_username = req.session.adminUser.admin_username;
+  }
+
+  console.log("admin_username------>", admin_username);
+
+  const [adminUser] = await Promise.all([
+    Admin.findOne({ admin_username }),
+    Product.findOneAndUpdate({ _id: new ObjectId(productId) }, productUpdate, {
+      new: true,
+    }),
+  ]);
+
+  await Promise.all([
+    updateFilterStats(main_cat, sub_cat),
+    updateCategoryNumber(adminUser),
+  ]);
 
   console.log("> > > product edited < < <");
   res.status(201).send({ main_cat, sub_cat });

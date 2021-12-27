@@ -41,17 +41,16 @@ export const adminSignIn = asyncWrapper(
     console.log("checking session in get Admin Auth---->", req.session);
 
     // to test the loading spinner by delaying the response
-    setTimeout(() => {
-      res.status(200).send({
-        adminUser: req.session.adminUser,
-        csrfToken,
-      });
-    }, 3000);
+    // setTimeout(() => {
+    //   res.status(200).send({
+    //     adminUser: req.session.adminUser,
+    //     csrfToken,
+    //   });
+    // }, 3000);
 
-    // res.status(200).send({
-    //   message: "Logged in",
-    //   currentUser: req.session.currentUser,
-    //   isLoggedIn: req.session.isLoggedIn,
-    // });
+    res.status(200).send({
+      adminUser: req.session.adminUser,
+      csrfToken,
+    });
   }
 );

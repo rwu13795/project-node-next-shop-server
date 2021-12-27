@@ -33,7 +33,6 @@ interface AddProductBody {
   price: number;
   colorPropsListFromClient: ColorPropsFromClient[];
   description: string;
-  admin_username: string;
 }
 
 export const addProduct = async (
@@ -49,10 +48,11 @@ export const addProduct = async (
     price,
     colorPropsListFromClient,
     description,
-    admin_username,
   }: AddProductBody = req.body;
 
-  const adminUser: AdminDoc = await Admin.findOne({ admin_username });
+  const adminUser: AdminDoc = await Admin.findOne({
+    admin_username: req.session.adminUser.admin_username,
+  });
   if (!adminUser) {
     return next(new Not_Authorized_Error());
   }
