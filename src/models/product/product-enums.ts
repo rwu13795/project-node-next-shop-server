@@ -29,7 +29,6 @@ export enum p_keys {
 }
 
 // used in the search route, to see if the keywords match the category
-
 export const main_cat = {
   men: "men",
   man: "men",
@@ -43,32 +42,42 @@ export const main_cat = {
   children: "kids",
 };
 export const sub_cat = {
-  // men
+  // top
   "t-shirts": "t-shirts",
   "t-shirt": "t-shirts",
   tshirt: "t-shirts",
   shirts: "shirts",
   shirt: "shirts",
+  blouses: "blouses",
+  blouse: "blouses",
   coat: "coats",
   coats: "coats",
-  blazers: "blazers",
-  blazer: "blazers",
+  jacket: "jackets",
+  jackets: "jackets",
+  hoodie: "hoodies",
+  hoodies: "hoodies",
+  sweaters: "sweaters",
+  sweater: "sweaters",
+  // bottom
   short: "shorts",
   shorts: "shorts",
   pant: "pants",
   pants: "pants",
   jean: "jeans",
   jeans: "jeans",
-  shoe: "shoes",
-  shoes: "shoes",
+  dresses: "dresses",
+  dress: "dresses",
+  skirt: "dresses",
+  // accessory
+  socks: "socks",
+  sock: "socks",
   hat: "hats",
   hats: "hats",
+  sun: "glasses",
   "sun-glasses": "glasses",
   glasses: "glasses",
-  // women
-
-  // kids
 };
+
 export const colors_map = {
   white: "White",
   silver: "Silver",
