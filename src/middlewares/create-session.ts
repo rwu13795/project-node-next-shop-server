@@ -17,6 +17,7 @@ export const createSession = session({
     // httpOnly: false,
     secure: true,
     // domain: "https://node-next-shop-client.herokuapp.com",
+    sameSite: "none",
   }, // 1 hour
   // store: sessionStore, // additional config for using the MongoDBstore
   store: MongoStore.create({
