@@ -21,6 +21,7 @@ export const createSession = session({
   // by using the expiration function offered by MongoDB
   proxy: true,
   cookie: {
+    httpOnly: false,
     maxAge: 1000 * 60 * 60,
     secure: true,
     sameSite: "none",
