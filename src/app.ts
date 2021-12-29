@@ -38,8 +38,6 @@ app.use(express.json());
 //   }
 // });
 
-// app.set("trust proxy", 1);
-
 app.use(
   cors({
     credentials: true,
@@ -51,10 +49,9 @@ app.use(
   })
 );
 
+app.set("trust proxy", 1);
 app.use(helmet());
 app.use(compression());
-
-app.enable("trust proxy");
 
 // connect all routers to the app
 app.use("/api/products", productRouter);

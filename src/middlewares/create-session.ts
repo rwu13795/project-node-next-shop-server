@@ -15,10 +15,10 @@ export const createSession = session({
   proxy: true,
   cookie: {
     maxAge: 1000 * 60 * 60,
-    httpOnly: true,
+    // httpOnly: true,
     // secure: true,
     // domain: "https://node-next-shop-client.herokuapp.com",
-    sameSite: "none",
+    // sameSite: "none",
   }, // 1 hour
   // store: sessionStore, // additional config for using the MongoDBstore
   store: MongoStore.create({
