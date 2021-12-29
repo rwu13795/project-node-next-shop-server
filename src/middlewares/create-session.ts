@@ -11,6 +11,8 @@ if (process.env.NODE_ENV !== "production") {
 
 // if (app.get("env") === "production") {
 //   cookie.secure = true;
+//   cookie.httpOnly = true;
+//   cookie.sameSite = "none";
 // }
 
 export const createSession = session({
@@ -25,7 +27,7 @@ export const createSession = session({
     maxAge: 1000 * 60 * 60,
     secure: true,
     sameSite: "none",
-    // domain: "node-next-shop-client.herokuapp.com",
+    domain: ".herokuapp.com",
   },
   // store: sessionStore, // additional config for using the MongoDBstore
   store: MongoStore.create({
