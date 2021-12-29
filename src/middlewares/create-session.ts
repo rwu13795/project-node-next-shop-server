@@ -21,11 +21,11 @@ export const createSession = session({
   // by using the expiration function offered by MongoDB
   proxy: true,
   cookie: {
-    httpOnly: false,
+    httpOnly: true,
     maxAge: 1000 * 60 * 60,
     secure: true,
     sameSite: "none",
-    domain: "node-next-shop-client.herokuapp.com",
+    // domain: "node-next-shop-client.herokuapp.com",
   },
   // store: sessionStore, // additional config for using the MongoDBstore
   store: MongoStore.create({
