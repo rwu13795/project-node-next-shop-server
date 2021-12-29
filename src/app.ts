@@ -24,10 +24,6 @@ declare module "express-session" {
   }
 }
 
-// if (process.env.NODE_ENV !== "production") {
-//   config();
-// }
-
 const app = express();
 export const tokens = new Tokens();
 
@@ -51,32 +47,6 @@ app.use(
     ],
   })
 );
-
-// const sessionStore = new MongoDBStore(
-//   {
-//     uri: process.env.MONGO_URI,
-//     collection: "sessions",
-//   },
-//   function (error) {
-//     console.log(error);
-//     // Should have gotten an error
-//   }
-// );
-
-// app.use(
-//   session({
-//     secret: "my-secret",
-//     resave: true,
-//     saveUninitialized: true,
-//     // the MongoDBStore will set the expiration time the same as we set for the session
-//     // by using the expiration function offered by MongoDB
-//     cookie: { maxAge: 1000 * 60 * 60 }, // 1 hour
-//     // store: sessionStore, // additional config for using the MongoDBstore
-//     store: MongoStore.create({
-//       mongoUrl: process.env.MONGO_URI,
-//     }),
-//   })
-// );
 
 app.use(helmet());
 app.use(compression());

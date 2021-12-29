@@ -41,8 +41,6 @@ export const updateInfo = asyncWrapper(
       { new: true }
     );
 
-    console.log("in update info -------------------------------");
-
     req.session.currentUser = {
       username: updatedUser.userInfo.first_name,
       cart: req.session.currentUser.cart,
@@ -52,10 +50,6 @@ export const updateInfo = asyncWrapper(
       isLoggedIn: true,
     };
 
-    setTimeout(() => {
-      res.status(201).send({ currentUser: req.session.currentUser });
-    }, 3000);
-
-    // res.status(201).send({ currentUser: req.session.currentUser });
+    res.status(201).send({ currentUser: req.session.currentUser });
   }
 );

@@ -8,7 +8,7 @@ export const updateCartInDatebase = asyncWrapper(
     const user: UserDoc = await User.findById(req.session.currentUser.userId);
     user.cartDetail.cart = req.session.currentUser.cart;
     user.markModified("cartDetail");
-    console.log("saving change to DB !!!!!!!!!!!!!!!!!!!!!");
+
     await user.save();
 
     return res.status(201).send({

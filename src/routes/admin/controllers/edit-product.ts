@@ -4,10 +4,7 @@ import { ObjectId } from "mongodb";
 
 import { Product } from "../../../models/product/product-schema";
 
-import {
-  ColorProps,
-  ProductAttrs,
-} from "../../../models/product/product-interfaces";
+import { ColorProps } from "../../../models/product/product-interfaces";
 import { sizesArray } from "../../../models/product/product-enums";
 import { ColorPropsFromClient } from "./add-product";
 import mapStock from "../helpers/map-product-stock";
@@ -70,8 +67,6 @@ export const editProduct = async (
     deleteImages(deletedImgaes),
   ]);
 
-  console.log(colorPropsList_toBeSaved);
-
   const productUpdate = {
     productInfo: {
       title,
@@ -86,16 +81,12 @@ export const editProduct = async (
     createdDate: new Date(),
   };
 
-  console.log("selected_admin_username------>", selected_admin_username);
-
   let admin_username: string;
   if (selected_admin_username !== "" && req.session.adminUser.isMasterAdmin) {
     admin_username = selected_admin_username;
   } else {
     admin_username = req.session.adminUser.admin_username;
   }
-
-  console.log("admin_username------>", admin_username);
 
   const [adminUser] = await Promise.all([
     Admin.findOne({ admin_username }),
@@ -109,6 +100,5 @@ export const editProduct = async (
     updateCategoryNumber(adminUser),
   ]);
 
-  console.log("> > > product edited < < <");
   res.status(201).send({ main_cat, sub_cat });
 };

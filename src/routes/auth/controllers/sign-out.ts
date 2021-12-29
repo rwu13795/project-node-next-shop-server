@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 
-import { asyncWrapper, Bad_Request_Error } from "../../../middlewares";
+import { asyncWrapper } from "../../../middlewares";
 
 export const signOut = asyncWrapper(
   async (req: Request, res: Response, next: NextFunction) => {

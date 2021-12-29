@@ -33,8 +33,6 @@ router.post(
   addProduct
 );
 
-// router.post("/get-one-product", getOneProduct);
-
 router.post(
   "/edit-product",
   getImagesFromClient,

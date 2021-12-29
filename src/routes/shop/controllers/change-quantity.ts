@@ -13,8 +13,6 @@ export const changeQuantity = asyncWrapper(
       return next();
     }
 
-    console.log("direct change qty", req.session.currentUser.cart[index]);
-
     res.status(201).send({ currentUser: req.session.currentUser });
   }
 );

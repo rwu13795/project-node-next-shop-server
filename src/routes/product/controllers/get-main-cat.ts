@@ -7,8 +7,6 @@ import { p_keys } from "../../../models/product/product-enums";
 export const getMainCat = asyncWrapper(async (req: Request, res: Response) => {
   const { main_cat } = req.params;
 
-  console.log("get main cat -------->", main_cat);
-
   const sub_cat_men = ["t-shirts", "hoodies", "shorts", "jeans"];
   const sub_cat_women = ["t-shirts", "blouses", "shorts", "dresses"];
   const sub_cat_kids = ["t-shirts", "sweaters", "shorts", "jeans"];

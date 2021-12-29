@@ -23,7 +23,6 @@ interface Sorting {
 export const getSubCat = asyncWrapper(async (req: Request, res: Response) => {
   const { main_cat, sub_cat } = req.params;
 
-  console.log("get sub cat query", req.query);
   let query_page = req.query.page as string;
   let query_filter = req.query.filter as string;
 
@@ -51,8 +50,6 @@ export const getSubCat = asyncWrapper(async (req: Request, res: Response) => {
     if (colors.length > 0 || sizes.length > 0) {
       db_filter = productFilter(colors, sizes);
     }
-
-    console.log("db_filter", db_filter);
   }
 
   const ITEMS_PER_PAGE = 6;

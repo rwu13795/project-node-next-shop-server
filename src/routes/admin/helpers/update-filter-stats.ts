@@ -1,13 +1,10 @@
-import contentSecurityPolicy from "helmet/dist/middlewares/content-security-policy";
 import {
   FilterColors,
   FilterSizes,
   FilterStats_Doc,
-  FilterStats_Attrs,
 } from "../../../models/filter-stats/filter-stats-interfaces";
 import { FilterStats } from "../../../models/filter-stats/filter-stats-schema";
 import { p_keys } from "../../../models/product/product-enums";
-import { ProductDoc } from "../../../models/product/product-interfaces";
 import { Product } from "../../../models/product/product-schema";
 
 const initialSizes: FilterSizes = {};

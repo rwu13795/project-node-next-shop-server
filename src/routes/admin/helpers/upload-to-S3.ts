@@ -1,4 +1,5 @@
 import { PutObjectCommand } from "@aws-sdk/client-s3";
+import { config } from "dotenv";
 
 import { s3Client } from "../../../utils/aws-s3-client";
 import { ColorPropsFromClient } from "../controllers/add-product";
@@ -9,6 +10,10 @@ interface Params {
   Bucket: string;
   Key: string;
   Body: string | Buffer;
+}
+
+if (process.env.NODE_ENV !== "production") {
+  config();
 }
 
 export default async function uploadImageTo_S3(
@@ -25,10 +30,10 @@ export default async function uploadImageTo_S3(
   let urlTitle = title.replace(allSpacesRegex, "-");
 
   const categoryUrl = `${main_cat}/${sub_cat}/${urlTitle}`;
-  const awsUrl = `https://testing-images-on-s3.s3.us-east-2.amazonaws.com/${categoryUrl}`;
+  const awsUrl = `https://${process.env.S3_BUCKET_NAME}.${process.env.S3_BUCKET_REGION}/${categoryUrl}`;
 
   let params: Params = {
-    Bucket: "testing-images-on-s3", // The name of the bucket. For example, 'sample_bucket_101'.
+    Bucket: process.env.S3_BUCKET_NAME, // The name of the bucket. For example, 'sample_bucket_101'.
     // The name of the object. For example, 'sample_upload.txt'. And the folder name will any
     // path in front of the file name, (testing_folder/xxxxx.txt)
     Key: "", // add the key dynamically for different images

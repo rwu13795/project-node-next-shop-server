@@ -91,13 +91,6 @@ export const signIn = asyncWrapper(
       isLoggedIn: true,
     };
 
-    // to test the loading spinner by delaying the response
-    // setTimeout(() => {
-    //   res.status(200).send({
-    //     currentUser: req.session.currentUser,
-    //   });
-    // }, 3000);
-
     res.status(200).send({
       currentUser: req.session.currentUser,
     });

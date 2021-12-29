@@ -7,7 +7,7 @@ if (process.env.NODE_ENV !== "production") {
 }
 
 export const createSession = session({
-  secret: "my-secret",
+  secret: process.env.SESSION_SECRET,
   resave: true,
   saveUninitialized: true,
   // the MongoDBStore will set the expiration time the same as we set for the session

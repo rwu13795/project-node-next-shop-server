@@ -1,8 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 
 import { asyncWrapper } from "../../../middlewares";
-import { UserDoc } from "../../../models/user/user-interfaces";
-import { User } from "../../../models/user/user-schema";
 import { CartItem } from "../../auth/controllers";
 
 interface Body {
@@ -14,8 +12,6 @@ interface Body {
 export const addToCart = asyncWrapper(
   async (req: Request, res: Response, next: NextFunction) => {
     const { item, editMode, index }: Body = req.body;
-
-    console.log("updated item", item);
 
     // when the user tried to change the quantity after the session has expired
     if (!req.session.currentUser) {
@@ -71,7 +67,6 @@ export const addToCart = asyncWrapper(
 
     // add quantity for the same existing item
     for (let i of req.session.currentUser.cart) {
-      console.log("adding qty");
       if (
         i.productId === item.productId &&
         i.colorName === item.colorName &&

@@ -7,15 +7,12 @@ import {
   Not_Authorized_Error,
 } from "../../../middlewares";
 import { p_keys } from "../../../models/product/product-enums";
-import { ProductDoc } from "../../../models/product/product-interfaces";
 import { Review } from "../../../models/review/review-schema";
 
 export const getDetail = asyncWrapper(
   async (req: Request, res: Response, next: NextFunction) => {
     const { productId } = req.params;
     const { admin } = req.query;
-
-    console.log("req.query ----------->", req.query);
 
     if (
       (!req.session.adminUser || !req.session.adminUser?.loggedInAsAdmin) &&

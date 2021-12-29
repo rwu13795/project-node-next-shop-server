@@ -63,8 +63,6 @@ export const checkStock = asyncWrapper(
       }
     }
 
-    console.log(stockErrors);
-
     // update the session cart and User's cart in DB
     req.session.currentUser.cart = cart;
     if (req.session.currentUser.isLoggedIn) {
@@ -105,5 +103,3 @@ export const checkStock = asyncWrapper(
 //       }
 //     }
 //   }
-
-//   console.log(cart);

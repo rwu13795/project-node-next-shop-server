@@ -10,7 +10,6 @@ export const requestValidator = (
   const errors = validationResult(req);
 
   if (!errors.isEmpty()) {
-    console.log("> > in requestValidator ", errors);
     throw new Request_Validation_Error(errors.array());
     // return res.status(400).send({ message: errors.array()[0].msg });
     // errors.array() is a method of the validationResult, to convert the errors into an array

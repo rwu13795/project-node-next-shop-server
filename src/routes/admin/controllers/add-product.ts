@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from "express";
+import { config } from "dotenv";
 
 import { Product } from "../../../models/product/product-schema";
-
 import {
   ColorProps,
   ProductAttrs,
@@ -15,7 +15,7 @@ import { AdminDoc } from "../../../models/admin/admin-interfaces";
 import { Review } from "../../../models/review/review-schema";
 import { updateFilterStats } from "../helpers/update-filter-stats";
 import updateCategoryNumber from "../helpers/update-cat-number";
-import { ReviewDoc } from "../../../models/review/review-interfaces";
+// import { ReviewDoc } from "../../../models/review/review-interfaces";
 
 export interface ColorPropsFromClient {
   colorName: string;
@@ -33,6 +33,10 @@ interface AddProductBody {
   price: number;
   colorPropsListFromClient: ColorPropsFromClient[];
   description: string;
+}
+
+if (process.env.NODE_ENV !== "production") {
+  config();
 }
 
 export const addProduct = async (
@@ -78,7 +82,7 @@ export const addProduct = async (
     elem.imageCount += 5;
     for (let i = 1; i <= 5; i++) {
       elem.imageFiles.push(
-        `https://testing-images-on-s3.s3.us-east-2.amazonaws.com/other-images/more-images-${i}.jpg`
+        `https://${process.env.S3_BUCKET_NAME}.${process.env.S3_BUCKET_REGION}/other-images/more-images-${i}.jpg`
       );
     }
   }
@@ -121,6 +125,7 @@ export const addProduct = async (
   /* ****************************************** */
   /* add testing reviews after adding new items */
   /* ****************************************** */
+  /*
   const sizes = ["Small", "Medium", "Large"];
   const body_length_reduction = [0, 200, 400, 600];
   const rating = ["one", "two", "three", "four", "five"];
@@ -179,21 +184,21 @@ export const addProduct = async (
 
     await reviews.save();
   }
+  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
-  console.log("> > > new product added < < <");
   res.status(201).send({ main_cat, sub_cat });
 };
 
-interface ReviewProps {
-  title: string;
-  review: string;
-  rating: string;
-  date: Date;
-  user_name: string;
-  user_email: string;
-  size: string;
-}
+// interface ReviewProps {
+//   title: string;
+//   review: string;
+//   rating: string;
+//   date: Date;
+//   user_name: string;
+//   user_email: string;
+//   size: string;
+// }
 
-function getRandomInt(max) {
-  return Math.floor(Math.random() * max);
-}
+// function getRandomInt(max) {
+//   return Math.floor(Math.random() * max);
+// }

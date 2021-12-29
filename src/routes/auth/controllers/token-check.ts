@@ -1,8 +1,6 @@
 import { NextFunction, Request, Response } from "express";
-import { randomBytes } from "crypto";
 
 import { asyncWrapper, Bad_Request_Error } from "../../../middlewares";
-import { transporter } from "../router";
 import { User } from "../../../models/user/user-schema";
 import { UserDoc } from "../../../models/user/user-interfaces";
 
@@ -18,10 +16,7 @@ export const tokenCheck = asyncWrapper(
       // the Mongoose will convert the DB timestamp to the local Node server time for comparison
     });
 
-    console.log("token check ---------------------->", userWithValidToken);
-
     if (!userWithValidToken) {
-      console.log("Reset link expired");
       return next(new Bad_Request_Error("Reset link expired"));
     }
 

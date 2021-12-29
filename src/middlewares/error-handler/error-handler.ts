@@ -17,14 +17,8 @@ export const errorHandler = (
   // the instanceof applies to all the CustomError's subclass, so we don't need
   // to check each custom error handler manually
   if (err instanceof CustomError) {
-    // console.log(err);
     return res.status(err.statusCode).send({ errors: err.serializeErrors() });
   }
-
-  // if (err.stack === "EBADCSRFTOKEN") {
-  //   // handle CSRF token errors here
-  //   return res.status(403).send("form tampered with");
-  // }
 
   // the error which no handler can handle
   return res.status(400).send({

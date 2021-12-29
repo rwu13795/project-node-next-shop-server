@@ -38,17 +38,8 @@ export const resetPassword = asyncWrapper(
     existingUser.password = new_password;
     await existingUser.save();
 
-    // to test the loading spinner by delaying the response
-    setTimeout(() => {
-      res.status(201).send({
-        message: "Password reset successfully",
-      });
-    }, 3000);
-
-    // res.status(200).send({
-    //   message: "Logged in",
-    //   currentUser: req.session.currentUser,
-    //   isLoggedIn: req.session.isLoggedIn,
-    // });
+    res.status(201).send({
+      message: "Password reset successfully",
+    });
   }
 );

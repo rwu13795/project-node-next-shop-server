@@ -1,5 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 import { transporter } from "../../auth/router";
+import { config } from "dotenv";
 
 import { asyncWrapper } from "../../../middlewares";
 import {
@@ -22,6 +23,10 @@ interface ReqBody {
   paymentDetail: PaymentDetail;
 }
 
+if (process.env.NODE_ENV !== "production") {
+  config();
+}
+
 export const createOrder = asyncWrapper(
   async (req: Request, res: Response, next: NextFunction) => {
     const {
@@ -35,13 +40,6 @@ export const createOrder = asyncWrapper(
 
     const capShippingAddress = capitalizeAddress(shippingAddress);
     const capBillingAddress = capitalizeAddress(billingAddress);
-
-    // if (currentUser.cart !== req.session.currentUser.cart) {
-    //   console.log("not match!!");
-    //   return next(
-    //     new Bad_Request_Error("The states of user's cart are not matched!")
-    //   );
-    // }
 
     let userId: string;
     if (!currentUser.userId) {
@@ -73,8 +71,6 @@ export const createOrder = asyncWrapper(
       await user.save();
     }
 
-    console.log("contactInfo.email", contactInfo.email);
-
     // send order ID to user email
     transporter.sendMail({
       from: "rwu13795.work@gmail.com",
@@ -83,7 +79,7 @@ export const createOrder = asyncWrapper(
       html: `<h2>Thank you for your purchase!</h2>
       <p><strong>Order ID: ${newOrder._id}</strong></P>
         <p>You could use this ID on the 
-        <a href="http://localhost:3000/shop/order-status"><strong>Order Status</strong></a>
+        <a href="${process.env.CLIENT_HOST_URL}/shop/order-status"><strong>Order Status</strong></a>
          page to track your order</P>
         `,
     });

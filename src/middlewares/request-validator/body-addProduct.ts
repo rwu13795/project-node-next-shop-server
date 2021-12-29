@@ -41,7 +41,6 @@ export const body_addProduct = [
   body("colorPropsListFromClient")
     .custom((value, { req }) => {
       for (let elem of req.body.colorPropsListFromClient) {
-        console.log("ckeck size props", elem.sizes.small === null);
         if (
           isNaN(elem.sizes.small) ||
           elem.sizes.small === "" ||

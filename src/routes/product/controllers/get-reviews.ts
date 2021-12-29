@@ -2,11 +2,7 @@ import { NextFunction, Request, Response } from "express";
 
 import { Review } from "../../../models/review/review-schema";
 import { asyncWrapper, Bad_Request_Error } from "../../../middlewares";
-import {
-  ReviewDoc,
-  ReviewProps,
-} from "../../../models/review/review-interfaces";
-import { isValidObjectId } from "mongoose";
+import { ReviewDoc } from "../../../models/review/review-interfaces";
 
 interface Body {
   pageNum: number;
@@ -17,7 +13,7 @@ interface Body {
 
 export const getReviews = asyncWrapper(
   async (req: Request, res: Response, next: NextFunction) => {
-    const { pageNum, filter, refresh, productId } = req.body as Body;
+    const { pageNum, filter, productId } = req.body as Body;
 
     const REVIEWS_PER_PAGE = 6;
     const skipNum = (pageNum - 1) * REVIEWS_PER_PAGE;
@@ -62,13 +58,8 @@ export const getReviews = asyncWrapper(
         },
         newPage,
       });
-
-      // return res.status(200).send({
-      //   reviews: reviewDoc.reviewsByRating[`${filter}`],
-      // });
     }
 
-    // if (refresh) {
     let reviewDoc: ReviewDoc = await Review.findOne(
       { productId },
       { allReviews: { $slice: [skipNum, returnNum] } }
@@ -93,13 +84,5 @@ export const getReviews = asyncWrapper(
     }
 
     return res.status(200).send({ reviewDoc, newPage });
-    // }
-
-    // const reviewDoc: ReviewDoc = await Review.findById(productId, {
-    //   allReviews: { $slice: [skipNum, returnNum] },
-    // }).lean();
-    // if (!reviewDoc) return next(new Bad_Request_Error("No review found !"));
-
-    // return res.status(200).send({ reviews: reviewDoc.allReviews });
   }
 );

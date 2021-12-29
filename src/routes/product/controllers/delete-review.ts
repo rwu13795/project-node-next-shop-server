@@ -1,11 +1,8 @@
 import { NextFunction, Request, Response } from "express";
 
 import { Review } from "../../../models/review/review-schema";
-import { asyncWrapper, Bad_Request_Error } from "../../../middlewares";
-import {
-  ReviewDoc,
-  ReviewProps,
-} from "../../../models/review/review-interfaces";
+import { asyncWrapper } from "../../../middlewares";
+import { ReviewDoc } from "../../../models/review/review-interfaces";
 
 interface Body {
   id_allReviews: string;
@@ -16,10 +13,6 @@ interface Body {
 export const deleteReview = asyncWrapper(
   async (req: Request, res: Response, next: NextFunction) => {
     const { id_allReviews, reviewPrimaryId, rating } = req.body as Body;
-
-    console.log("id_allReviews", id_allReviews);
-    console.log("reviewPrimaryId", reviewPrimaryId);
-    console.log("rating", rating);
 
     const update = {
       $inc: {

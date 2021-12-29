@@ -26,9 +26,6 @@ export const getAdminStatus = async (
   }
 
   const csrfToken = tokens.create(req.session.csrf_secret_admin);
-  console.log("token in get admin auth", csrfToken);
-
-  console.log("checking session in get Admin Auth---->", req.session);
 
   res.status(200).send({
     adminUser: req.session.adminUser,

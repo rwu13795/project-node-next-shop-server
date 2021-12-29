@@ -51,17 +51,11 @@ export const getUserStatus = async (
     req.session.currentUser.cart = existingUser.cartDetail.cart;
   }
 
-  console.log(
-    "checking session in get user auth---->",
-    req.session.currentUser
-  );
-
   // create and save the csrf_secret in each session for each user
   req.session.csrf_secret_user = tokens.secretSync();
 
   // create a new token and send it to client each time the getAuthStatus is called
   const csrfToken = tokens.create(req.session.csrf_secret_user);
-  console.log("token in get user auth", csrfToken);
 
   res.status(200).send({
     currentUser: req.session.currentUser,

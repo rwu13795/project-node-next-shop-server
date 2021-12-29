@@ -10,8 +10,6 @@ export const orderHistory = asyncWrapper(
 
     let pageNum = parseInt(req.query.pageNum as string) || 1;
 
-    console.log("pageNUm", pageNum);
-
     let ordersTotal = 0;
     if (pageNum === 1) {
       ordersTotal = await Order.countDocuments({ userId });
@@ -23,8 +21,6 @@ export const orderHistory = asyncWrapper(
       .skip((pageNum - 1) * ORDER_PER_PAGE)
       .limit(ORDER_PER_PAGE)
       .lean();
-
-    // console.log(ordersHistory);
 
     res.status(200).send({ orders: ordersHistory, ordersTotal });
   }

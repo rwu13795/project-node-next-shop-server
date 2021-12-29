@@ -23,9 +23,6 @@ export const deleteProduct = async (
     Admin.findOne({ admin_username }),
   ]);
 
-  // const product: ProductDoc = await Product.findById(productId);
-  // const adminUser: AdminDoc = await Admin.findOne({ admin_username });
-
   if (!product || !adminUser) {
     return next(
       new Bad_Request_Error("Something wrong with the product_id or admin_id")
@@ -55,14 +52,5 @@ export const deleteProduct = async (
     updateCategoryNumber(adminUser),
   ]);
 
-  // // update the master's category number whenever a none-master is adding/deleting a product
-  // if (adminUser.master_admin) {
-  //   await updateCategoryNumber(adminUser, true);
-  // } else {
-  //   const adminMaster = await Admin.findOne({ master_admin: true });
-  //   await updateCategoryNumber(adminMaster, true);
-  // }
-
-  // console.log("> > > product deleted < < <", result);
   res.status(201).send({ message: "OK" });
 };
