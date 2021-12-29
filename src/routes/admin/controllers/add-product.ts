@@ -1,5 +1,4 @@
 import { NextFunction, Request, Response } from "express";
-import { config } from "dotenv";
 
 import { Product } from "../../../models/product/product-schema";
 import {
@@ -33,10 +32,6 @@ interface AddProductBody {
   price: number;
   colorPropsListFromClient: ColorPropsFromClient[];
   description: string;
-}
-
-if (process.env.NODE_ENV !== "production") {
-  config();
 }
 
 export const addProduct = async (

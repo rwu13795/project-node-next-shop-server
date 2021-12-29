@@ -4,7 +4,6 @@ import { asyncWrapper } from "../../../middlewares";
 import { AdminDoc } from "../../../models/admin/admin-interfaces";
 import { Admin } from "../../../models/admin/admin-schema";
 import { p_keys } from "../../../models/product/product-enums";
-import { ProductDoc } from "../../../models/product/product-interfaces";
 import { Product } from "../../../models/product/product-schema";
 
 export const getProductsList = asyncWrapper(
@@ -71,15 +70,3 @@ export const getProductsList = asyncWrapper(
     });
   }
 );
-
-// select products by using the IDs in admin //
-
-//   products = await Product.find({
-//     // _id: { $in: selected_ids },
-//     admin_username,
-//     [p_keys.main_cat]: main_cat.toLowerCase(),
-//     [p_keys.sub_cat]: sub_cat.toLowerCase(),
-//   })
-//     .select([p_keys.colorPropsList, p_keys.productInfo, "_id"])
-//     .sort({ createdDate: -1 })
-//     .lean();
