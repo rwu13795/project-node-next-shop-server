@@ -15,7 +15,7 @@ export const createSession = session({
   cookie: {
     maxAge: 1000 * 60 * 60,
     httpOnly: true,
-    secure: true,
+    // secure: true,
     // domain: "https://node-next-shop-client.herokuapp.com",
     sameSite: "none",
   }, // 1 hour
