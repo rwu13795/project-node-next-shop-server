@@ -42,10 +42,10 @@ app.use(
   cors({
     credentials: true,
     origin: [
-      "https://project-next-js-blog.vercel.app",
       "http://localhost:3000",
-      "https://node-next-shop-client.herokuapp.com",
       "https://project-node-next-shop-client.vercel.app",
+      "https://node-next-shop-client.herokuapp.com",
+      "https://node-next-shop-client.com",
     ],
   })
 );
