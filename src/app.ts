@@ -46,6 +46,7 @@ app.use(
       "https://project-node-next-shop-client.vercel.app",
       "https://node-next-shop-client.herokuapp.com",
       "https://node-next-shop-client.com",
+      "https://optimistic-heyrovsky-811d5f.netlify.app",
     ],
   })
 );
