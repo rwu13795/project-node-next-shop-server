@@ -45,7 +45,7 @@ app.use(
     origin: [
       "https://project-next-js-blog.vercel.app",
       "http://localhost:3000",
-      "https://project-node-next-shop-client.vercel.app",
+      "https://node-next-shop-client.herokuapp.com/",
     ],
   })
 );

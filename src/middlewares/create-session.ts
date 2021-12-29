@@ -15,7 +15,7 @@ export const createSession = session({
   cookie: {
     maxAge: 1000 * 60 * 60,
     secure: true,
-    domain: process.env.CLIENT_HOST_URL,
+    domain: "https://node-next-shop-client.herokuapp.com",
   }, // 1 hour
   // store: sessionStore, // additional config for using the MongoDBstore
   store: MongoStore.create({
