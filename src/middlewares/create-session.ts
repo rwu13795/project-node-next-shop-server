@@ -26,7 +26,8 @@ export const createSession = session({
     httpOnly: true,
     maxAge: 1000 * 60 * 60,
     secure: true,
-    sameSite: true,
+    path: "/",
+    sameSite: "none",
     // domain: ".herokuapp.com",
   },
   // store: sessionStore, // additional config for using the MongoDBstore
