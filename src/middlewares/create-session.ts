@@ -12,7 +12,7 @@ export const createSession = session({
   saveUninitialized: true,
   // the MongoDBStore will set the expiration time the same as we set for the session
   // by using the expiration function offered by MongoDB
-  cookie: { maxAge: 1000 * 60 * 60 }, // 1 hour
+  cookie: { maxAge: 1000 * 60 * 60, secure: true }, // 1 hour
   // store: sessionStore, // additional config for using the MongoDBstore
   store: MongoStore.create({
     mongoUrl: process.env.MONGO_URI,
