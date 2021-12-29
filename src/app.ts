@@ -54,6 +54,8 @@ app.use(
 app.use(helmet());
 app.use(compression());
 
+app.enable("trust proxy");
+
 // connect all routers to the app
 app.use("/api/products", productRouter);
 app.use("/api/admin", createSession, adminRouter);
