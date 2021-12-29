@@ -20,7 +20,12 @@ export const createSession = session({
   // the MongoDBStore will set the expiration time the same as we set for the session
   // by using the expiration function offered by MongoDB
   proxy: true,
-  cookie: { maxAge: 1000 * 60 * 60, secure: true },
+  cookie: {
+    maxAge: 1000 * 60 * 60,
+    secure: true,
+    sameSite: "none",
+    domain: "node-next-shop-client.herokuapp.com",
+  },
   // store: sessionStore, // additional config for using the MongoDBstore
   store: MongoStore.create({
     mongoUrl: process.env.MONGO_URI,
