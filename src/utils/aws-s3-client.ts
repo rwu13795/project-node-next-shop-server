@@ -1,12 +1,12 @@
 import { S3Client } from "@aws-sdk/client-s3";
-import aws from "aws-sdk";
+// import aws from "aws-sdk";
 
-aws.config.update({
-  credentials: {
-    accessKeyId: process.env.AWS_ACCESS_KEY_ID_MYAPP,
-    secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY_MYAPP,
-  },
-});
+// aws.config.update({
+//   credentials: {
+//     accessKeyId: process.env.AWS_ACCESS_KEY_ID_MYAPP,
+//     secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY_MYAPP,
+//   },
+// });
 
 // you can find the region in the S3 management console
 const REGION = "us-east-2";

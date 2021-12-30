@@ -23,23 +23,14 @@ export const createSession = session({
   // by using the expiration function offered by MongoDB
   proxy: true,
   cookie: {
-    httpOnly: true,
     maxAge: 1000 * 60 * 60,
-    secure: true,
-    path: "/",
-    sameSite: "none",
-    // domain: ".herokuapp.com",
+    // secure: true,
+    // path: "/",
+    // sameSite: "none",
+    // httpOnly: true,
   },
   // store: sessionStore, // additional config for using the MongoDBstore
   store: MongoStore.create({
     mongoUrl: process.env.MONGO_URI,
   }),
 });
-
-/**cookie: {
-    maxAge: 1000 * 60 * 60,
-    // httpOnly: true,
-    // secure: true,
-    // domain: "https://node-next-shop-client.herokuapp.com",
-    // sameSite: "none",
-  }, // 1 hour */
