@@ -14,6 +14,7 @@ import { CurrentUser } from "./routes/auth/controllers/user-status";
 import { AdminUser } from "./routes/admin/controllers/admin-status";
 import { createSession } from "./middlewares";
 import Tokens from "csrf";
+import { homeIndex } from "./routes";
 
 declare module "express-session" {
   interface SessionData {
@@ -57,6 +58,7 @@ app.use(helmet());
 app.use(compression());
 
 // connect all routers to the app
+app.get("/", homeIndex);
 app.use("/api/products", productRouter);
 app.use("/api/admin", createSession, adminRouter);
 app.use("/api/shop", createSession, shopRouter);
