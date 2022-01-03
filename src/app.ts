@@ -44,11 +44,8 @@ app.use(
     credentials: true,
     origin: [
       "http://localhost:3000",
-      "https://project-node-next-shop-client.vercel.app",
       "https://node-next-shop-client.herokuapp.com",
-      "https://node-next-shop-client.com",
-      "https://optimistic-heyrovsky-811d5f.netlify.app",
-      "http://www.node-next-shop-server.xyz",
+      "http://node-next-shop-client.herokuapp.com",
     ],
   })
 );
