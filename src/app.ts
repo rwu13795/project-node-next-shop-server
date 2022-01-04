@@ -48,6 +48,7 @@ app.use(
       "http://node-next-shop-client.herokuapp.com",
       ////
       "http://www.node-next-shop-server.net",
+      "https://www.node-next-shop-server.net",
     ],
   })
 );
