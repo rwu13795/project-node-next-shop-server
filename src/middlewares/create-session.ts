@@ -27,7 +27,7 @@ export const createSession = session({
     // secure: true,
     path: "/",
     sameSite: "none",
-    httpOnly: false,
+    httpOnly: true,
   },
   // store: sessionStore, // additional config for using the MongoDBstore
   store: MongoStore.create({
