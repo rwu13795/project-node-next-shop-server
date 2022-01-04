@@ -24,8 +24,8 @@ export const createSession = session({
   proxy: true,
   cookie: {
     maxAge: 1000 * 60 * 60,
-    // secure: true,
-    // path: "/",
+    secure: true,
+    path: "/",
     sameSite: "none",
     httpOnly: true,
   },
