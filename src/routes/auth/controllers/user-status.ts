@@ -57,7 +57,7 @@ export const getUserStatus = async (
   // create a new token and send it to client each time the getAuthStatus is called
   const csrfToken = tokens.create(req.session.csrf_secret_user);
 
-  res.status(200).send({
+  res.status(200).header("Access-Control-Allow-Credentials", "true").send({
     currentUser: req.session.currentUser,
     csrfToken,
   });
