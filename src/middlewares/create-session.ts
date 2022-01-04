@@ -24,11 +24,10 @@ export const createSession = session({
   proxy: true,
   cookie: {
     maxAge: 1000 * 60 * 60,
+    // path: "/",
     secure: true,
-    path: "/",
     sameSite: "none",
     httpOnly: true,
-    domain: "https://www.node-next-shop-server.net",
   },
   // store: sessionStore, // additional config for using the MongoDBstore
   store: MongoStore.create({
