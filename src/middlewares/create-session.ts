@@ -28,6 +28,7 @@ export const createSession = session({
     path: "/",
     sameSite: "none",
     httpOnly: true,
+    domain: "https://www.node-next-shop-server.net",
   },
   // store: sessionStore, // additional config for using the MongoDBstore
   store: MongoStore.create({
