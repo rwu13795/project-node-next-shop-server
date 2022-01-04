@@ -46,6 +46,8 @@ app.use(
       "http://localhost:3000",
       "https://node-next-shop-client.herokuapp.com",
       "http://node-next-shop-client.herokuapp.com",
+      ////
+      "http://www.node-next-shop-server.net",
     ],
   })
 );
