@@ -26,7 +26,7 @@ export const createSession = session({
     maxAge: 1000 * 60 * 60,
     path: "/",
     secure: true,
-    sameSite: "none",
+    sameSite: true,
     httpOnly: true,
   },
   // store: sessionStore, // additional config for using the MongoDBstore
