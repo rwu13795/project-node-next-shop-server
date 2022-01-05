@@ -51,7 +51,7 @@ app.use(
       "http://www.node-next-shop-server.net",
       "https://www.node-next-shop-server.net",
       ////
-      "project-node-next-shop-client.vercel.app",
+      "https://project-node-next-shop-client.vercel.app",
     ],
   })
 );
