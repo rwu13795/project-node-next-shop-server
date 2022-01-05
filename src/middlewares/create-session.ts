@@ -39,8 +39,8 @@ export const createSession = session({
       both the client and the server must use the same domain in order
       to allow the client to set the cookies inside the browser. Otherwise, the 
       NextJS "getServerSideProps" will be unable to get the cookies inside the "context"
-  (4) I can use the the domain for the client and server by adding the subdomain
-      for example, if I have a domain "node-next-shop-rw.store". I just need to add
+  (4) I can use the the same domain for the client and server by adding the subdomain.
+      For example, if I have a domain "node-next-shop-rw.store". I just need to add
       "client" or "server" inside the "host" field while adding the DNS record in
       the custom domain. And the two new subdomains will be "client.node-next-shop-rw.store" 
       and "server.node-next-shop-rw.store".
