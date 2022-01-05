@@ -45,14 +45,14 @@ app.use(
     credentials: true,
     origin: [
       "http://localhost:3000",
-      "https://node-next-shop-client.herokuapp.com",
-      "http://node-next-shop-client.herokuapp.com",
+      // "https://node-next-shop-client.herokuapp.com",
+      // "http://node-next-shop-client.herokuapp.com",
 
       ////
       "http://www.node-next-shop-server.net",
       "https://www.node-next-shop-server.net",
       ////
-      "https://project-node-next-shop-client.vercel.app",
+      "https://client.node-next-shop-server.xyz",
     ],
   })
 );
