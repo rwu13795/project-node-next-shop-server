@@ -43,7 +43,7 @@ app.set("trust proxy", 1);
 app.use(
   cors({
     credentials: true,
-    origin: ["http://localhost:3000", "https://client.node-next-shop-rw.store"],
+    origin: ["http://localhost:3000", "https://wwww.node-next-shop-rw.store"],
   })
 );
 
