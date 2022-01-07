@@ -2,7 +2,7 @@ import session, { CookieOptions } from "express-session";
 import MongoStore from "connect-mongo";
 import { config } from "dotenv";
 
-let cookieOptions: CookieOptions = { maxAge: 1000 * 60 * 60 };
+let cookieOptions: CookieOptions = { maxAge: 1000 * 60 * 60 * 24 }; // 24-hour session
 if (process.env.NODE_ENV !== "production") {
   config();
 } else {
