@@ -1,9 +1,16 @@
-import session from "express-session";
+import session, { CookieOptions } from "express-session";
 import MongoStore from "connect-mongo";
 import { config } from "dotenv";
 
+let cookieOptions: CookieOptions = { maxAge: 1000 * 60 * 60 };
 if (process.env.NODE_ENV !== "production") {
   config();
+} else {
+  cookieOptions.path = "/";
+  cookieOptions.secure = true; // must use the "secure" when serve the data over https
+  cookieOptions.sameSite = true;
+  cookieOptions.httpOnly = true;
+  cookieOptions.domain = ".node-next-shop-rw.store"; // all the subdomain will set the cookies
 }
 
 export const createSession = session({
@@ -13,7 +20,15 @@ export const createSession = session({
   // the MongoDBStore will set the expiration time the same as we set for the session
   // by using the expiration function offered by MongoDB
   proxy: true,
-  cookie: {
+  cookie: cookieOptions,
+  // store: sessionStore, // additional config for using the MongoDBstore
+  store: MongoStore.create({
+    mongoUrl: process.env.MONGO_URI,
+  }),
+});
+
+/**
+ * {
     maxAge: 1000 * 60 * 60,
     path: "/",
     secure: true, // must use the "secure" when serve the data over https
@@ -21,11 +36,7 @@ export const createSession = session({
     httpOnly: true,
     domain: ".node-next-shop-rw.store", // all the subdomain will set the cookies
   },
-  // store: sessionStore, // additional config for using the MongoDBstore
-  store: MongoStore.create({
-    mongoUrl: process.env.MONGO_URI,
-  }),
-});
+ */
 
 // NOTE //
 /*
