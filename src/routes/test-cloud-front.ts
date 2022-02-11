@@ -13,8 +13,8 @@ export const testCloudFront = asyncWrapper(
     //     expires: Math.floor((Date.now() + fiveMin) / 1000),
     //   });
 
-    const folder_1 = `${process.env.CLOUD_FRONT_URL}/testing/test-1/*`;
-    const folder_2 = `${process.env.CLOUD_FRONT_URL}/testing/test-2/*`;
+    const folder_1 = `${process.env.CLOUD_FRONT_URL}/testing-1/abc/*`;
+    const folder_2 = `${process.env.CLOUD_FRONT_URL}/testing-2/abc/*`;
 
     const policy_1 = JSON.stringify({
       Statement: [
@@ -69,22 +69,22 @@ export const testCloudFront = asyncWrapper(
       domain: "node-next-shop-rw.store",
       httpOnly: true,
       // the corresponding path which the cookie let the user access
-      path: "/testing",
+      path: "/testing-1",
     });
     res.cookie("CloudFront-Signature", cookie_test1["CloudFront-Signature"], {
       domain: "node-next-shop-rw.store",
       httpOnly: true,
-      path: "/testing",
+      path: "/testing-1",
     });
     res.cookie("CloudFront-Policy", cookie_test2["CloudFront-Policy"], {
       domain: "node-next-shop-rw.store",
       httpOnly: true,
-      path: "/testing",
+      path: "/testing-2",
     });
     res.cookie("CloudFront-Signature", cookie_test2["CloudFront-Signature"], {
       domain: "node-next-shop-rw.store",
       httpOnly: true,
-      path: "/testing",
+      path: "/testing-2",
     });
 
     res.status(200).send("OK");
