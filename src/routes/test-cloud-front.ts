@@ -57,34 +57,34 @@ export const testCloudFront = asyncWrapper(
       "CloudFront-Key-Pair-Id",
       cookie_test1["CloudFront-Key-Pair-Id"],
       {
-        domain: "cdn.node-next-shop-rw.store",
+        domain: "node-next-shop-rw.store",
         httpOnly: true,
         // the path is the parent folder of the folder_1 and folder_2
-        path: "/testing",
+        path: "/test-page",
       }
     );
 
     // set Policy and Signature for 2 differnt folders
     res.cookie("CloudFront-Policy", cookie_test1["CloudFront-Policy"], {
-      domain: "cdn.node-next-shop-rw.store",
+      domain: "node-next-shop-rw.store",
       httpOnly: true,
       // the corresponding path which the cookie let the user access
-      path: "/testing/test-1",
+      path: "/test-page/test-1",
     });
     res.cookie("CloudFront-Signature", cookie_test1["CloudFront-Signature"], {
-      domain: "cdn.node-next-shop-rw.store",
+      domain: "node-next-shop-rw.store",
       httpOnly: true,
-      path: "/testing/test-1",
+      path: "/test-page/test-1",
     });
     res.cookie("CloudFront-Policy", cookie_test2["CloudFront-Policy"], {
-      domain: "cdn.node-next-shop-rw.store",
+      domain: "node-next-shop-rw.store",
       httpOnly: true,
-      path: "/testing/test-2",
+      path: "/test-page/test-2",
     });
     res.cookie("CloudFront-Signature", cookie_test2["CloudFront-Signature"], {
-      domain: "cdn.node-next-shop-rw.store",
+      domain: "node-next-shop-rw.store",
       httpOnly: true,
-      path: "/testing/test-2",
+      path: "/test-page/test-2",
     });
 
     res.status(200).send("OK");
