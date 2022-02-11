@@ -78,7 +78,7 @@ app.get("/api/testing-cloud-front", (req, res) => {
 
   const signer = new AWS.CloudFront.Signer(publicAccessId, privateKey);
 
-  console.log("getting signer", signer);
+  console.log("getting signer");
 
   //// test signed url
   const fiveMin = 1000 * 60 * 5;
@@ -97,16 +97,31 @@ app.get("/api/testing-cloud-front", (req, res) => {
   //     expires: Math.floor((Date.now() + fiveMin) / 1000),
   //   });
 
-  const unsigned_folder = `${process.env.CLOUD_FRONT_URL}/*`;
+  const folder_1 = `${process.env.CLOUD_FRONT_URL}/users/*`;
+  const folder_2 = `${process.env.CLOUD_FRONT_URL}/groups/*`;
 
-  const policy = JSON.stringify({
+  const policy_1 = JSON.stringify({
     Statement: [
       {
-        Resource: unsigned_folder,
+        Resource: folder_1,
         Condition: {
           DateLessThan: {
             "AWS:EpochTime":
-              Math.floor(new Date().getTime() / 1000) + 60 * 60 * 24,
+              Math.floor(new Date().getTime() / 1000) + 60 * 60 * 5,
+            // Current Time in UTC + time in seconds, (60 * 60 * 24 = 24 hours)
+          },
+        },
+      },
+    ],
+  });
+  const policy_2 = JSON.stringify({
+    Statement: [
+      {
+        Resource: folder_2,
+        Condition: {
+          DateLessThan: {
+            "AWS:EpochTime":
+              Math.floor(new Date().getTime() / 1000) + 60 * 60 * 5,
             // Current Time in UTC + time in seconds, (60 * 60 * 24 = 24 hours)
           },
         },
@@ -114,25 +129,47 @@ app.get("/api/testing-cloud-front", (req, res) => {
     ],
   });
 
-  const cookie = signer.getSignedCookie({
-    policy,
+  const cookie_users = signer.getSignedCookie({
+    policy: policy_1,
   });
 
-  res.cookie("CloudFront-Key-Pair-Id", cookie["CloudFront-Key-Pair-Id"], {
-    domain: "node-next-shop-rw.store",
-    httpOnly: true,
-  });
-  res.cookie("CloudFront-Policy", cookie["CloudFront-Policy"], {
-    domain: "node-next-shop-rw.store",
-    httpOnly: true,
+  const cookie_groups = signer.getSignedCookie({
+    policy: policy_2,
   });
 
-  res.cookie("CloudFront-Signature", cookie["CloudFront-Signature"], {
+  // cookie for users folder
+  res.cookie("CloudFront-Key-Pair-Id", cookie_users["CloudFront-Key-Pair-Id"], {
     domain: "node-next-shop-rw.store",
     httpOnly: true,
+    path: "/",
+  });
+  res.cookie("CloudFront-Policy", cookie_users["CloudFront-Policy"], {
+    domain: "node-next-shop-rw.store",
+    httpOnly: true,
+    path: "/users",
+  });
+  res.cookie("CloudFront-Signature", cookie_users["CloudFront-Signature"], {
+    domain: "node-next-shop-rw.store",
+    httpOnly: true,
+    path: "/users",
+  });
+  // cookie for groups folder
+  // res.cookie("CloudFront-Key-Pair-Id", cookie_groups["CloudFront-Key-Pair-Id"], {
+  //   domain: "node-next-shop-rw.store",
+  //   httpOnly: true,
+  // });
+  res.cookie("CloudFront-Policy", cookie_groups["CloudFront-Policy"], {
+    domain: "node-next-shop-rw.store",
+    httpOnly: true,
+    path: "/groups",
+  });
+  res.cookie("CloudFront-Signature", cookie_groups["CloudFront-Signature"], {
+    domain: "node-next-shop-rw.store",
+    httpOnly: true,
+    path: "/groups",
   });
 
-  console.log(cookie);
+  console.log("setting cookies");
 
   res.status(200).send(signedUrl);
 });
