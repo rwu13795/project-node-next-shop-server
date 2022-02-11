@@ -68,9 +68,9 @@ export const testCloudFront = asyncWrapper(
     res.cookie("CloudFront-Policy", cookie_test1["CloudFront-Policy"], {
       domain: "node-next-shop-rw.store",
       httpOnly: true,
-      // the corresponding path which the cookie let the user access
       path: "/testing-1",
     });
+    // the corresponding path of which the img source in the client contains
     res.cookie("CloudFront-Signature", cookie_test1["CloudFront-Signature"], {
       domain: "node-next-shop-rw.store",
       httpOnly: true,
@@ -90,3 +90,31 @@ export const testCloudFront = asyncWrapper(
     res.status(200).send("OK");
   }
 );
+
+// NOTE //
+/* 
+ (1) the folder_1 = `${process.env.CLOUD_FRONT_URL}/testing-1/abc/*
+     is the path where the user can access with signed cookie
+     all the content inside the /testing-1/abc folder are accessible
+
+ (2) path in the res.cookie
+  
+    - in "CloudFront-Key-Pair-Id", the path should be set to the root path "/"
+      of the cloudFront. Only one "CloudFront-Key-Pair-Id" cookie should be set
+      
+    - 2 different folders
+      we need to set "CloudFront-Signature" and "CloudFront-Policy" cookies for
+      the 2 different folders
+      the cookies to access these 2 folder should have DIFFERENT PATH
+      
+      - for example, an image in the client requires the source from CLOUD_FRONT_URL/testing-2/abc/2.jpg
+        and folder /testing-2 can only be accessible with the cookie containing the 
+        test2 "CloudFront-Signature", and the path in side this cookie has to be set
+        as "/testing-2". If the path does match the image required source path /testing-2/abc/2.jpg,
+        the cookie won't be set by the browser!
+      
+      - Even though the cooike path is set the /testing-2, user will not be able to
+        access all the sub-folder in the /testing-2, since the policy only signs the
+        sub-folder /testing-2/abc, only this sub-folder /abc will be accessible!
+
+*/
