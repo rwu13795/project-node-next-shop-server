@@ -69,22 +69,22 @@ export const testCloudFront = asyncWrapper(
       domain: "node-next-shop-rw.store",
       httpOnly: true,
       // the corresponding path which the cookie let the user access
-      path: "/users",
+      path: "/test-1",
     });
     res.cookie("CloudFront-Signature", cookie_test1["CloudFront-Signature"], {
       domain: "node-next-shop-rw.store",
       httpOnly: true,
-      path: "/users",
+      path: "/test-1",
     });
     res.cookie("CloudFront-Policy", cookie_test2["CloudFront-Policy"], {
       domain: "node-next-shop-rw.store",
       httpOnly: true,
-      path: "/groups",
+      path: "/test-2",
     });
     res.cookie("CloudFront-Signature", cookie_test2["CloudFront-Signature"], {
       domain: "node-next-shop-rw.store",
       httpOnly: true,
-      path: "/groups",
+      path: "/test-2",
     });
 
     res.status(200).send("OK");
