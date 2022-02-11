@@ -1,12 +1,7 @@
 import express from "express";
-
 import cors from "cors";
 import helmet from "helmet";
 import compression from "compression";
-
-/////////////////
-import AWS from "aws-sdk";
-import { config } from "dotenv";
 
 import { adminRouter } from "./routes/admin/router";
 import { productRouter } from "./routes/product/router";
@@ -19,10 +14,7 @@ import { AdminUser } from "./routes/admin/controllers/admin-status";
 import { createSession } from "./middlewares";
 import Tokens from "csrf";
 import { homeIndex } from "./routes";
-
-if (process.env.NODE_ENV !== "production") {
-  config();
-}
+import { testCloudFront } from "./routes/test-cloud-front";
 
 declare module "express-session" {
   interface SessionData {
@@ -69,110 +61,8 @@ app.use("/api/shop", createSession, shopRouter);
 // duplicated session for the same user over and over
 app.use("/api/auth", createSession, authRouter);
 
-app.get("/api/testing-cloud-front", (req, res) => {
-  const publicAccessId = "APKAU3FOW4MKLOTDCWVB";
-
-  const privateKey = process.env.CF_PRIVATE_KEY;
-
-  console.log("getting signer");
-
-  const signer = new AWS.CloudFront.Signer(publicAccessId, privateKey);
-
-  console.log("getting signer");
-
-  //// test signed url
-  const fiveMin = 1000 * 60 * 5;
-  const signedUrl = signer.getSignedUrl({
-    url: `${process.env.CLOUD_FRONT_URL}/testing/cat1.jpg`,
-    // the "expires", is the exact expiration date, NOT a expiration timer
-    expires: Math.floor((Date.now() + fiveMin) / 1000),
-  });
-  ////////////////////////
-
-  // const sixHour = 1000 * 60 * 60 * 6;
-
-  //   const signedUrl = signer.getSignedUrl({
-  //     url: `${process.env.CLOUD_FRONT_URL}/testing/cat1.jpg`,
-  //     // the "expires", is the exact expiration date, NOT a expiration timer
-  //     expires: Math.floor((Date.now() + fiveMin) / 1000),
-  //   });
-
-  const folder_1 = `${process.env.CLOUD_FRONT_URL}/users/*`;
-  const folder_2 = `${process.env.CLOUD_FRONT_URL}/groups/*`;
-
-  const policy_1 = JSON.stringify({
-    Statement: [
-      {
-        Resource: folder_1,
-        Condition: {
-          DateLessThan: {
-            "AWS:EpochTime":
-              Math.floor(new Date().getTime() / 1000) + 60 * 60 * 5,
-            // Current Time in UTC + time in seconds, (60 * 60 * 24 = 24 hours)
-          },
-        },
-      },
-    ],
-  });
-  const policy_2 = JSON.stringify({
-    Statement: [
-      {
-        Resource: folder_2,
-        Condition: {
-          DateLessThan: {
-            "AWS:EpochTime":
-              Math.floor(new Date().getTime() / 1000) + 60 * 60 * 5,
-            // Current Time in UTC + time in seconds, (60 * 60 * 24 = 24 hours)
-          },
-        },
-      },
-    ],
-  });
-
-  const cookie_users = signer.getSignedCookie({
-    policy: policy_1,
-  });
-
-  const cookie_groups = signer.getSignedCookie({
-    policy: policy_2,
-  });
-
-  // cookie for users folder
-  res.cookie("CloudFront-Key-Pair-Id", cookie_users["CloudFront-Key-Pair-Id"], {
-    domain: "node-next-shop-rw.store",
-    httpOnly: true,
-    path: "/",
-  });
-  res.cookie("CloudFront-Policy", cookie_users["CloudFront-Policy"], {
-    domain: "node-next-shop-rw.store",
-    httpOnly: true,
-    path: "/users",
-  });
-  res.cookie("CloudFront-Signature", cookie_users["CloudFront-Signature"], {
-    domain: "node-next-shop-rw.store",
-    httpOnly: true,
-    path: "/users",
-  });
-  // cookie for groups folder
-  // res.cookie("CloudFront-Key-Pair-Id", cookie_groups["CloudFront-Key-Pair-Id"], {
-  //   domain: "node-next-shop-rw.store",
-  //   httpOnly: true,
-  // });
-  res.cookie("CloudFront-Policy", cookie_groups["CloudFront-Policy"], {
-    domain: "node-next-shop-rw.store",
-    httpOnly: true,
-    path: "/groups",
-  });
-  res.cookie("CloudFront-Signature", cookie_groups["CloudFront-Signature"], {
-    domain: "node-next-shop-rw.store",
-    httpOnly: true,
-    path: "/groups",
-  });
-
-  console.log("setting cookies");
-
-  res.status(200).send(signedUrl);
-});
+// test the cloudFront signed cookies
+app.get("/api/testing-cloud-front", testCloudFront);
 
 // YOU HAVE TO APPLY THE errorHandler AT LAST //
 app.use(errorHandler);
