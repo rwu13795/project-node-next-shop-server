@@ -106,11 +106,18 @@ export const testCloudFront = asyncWrapper(
       we need to set "CloudFront-Signature" and "CloudFront-Policy" cookies for
       the 2 different folders
       the cookies to access these 2 folder should have DIFFERENT PATH
+
+      - Exmaple 1, if we allow user to access /folder-1/abc and /folder-1/xyz
+        setting the path for 2 cookies as "/folder-1/abc" and "/folder-1/abc"
+        won't work! The path has to be "/folder-1". BUT 2 different cookies
+        can't not have the same path "/folder-1", one will be overwritten!
+        To solve this problem, I have to put the content into 2 different folders
+        /folder-1 and /folder-2, and set the cookie path as "/folder-1" and "/folder-2"
       
-      - for example, an image in the client requires the source from CLOUD_FRONT_URL/testing-2/abc/2.jpg
+      - Example 2, an image in the client requires the source from CLOUD_FRONT_URL/testing-2/abc/2.jpg
         and folder /testing-2 can only be accessible with the cookie containing the 
-        test2 "CloudFront-Signature", and the path in side this cookie has to be set
-        as "/testing-2". If the path does match the image required source path /testing-2/abc/2.jpg,
+        testing-2/abc "CloudFront-Signature", and the path in side this cookie has to be set
+        as "/testing-2". If the path does match the image required source path /testing-2,
         the cookie won't be set by the browser!
       
       - Even though the cooike path is set the /testing-2, user will not be able to
