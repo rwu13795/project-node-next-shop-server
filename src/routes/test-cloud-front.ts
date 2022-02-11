@@ -13,7 +13,7 @@ export const testCloudFront = asyncWrapper(
     //     expires: Math.floor((Date.now() + fiveMin) / 1000),
     //   });
 
-    const folder_1 = `${process.env.CLOUD_FRONT_URL}/users/*`;
+    const folder_1 = `${process.env.CLOUD_FRONT_URL}/users/1/*`;
     const folder_2 = `${process.env.CLOUD_FRONT_URL}/groups/*`;
 
     const policy_1 = JSON.stringify({
