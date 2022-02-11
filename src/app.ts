@@ -80,7 +80,7 @@ app.get("/api/testing-cloud-front", (req, res) => {
 
   console.log("getting signer", signer);
 
-  const fiveMin = 1000 * 60 * 5;
+  // const sixHour = 1000 * 60 * 60 * 6;
 
   //   const signedUrl = signer.getSignedUrl({
   //     url: `${process.env.CLOUD_FRONT_URL}/testing/cat1.jpg`,
@@ -96,7 +96,9 @@ app.get("/api/testing-cloud-front", (req, res) => {
         Resource: unsigned_folder,
         Condition: {
           DateLessThan: {
-            "AWS:EpochTime": Math.floor((Date.now() + fiveMin) / 1000),
+            "AWS:EpochTime":
+              Math.floor(new Date().getTime() / 1000) + 60 * 60 * 24,
+            // Current Time in UTC + time in seconds, (60 * 60 * 24 = 24 hours)
           },
         },
       },
