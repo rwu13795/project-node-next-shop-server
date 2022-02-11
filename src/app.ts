@@ -1,8 +1,12 @@
 import express from "express";
-// import { config } from "dotenv";
+
 import cors from "cors";
 import helmet from "helmet";
 import compression from "compression";
+
+/////////////////
+import AWS from "aws-sdk";
+import { config } from "dotenv";
 
 import { adminRouter } from "./routes/admin/router";
 import { productRouter } from "./routes/product/router";
@@ -15,6 +19,10 @@ import { AdminUser } from "./routes/admin/controllers/admin-status";
 import { createSession } from "./middlewares";
 import Tokens from "csrf";
 import { homeIndex } from "./routes";
+
+if (process.env.NODE_ENV !== "production") {
+  config();
+}
 
 declare module "express-session" {
   interface SessionData {
@@ -60,6 +68,59 @@ app.use("/api/shop", createSession, shopRouter);
 // from the server, so that I could use "getStaticProps" to fetch date without creating
 // duplicated session for the same user over and over
 app.use("/api/auth", createSession, authRouter);
+
+app.get("/api/testing-cloud-front", (req, res) => {
+  const publicAccessId = "APKAU3FOW4MKLOTDCWVB";
+
+  const privateKey = process.env.CF_PRIVATE_KEY;
+
+  const signer = new AWS.CloudFront.Signer(publicAccessId, privateKey);
+
+  const fiveMin = 1000 * 60 * 5;
+
+  //   const signedUrl = signer.getSignedUrl({
+  //     url: `${process.env.CLOUD_FRONT_URL}/testing/cat1.jpg`,
+  //     // the "expires", is the exact expiration date, NOT a expiration timer
+  //     expires: Math.floor((Date.now() + fiveMin) / 1000),
+  //   });
+
+  const unsigned_folder = `${process.env.CLOUD_FRONT_URL}/*`;
+
+  const policy = JSON.stringify({
+    Statement: [
+      {
+        Resource: unsigned_folder,
+        Condition: {
+          DateLessThan: {
+            "AWS:EpochTime": Math.floor((Date.now() + fiveMin) / 1000),
+          },
+        },
+      },
+    ],
+  });
+
+  const cookie = signer.getSignedCookie({
+    policy,
+  });
+
+  res.cookie("CloudFront-Key-Pair-Id", cookie["CloudFront-Key-Pair-Id"], {
+    // domain: "node-next-shop-rw.store",
+    httpOnly: true,
+  });
+  res.cookie("CloudFront-Policy", cookie["CloudFront-Policy"], {
+    // domain: "node-next-shop-rw.store",
+    httpOnly: true,
+  });
+
+  res.cookie("CloudFront-Signature", cookie["CloudFront-Signature"], {
+    // domain: "node-next-shop-rw.store",
+    httpOnly: true,
+  });
+
+  console.log(cookie);
+
+  res.status(200).send("ok");
+});
 
 // YOU HAVE TO APPLY THE errorHandler AT LAST //
 app.use(errorHandler);
