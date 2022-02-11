@@ -108,16 +108,16 @@ app.get("/api/testing-cloud-front", (req, res) => {
   });
 
   res.cookie("CloudFront-Key-Pair-Id", cookie["CloudFront-Key-Pair-Id"], {
-    // domain: "node-next-shop-rw.store",
+    domain: "node-next-shop-rw.store",
     httpOnly: true,
   });
   res.cookie("CloudFront-Policy", cookie["CloudFront-Policy"], {
-    // domain: "node-next-shop-rw.store",
+    domain: "node-next-shop-rw.store",
     httpOnly: true,
   });
 
   res.cookie("CloudFront-Signature", cookie["CloudFront-Signature"], {
-    // domain: "node-next-shop-rw.store",
+    domain: "node-next-shop-rw.store",
     httpOnly: true,
   });
 
