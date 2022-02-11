@@ -60,7 +60,7 @@ export const testCloudFront = asyncWrapper(
         domain: "node-next-shop-rw.store",
         httpOnly: true,
         // the path is the parent folder of the folder_1 and folder_2
-        path: "/test-page",
+        path: "/",
       }
     );
 
