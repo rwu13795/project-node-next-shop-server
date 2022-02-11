@@ -80,6 +80,15 @@ app.get("/api/testing-cloud-front", (req, res) => {
 
   console.log("getting signer", signer);
 
+  //// test signed url
+  const fiveMin = 1000 * 60 * 5;
+  const signedUrl = signer.getSignedUrl({
+    url: `${process.env.CLOUD_FRONT_URL}/testing/cat1.jpg`,
+    // the "expires", is the exact expiration date, NOT a expiration timer
+    expires: Math.floor((Date.now() + fiveMin) / 1000),
+  });
+  ////////////////////////
+
   // const sixHour = 1000 * 60 * 60 * 6;
 
   //   const signedUrl = signer.getSignedUrl({
@@ -125,7 +134,7 @@ app.get("/api/testing-cloud-front", (req, res) => {
 
   console.log(cookie);
 
-  res.status(200).send("ok");
+  res.status(200).send(signedUrl);
 });
 
 // YOU HAVE TO APPLY THE errorHandler AT LAST //
