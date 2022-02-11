@@ -74,7 +74,11 @@ app.get("/api/testing-cloud-front", (req, res) => {
 
   const privateKey = process.env.CF_PRIVATE_KEY;
 
+  console.log("getting signer");
+
   const signer = new AWS.CloudFront.Signer(publicAccessId, privateKey);
+
+  console.log("getting signer", signer);
 
   const fiveMin = 1000 * 60 * 5;
 
