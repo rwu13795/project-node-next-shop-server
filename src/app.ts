@@ -29,15 +29,6 @@ const app = express();
 export const tokens = new Tokens();
 
 app.use(express.json());
-// Use JSON parser for all non-webhook routes
-// parse all other routes to JSON, leave the /webhook route as rawBody
-// app.use((req: Request, res: Response, next: NextFunction): void => {
-//   if (req.originalUrl === "/webhook") {
-//     next();
-//   } else {
-//     express.json()(req, res, next);
-//   }
-// });
 
 app.set("trust proxy", 1);
 app.use(

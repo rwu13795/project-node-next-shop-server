@@ -15,6 +15,7 @@ const fileFilter = (req: Request, file, callback) => {
     file.mimetype === "image/jpg" ||
     file.mimetype === "image/jpeg"
   ) {
+    // I can add file.extension here depending on the mimetype
     callback(null, true);
   } else {
     callback(null, false);

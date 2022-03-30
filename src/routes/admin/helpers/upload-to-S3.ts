@@ -19,7 +19,6 @@ if (process.env.NODE_ENV !== "production") {
 export default async function uploadImageTo_S3(
   editMode: boolean,
   uploadedImageFiles: UploadedImages,
-
   colorPropsListFromClient: ColorPropsFromClient[],
   main_cat: string,
   sub_cat: string,
